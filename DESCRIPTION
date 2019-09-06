@@ -1,0 +1,16 @@
+Package: risk3r
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Joshua",
+           family = "Kunst",
+           role = c("aut", "cre"),
+           email = "jbkunst@gmail.com"
+           )
+Description: What the package does (one paragraph).
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    Metrics
+RoxygenNote: 6.1.1
