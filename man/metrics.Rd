@@ -25,4 +25,7 @@ predicted <- runif(N)
 
 metrics(actual, predicted)
 
+scorecard::perf_eva(predicted, actual)$binomial_metric$dat
+
+
 }

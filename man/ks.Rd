@@ -25,4 +25,11 @@ predicted <- runif(N)
 
 ks(actual, predicted)
 
+predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
+
+ks(actual, predicted)
+
+scorecard::perf_eva(predicted, actual)
+
+
 }

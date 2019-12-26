@@ -13,9 +13,6 @@ gain(actual, predicted, percents = c(0.1, 0.2, 0.3, 0.4, 0.5))
 
 \item{percents}{Values to calculate the gain}
 }
-\value{
-The Gini Coefficient
-}
 \description{
 Gains
 }

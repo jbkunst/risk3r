@@ -12,5 +12,11 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    Metrics
+    Metrics,
+    dplyr,
+    purrr,
+    rlang
+Suggests:
+    partykit,
+    scorecard    
 RoxygenNote: 6.1.1

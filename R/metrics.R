@@ -1,10 +1,15 @@
 validate_actual_predicted_num <- function(actual, predicted){
 
   stopifnot(
+    !any(is.na(actual)),
     length(unique(actual)) == 2,
     length(predicted) == length(actual),
     is.numeric(predicted)
   )
+
+  if(any(is.na(predicted))) {
+    message("Some NAs values in predicted, they will be ignorated")
+  }
 
 }
 
@@ -24,16 +29,44 @@ validate_actual_predicted_num <- function(actual, predicted){
 #'
 #' ks(actual, predicted)
 #'
-#' @importFrom stats ks.test
+#' predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
+#'
+#' ks(actual, predicted)
+#'
+#' scorecard::perf_eva(predicted, actual)
+#'
+#'
+#' @importFrom stats ks.test na.omit
 #' @export
 ks <- function(actual, predicted){
 
   validate_actual_predicted_num(actual, predicted)
 
+  if(length(unique(actual)) == 1) {
+    warning("Just 1 distinc value in 'actual' vector, returning NA")
+    return(NA)
+  } else if (length(unique(actual)) >= 3) {
+    warning("More than 2 unique vaues in 'actual' vector, returning NA")
+    return(NA)
+  }
+
   actual_values <- unique(actual)
 
-  dist1 <- predicted[actual == actual_values[1]]
-  dist2 <- predicted[actual == actual_values[2]]
+  if(any(is.na(predicted))) {
+    # message("Some NAs values in predicted, they will be ignorated")
+    warning("Some NAs values in predicted, they will be ignorated")
+  }
+
+  dist1 <- na.omit(predicted[actual == actual_values[1]])
+  dist2 <- na.omit(predicted[actual == actual_values[2]])
+
+  # print(head(dist1))
+  # print(head(dist2))
+
+  if(length(dist1) == 0 | length(dist2) == 0) {
+    message("not enough data for one of the distributions")
+    return(NA)
+  }
 
   value <- as.numeric(suppressWarnings(ks.test(dist1, dist2)[["statistic"]]))
 
@@ -57,6 +90,9 @@ ks <- function(actual, predicted){
 #'
 #' metrics(actual, predicted)
 #'
+#' scorecard::perf_eva(predicted, actual)$binomial_metric$dat
+#'
+#'
 #' @export
 metrics <- function(actual, predicted){
 
@@ -67,13 +103,12 @@ metrics <- function(actual, predicted){
 
 }
 
+#'
 #' Gains
 #'
 #' @param actual A binary vector
 #' @param predicted A numeric vector containing scores or probabilities
 #' @param percents Values to calculate the gain
-#'
-#' @return The Gini Coefficient
 #'
 #' @examples
 #'
