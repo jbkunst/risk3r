@@ -18,14 +18,9 @@
 #'
 #' @importFrom dplyr bind_rows group_by mutate summarize n
 #' @importFrom purrr reduce
-#' @importFrom rlang enquo enexpr
 #'
 #' @export
 woebin_summary <- function(woebin_obj) {
-
-  # variable    <- rlang::enquo(variable)
-  # total_iv    <- rlang::enquo(total_iv)
-  # count_distr <- rlang::enquo(count_distr)
 
   dbiv <- reduce(woebin_obj, bind_rows)
 
