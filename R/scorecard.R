@@ -1,28 +1,27 @@
 #'
 #' Get scorecard's woe_bin summary
 #'
-#' @param woebin_obj An output from `scorecard::woebin` function.
+#' @param bins An output from `scorecard::woebin` function.
 #'
 #' @examples
 #'
 #' data(germancredit, package = "scorecard")
 #'
-#' woebin_obj <- scorecard::woebin(
+#' bins <- scorecard::woebin(
 #'  germancredit,
 #'  y = "creditability",
 #'  x = c("credit.amount", "housing", "duration.in.month"),
 #'  method = "tree"
 #' )
 #'
-#' woebin_summary(woebin_obj)
+#' woebin_summary(bins)
 #'
 #' @importFrom dplyr bind_rows group_by mutate summarize n
-#' @importFrom purrr reduce
 #'
 #' @export
-woebin_summary <- function(woebin_obj) {
+woebin_summary <- function(bins) {
 
-  dbiv <- reduce(woebin_obj, bind_rows)
+  dbiv <- dplyr::bind_rows(bins)
 
   dbiv <- dplyr::group_by(dbiv, variable)
 
@@ -31,7 +30,8 @@ woebin_summary <- function(woebin_obj) {
     n_cat = dplyr::n(),
     iv = unique(total_iv),
     hhi = hhi(count_distr),
-    max_concentration = max(count_distr),
+    count_distr_max = max(count_distr),
+    count_distr_min = min(count_distr),
     has_missing = any(bin == "missing"),
     has_special_values = any(is_special_values)
     )
@@ -43,6 +43,129 @@ woebin_summary <- function(woebin_obj) {
     )
 
   dbiv
+
+}
+
+
+#'
+#' Alternative plot for woe_bin
+#'
+#' @param bins An output from `scorecard::woebin` function.
+#'
+#' @examples
+#'
+#' data(germancredit, package = "scorecard")
+#'
+#' bins <- scorecard::woebin(
+#'  germancredit,
+#'  y = "creditability",
+#'  x = c("credit.amount", "housing", "duration.in.month"),
+#'  method = "tree"
+#' )
+#'
+#' scorecard::woebin_plot(bins)
+#' woebin_plot2(bins)
+#
+# library(patchwork)
+#
+# purrr::reduce(woebin_plot2(bins), `+`) +
+#   plot_layout(guides = "collect")
+#'
+#' @importFrom dplyr bind_rows group_by mutate summarize n
+#' @importFrom purrr map
+#'
+#' @export
+woebin_plot2 <- function(bins) {
+
+  purrr::map(bins, bin_plot)
+
+}
+
+#'
+#' Plot one bin from
+#'
+#' @param bin A item from `scorecard::woebin` function.
+#'
+#' @examples
+#'
+#'
+#' data(germancredit, package = "scorecard")
+#'
+#' bins <- scorecard::woebin(
+#'   germancredit,
+#'   y = "creditability",
+#'   x = c("credit.amount", "housing", "duration.in.month"),
+#'   method = "tree"
+#'   )
+#'
+#' bin_plot(bins[[2]])
+#'
+#' @importFrom forcats fct_inorder
+#' @importFrom ggplot2 ggplot aes
+#'
+#' @export
+bin_plot <- function(bin = bins[[3]], text = TRUE){
+                             # , text.lbl.size = 4,
+                          # bar.col = "#4f2d7f", line.col = "#e22d36", line.col2 = "#f2ad4b"){
+
+  # bin <- tibble::as_tibble(bin)
+  bin
+
+  # values
+  br   <- dplyr::pull(dplyr::summarise(bin, sum(count_distr*badprob)))
+  iv   <- unique(dplyr::pull(bin, total_iv))
+  var  <- unique(dplyr::pull(bin, variable))
+  lvls <- dplyr::pull(bin, bin)
+
+  # dfs
+  bin <- dplyr::mutate(bin, bin = factor(bin, levels = lvls))
+  bin <- dplyr::mutate(bin, type = "bad rate")
+
+  bing <- tidyr::gather(dplyr::select(bin, bin, good, bad), label, value, -bin)
+  bing <- dplyr::mutate(
+      bing,
+      value = value/sum(value),
+      type = "distribution",
+      bin = factor(bin, levels = lvls)
+      )
+
+
+  gg <- ggplot2::ggplot() +
+    # tasa
+    ggplot2::geom_hline(ggplot2::aes(yintercept = br)) +
+    # columns
+    ggplot2::geom_col(ggplot2::aes(x = bin, y = value, fill = label), data = bing) +
+    # line
+    ggplot2::geom_line(ggplot2::aes(x = bin, y = badprob, group = 1), data = bin) +
+    # extras
+    ggplot2::theme()
+
+  gg <- gg +
+    ggplot2::labs(
+      title = paste(var)
+    )
+
+  gg
+
+  # gg + ggplot2::facet_wrap(ggplot2::vars(type))
+  #
+  #   geom_text(aes(y = count_distr, label = comma(count)), vjust = 1.5,
+  #             size = text.lbl.size, color = "gray70", family = "Segoe UI") +
+  #   # tasa
+  #   geom_text(aes(x = bin, y = br, label = percent(br)), vjust = -1, hjust = 2.5, color = line.col2,
+  #             family = "Segoe UI", data = head(w, 1)) +
+  #   # lines
+  #   geom_line(aes(y = badprob), group = 1, size = 2, color = line.col) +
+  #   geom_point(aes(y = badprob), size = 4, fill = "white", shape = 21, color = line.col) +
+  #   geom_text(aes(y = badprob, label = percent(badprob)), size = text.lbl.size,
+  #             vjust = -1.5, color = "gray50", family = "Segoe UI") +
+  #   scale_y_continuous(labels = percent, limits = c(0, ylim_sup), breaks = 0:10/5) +
+  #   theme_minimal(base_size = 15, base_family = "Segoe UI") +
+  #   labs(
+  #     y = "Porcentaje de casos/Tasa de Incumplimiento",
+  #     x = NULL,
+  #     title = str_c(var, " - IV: ", round(iv, 2))
+  #   )
 
 }
 

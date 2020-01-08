@@ -7,7 +7,14 @@ if(getRversion() >= "2.15.1") {
       "is_special_values",
       "iv",
       "total_iv",
-      "variable"
+      "variable",
+      #
+      "bad",
+      "badprob",
+      "bins",
+      "good",
+      "label",
+      "value"
     )
   )
 }

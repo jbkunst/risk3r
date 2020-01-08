@@ -15,8 +15,12 @@ Imports:
     Metrics,
     dplyr,
     purrr,
-    rlang
+    rlang,
+    forcats,
+    ggplot2,
+    tidyr
 Suggests:
     partykit,
-    scorecard    
+    scorecard,
+    patchwork
 RoxygenNote: 6.1.1
