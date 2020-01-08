@@ -4,7 +4,7 @@
 \alias{bin_plot}
 \title{Plot one bin from}
 \usage{
-bin_plot(bin = bins[[3]])
+bin_plot(bin = bins[[3]], text = TRUE)
 }
 \arguments{
 \item{bin}{A item from `scorecard::woebin` function.}
