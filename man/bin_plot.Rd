@@ -4,10 +4,12 @@
 \alias{bin_plot}
 \title{Plot one bin from}
 \usage{
-bin_plot(bin = bins[[3]], text = TRUE)
+bin_plot(bin = bins[[3]], texts = TRUE)
 }
 \arguments{
 \item{bin}{A item from `scorecard::woebin` function.}
+
+\item{texts}{Logical, show text of values (percentages, bad rates).}
 }
 \description{
 Plot one bin from

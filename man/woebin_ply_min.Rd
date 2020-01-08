@@ -16,3 +16,17 @@ woebin_ply_min(variable, bin, value = "woe")
 \description{
 Minimalistic version of woebin_ply
 }
+\examples{
+
+data(germancredit, package = "scorecard")
+
+bins <- scorecard::woebin(germancredit, y = "creditability", x = "credit.amount")
+
+variable <- head(germancredit$credit.amount, 10)
+bin <- bins$credit.amount
+
+woebin_ply_min(variable, bin)
+
+woebin_ply_min(variable, bin,  value = "badprob")
+
+}

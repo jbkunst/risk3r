@@ -14,7 +14,11 @@ if(getRversion() >= "2.15.1") {
       "bins",
       "good",
       "label",
-      "value"
+      "value",
+      #
+      "variable_1",
+      "variable_2",
+      "cor"
     )
   )
 }

@@ -18,7 +18,8 @@ Imports:
     rlang,
     forcats,
     ggplot2,
-    tidyr
+    tidyr,
+    tibble
 Suggests:
     partykit,
     scorecard,

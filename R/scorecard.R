@@ -46,8 +46,6 @@ woebin_summary <- function(bins) {
 
 }
 
-
-
 #'
 #' Minimalistic version of woebin_ply
 #'
@@ -59,9 +57,9 @@ woebin_summary <- function(bins) {
 #'
 #' data(germancredit, package = "scorecard")
 #'
-#' bins = woebin(germancredit, y = "creditability", x = "credit.amount)
+#' bins <- scorecard::woebin(germancredit, y = "creditability", x = "credit.amount")
 #'
-#' variable <- head(dt$credit.amount, 10)
+#' variable <- head(germancredit$credit.amount, 10)
 #' bin <- bins$credit.amount
 #'
 #' woebin_ply_min(variable, bin)
@@ -132,6 +130,7 @@ woebin_plot2 <- function(bins) {
 #' Plot one bin from
 #'
 #' @param bin A item from `scorecard::woebin` function.
+#' @param texts Logical, show text of values (percentages, bad rates).
 #'
 #' @examples
 #'
@@ -151,7 +150,7 @@ woebin_plot2 <- function(bins) {
 #' @importFrom ggplot2 ggplot aes
 #'
 #' @export
-bin_plot <- function(bin = bins[[3]], text = TRUE){
+bin_plot <- function(bin = bins[[3]], texts = TRUE){
                              # , text.lbl.size = 4,
                           # bar.col = "#4f2d7f", line.col = "#e22d36", line.col2 = "#f2ad4b"){
 
