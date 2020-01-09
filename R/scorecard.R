@@ -215,4 +215,115 @@ bin_plot <- function(bin = bins[[3]], texts = TRUE){
 
 }
 
+#'
+#' Create a tidy data frame from a correlation (cor) output
+#'
+#' @param dat A data frame to apply `scorecard::woebin_ply` and calculate correlations.
+#' @param bins An output from `scorecard::woebin` to create woe variables
+#'
+#' @examples
+#'
+#' data(germancredit, package = "scorecard")
+#'
+#' vars <- c("creditability", "duration.in.month", "credit.history",
+#'           "purpose", "status.of.existing.checking.account", "property")
+#'
+#' dat <- germancredit[, vars]
+#'
+#' bins <- scorecard::woebin(dat, y = "creditability", stop_limit = 0.0000001)
+#'
+#' woebin_cor(dat, bins)
+#'
+#' datcor <- woebin_cor(dat, bins)
+#'
+#' library(dplyr)
+#'
+#' cor_limit <- 0.15
+#'
+#' datcor %>%
+#'   filter(variable_1 != variable_2) %>%
+#'   mutate(
+#'     cor_conflict = ifelse(abs(cor) > cor_limit, TRUE, FALSE),
+#'     variable_to_remove = ifelse(
+#'       cor_conflict,
+#'       ifelse(iv_variable_1 > iv_variable_2, variable_2, variable_1),
+#'       NA
+#'    )
+#' )
+#'
+#' @importFrom stringr str_remove
+#'
+#' @export
+#'
+woebin_cor <- function(dat, bins) {
+
+  woebinsum <- woebin_summary(bins)
+  woebinsumiv <- dplyr::select(woebinsum, c("variable", "iv"))
+
+  datwoe <- scorecard::woebin_ply(dat, bins)
+  datwoe <- dplyr::select(datwoe, paste0(names(bins), "_woe"))
+
+  datcor <- cor_tidy(cor(datwoe), upper = FALSE)
+  datcor[[1]] <- stringr::str_remove(datcor[[1]], "_woe$")
+  datcor[[2]] <- stringr::str_remove(datcor[[2]], "_woe$")
+
+  datcor <- dplyr::left_join(datcor, woebinsumiv, by = c("variable_1" = "variable"))
+  datcor <- dplyr::left_join(datcor, woebinsumiv, by = c("variable_2" = "variable"), suffix = c("_variable_1", "_variable_2"))
+
+  datcor
+
+}
+
+#'
+#' Create a tidy data frame from a correlation (cor) output
+#'
+#' @param datcor A matrix from cor function
+#' @param upper Logical. Remove repeated correlations
+#'
+#' @examples
+#'
+#' data(germancredit, package = "scorecard")
+#'
+#' vars <- c("creditability", "duration.in.month", "credit.history", "age.in.years", "purpose")
+#'
+#' dat <- germancredit[, vars]
+#'
+#' bins <- scorecard::woebin(dat, y = "creditability")
+#'
+#' datwoe <- scorecard::woebin_ply(dat, bins)
+#'
+#' datwoe <- datwoe[, -c("creditability")]
+#'
+#' datcor <- cor(datwoe)
+#'
+#' datcor
+#'
+#' cor_tidy(datcor)
+#'
+#' cor_tidy(datcor, FALSE)
+#'
+#' @importFrom tidyr gather
+#' @importFrom tibble rownames_to_column
+#' @importFrom stats cor
+#'
+#' @export
+cor_tidy <- function(datcor, upper = TRUE) {
+
+  class(datcor)
+  stopifnot(class(datcor) %in% "matrix")
+
+  daux <- as.data.frame(datcor)
+  daux <- tibble::rownames_to_column(daux, var = "variable_1")
+  daux <- tidyr::gather(daux, variable_2, cor, -variable_1)
+
+  # daux <- dplyr::mutate_if(daux, is.character, factor, levels = rownames(datcor))
+
+  if(upper) return(dplyr::filter(daux, as.numeric(variable_1) > as.numeric(variable_2)))
+
+  daux
+
+}
+
+
+
 

@@ -19,7 +19,8 @@ Imports:
     forcats,
     ggplot2,
     tidyr,
-    tibble
+    tibble,
+    stringr
 Suggests:
     partykit,
     scorecard,
