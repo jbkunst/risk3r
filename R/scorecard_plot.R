@@ -2,7 +2,7 @@
 #' Plot one bin from
 #'
 #' @param bin A item from `scorecard::woebin` function.
-#' @param texts Logical, show text of values (percentages, bad rates).
+#' @param labels Logical, show text of values (percentages, bad rates).
 #'
 #' @examples
 #'
@@ -15,7 +15,12 @@
 #'   method = "tree"
 #'   )
 #'
+#' bin_plot(bins[[2]])
+#'
+#' scorecard::woebin_plot(bins[3])
+#'
 #' gg <- bin_plot(bins[[2]])
+#'
 #'
 #' gg
 #'
@@ -32,7 +37,7 @@
 #' @importFrom utils head
 #'
 #' @export
-bin_plot <- function(bin = bins[[3]], texts = TRUE){
+bin_plot <- function(bin = bins[[3]], labels = TRUE){
 
   # library(extrafont)
   # ggplot2::theme_set(ggplot2::theme_minimal() + ggplot2::theme(legend.position = "bottom"))
@@ -53,12 +58,18 @@ bin_plot <- function(bin = bins[[3]], texts = TRUE){
   bing <- dplyr::mutate(bing, count_distr = value/sum(value))
 
   df <- bind_rows(
-    bing %>% dplyr::select(bin, count_distr, label)      %>% mutate(type = "count_distr"),
-    bin  %>% dplyr::select(bin, badprob)                 %>% mutate(type = "badprob", type2 = "bin"),
-    bin  %>% dplyr::select(bin, badprob = total_badprob) %>% mutate(type = "badprob", type2 = "total")
+    mutate(dplyr::select(bing, bin, value, count_distr, label),  type = "count_distr"),
+    mutate(dplyr::select(bin , bin, badprob)                  , type = "badprob", type2 = "bin"),
+    mutate(dplyr::select(bin , bin, badprob = total_badprob)  , type = "badprob", type2 = "total")
   )
 
-  df <- dplyr::mutate(df, bin = factor(bin, levels = lvls))
+  df <- dplyr::mutate(
+    df,
+    bin               = factor(bin, levels = lvls),
+    value_label       = scales::comma(value),
+    count_distr_label = scales::percent(count_distr),
+    badprob_label     = scales::percent(badprob)
+    )
 
   df
 
@@ -76,7 +87,7 @@ bin_plot <- function(bin = bins[[3]], texts = TRUE){
 
     ggplot2::geom_col(
       ggplot2::aes(bin,  count_distr, fill = label),
-      data = df %>% dplyr::filter(type == "count_distr")
+      data = dplyr::filter(df, type == "count_distr")
       ) +
 
     ggplot2::geom_line(
@@ -90,9 +101,7 @@ bin_plot <- function(bin = bins[[3]], texts = TRUE){
       shape = 21
       ) +
 
-    ggplot2::scale_y_continuous(labels = scales::percent, limits = c(0, NA), breaks = 0:10/10) +
-
-    ggplot2::theme()
+    ggplot2::scale_y_continuous(labels = scales::percent, limits = c(0, NA), breaks = 0:10/10)
 
   gg <- gg +
     ggplot2::labs(
@@ -106,65 +115,37 @@ bin_plot <- function(bin = bins[[3]], texts = TRUE){
 
   gg
 
-  ggplot2::last_plot() + ggplot2::facet_wrap(ggplot2::vars(type), scales = "free_y")
+  # ggplot2::last_plot() + ggplot2::facet_wrap(ggplot2::vars(type), scales = "free_y")
 
-  gg +
-    ggplot2::scale_color_manual(values = c(bin = "darkred", total = "darkcyan")) +
-    ggplot2::scale_fill_manual(values = c(good = "gray80", bad = "darkorange4")) +
-    ggplot2::theme()
+  # gg +
+  #   ggplot2::scale_color_manual(values = c(bin = "darkred", total = "darkcyan")) +
+  #   ggplot2::scale_fill_manual(values = c(good = "gray80", bad = "darkorange4")) +
+  #   ggplot2::theme()
 
-  ggplot2::last_plot() + ggplot2::facet_wrap(ggplot2::vars(type), scales = "free_y")
+  # ggplot2::last_plot() + ggplot2::facet_wrap(ggplot2::vars(type), scales = "free_y")
 
-  gg +
-    ggplot2::facet_wrap(ggplot2::vars(type), scales = "free_y") +
-    modrpley::scale_fill_ripley_d() +
-    modrpley::scale_color_ripley_d(direction = -1) +
-    ggplot2::theme()
+  # gg +
+  #   ggplot2::facet_wrap(ggplot2::vars(type), scales = "free_y") +
+  #   modrpley::scale_fill_ripley_d() +
+  #   modrpley::scale_color_ripley_d(direction = -1) +
+  #   ggplot2::theme()
 
 
-  if(text) {
+  if(labels) {
+
+    gg <- gg +
+
+      ggplot2::geom_label(
+        ggplot2::aes(bin, count_distr, label = count_label),
+        data = dplyr::mutate(dplyr::select(bin, bin, count, count_distr, count), count_label = scales::comma(count))
+      ) +
+
+      ggplot2::geom_label(
+        ggplot2::aes(bin, badprob, label = badprob_label),
+        data = dplyr::mutate(dplyr::select(bin, bin, badprob), badprob_label = scales::percent(badprob))
+      )
 
   }
-
-  gg <- ggplot2::ggplot(bin) +
-    # tasa
-    ggplot2::geom_hline(ggplot2::aes(yintercept = br), color = line.col2) +
-    # columns
-    ggplot2::geom_col(ggplot2::aes(x = bin, y = value, fill = label), data = bing, width = 0.5) +
-    # line
-    ggplot2::geom_line(ggplot2::aes(x = bin, y = badprob, group = 1), size = 1.2, color = line.col2) +
-    # point
-    ggplot2::geom_point(ggplot2::aes(x = bin, y = badprob), size = 3, fill = "white", shape = 21, color = line.col) +
-    # extras
-    ggplot2::theme() +
-
-  # ggplot2::theme_minimal(base_size = 15, base_family = "Segoe UI")
-
-
-
-  gg
-
-  gg <- gg +
-    ggplot2::geom_text(
-      ggplot2::aes(x = bin, y = count_distr, label = scales::comma(count)),
-      vjust = 1.5, size = text.lbl.size, color = "gray70",
-      family = ggplot2::theme_get()$text$family
-    ) +
-    # lines
-    ggplot2::geom_text(
-      aes(x = bin, y = badprob, label = scales::percent(badprob)),
-      size = text.lbl.size, color = "gray70",
-      family = ggplot2::theme_get()$text$family,
-      vjust = 1.5, hjust = -.5
-    ) +
-    # tasa
-    ggplot2::geom_text(
-      ggplot2::aes(x = bin, y =  total_badprob, label = scales::percent( total_badprob)),
-      vjust = -1, hjust = 2.5, color = line.col2, family = "Segoe UI", size = text.lbl.size,
-      data = head(bin, 1)
-    )
-
-  # gg + modrpley::scale_fill_ripley_d()
 
   gg
 
