@@ -15,14 +15,15 @@
 #'   method = "tree"
 #'   )
 #'
-#' bin_plot(bins[[2]])
+#' bin_plot(bins[[3]])
 #'
 #' scorecard::woebin_plot(bins[3])
 #'
-#' gg <- bin_plot(bins[[2]])
-#'
+#' gg <- bin_plot(bins[[3]])
 #'
 #' gg
+#'
+#' gg + ggplot2::facet_wrap(ggplot2::vars(type), scales = "free_y")
 #'
 #'
 #' require(ggplot2)
@@ -33,8 +34,7 @@
 #' @importFrom forcats fct_inorder
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom scales comma percent
-#' @importFrom stringr  str_c
-#' @importFrom utils head
+#' @importFrom stringr str_c
 #'
 #' @export
 bin_plot <- function(bin = bins[[3]], labels = TRUE){
@@ -57,10 +57,10 @@ bin_plot <- function(bin = bins[[3]], labels = TRUE){
   bing <- tidyr::gather(dplyr::select(bin, bin, good, bad), label, value, -bin)
   bing <- dplyr::mutate(bing, count_distr = value/sum(value))
 
-  df <- bind_rows(
-    mutate(dplyr::select(bing, bin, value, count_distr, label),  type = "count_distr"),
-    mutate(dplyr::select(bin , bin, badprob)                  , type = "badprob", type2 = "bin"),
-    mutate(dplyr::select(bin , bin, badprob = total_badprob)  , type = "badprob", type2 = "total")
+  df <- dplyr::bind_rows(
+    dplyr::mutate(dplyr::select(bing, bin, value, count_distr, label), type = "count_distr"),
+    dplyr::mutate(dplyr::select(bin , bin, badprob)                  , type = "badprob", type2 = "bin"),
+    dplyr::mutate(dplyr::select(bin , bin, badprob = total_badprob)  , type = "badprob", type2 = "total")
   )
 
   df <- dplyr::mutate(
@@ -133,16 +133,16 @@ bin_plot <- function(bin = bins[[3]], labels = TRUE){
 
   if(labels) {
 
+    df2 <- dplyr::bind_rows(
+      dplyr::mutate(dplyr::select(bin, bin, value = count_distr, count), value_label = scales::comma(count), type = "count_distr"),
+      dplyr::mutate(dplyr::select(bin, bin, value = badprob), value_label = scales::percent(value), type = "badprob")
+    )
+
     gg <- gg +
 
       ggplot2::geom_label(
-        ggplot2::aes(bin, count_distr, label = count_label),
-        data = dplyr::mutate(dplyr::select(bin, bin, count, count_distr, count), count_label = scales::comma(count))
-      ) +
-
-      ggplot2::geom_label(
-        ggplot2::aes(bin, badprob, label = badprob_label),
-        data = dplyr::mutate(dplyr::select(bin, bin, badprob), badprob_label = scales::percent(badprob))
+        ggplot2::aes(bin, value, label = value_label),
+        data = df2
       )
 
   }
