@@ -20,7 +20,8 @@ Imports:
     ggplot2,
     tidyr,
     tibble,
-    stringr
+    stringr,
+    scales
 Suggests:
     partykit,
     scorecard,
