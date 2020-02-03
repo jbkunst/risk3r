@@ -3,6 +3,9 @@
 #'
 #' @param bin A item from `scorecard::woebin` function.
 #' @param labels Logical, show text of values (percentages, bad rates).
+#' @param labels_geom Function to use when add labels, default \code{ggplot2::geom_label}. Can
+#'   be \code{ggrepel::geom_label_repel}.
+#'
 #'
 #' @examples
 #'
@@ -26,9 +29,20 @@
 #' gg + ggplot2::facet_wrap(ggplot2::vars(type), scales = "free_y")
 #'
 #'
+#' \dontrun{
+#' gg <- bin_plot(bins[[3]], labels_geom = ggrepel::geom_label_repel)
+#'
+#' gg
+#'
 #' require(ggplot2)
 #' ggplot2::update_geom_defaults("point", list(colour = "black", fill = "white", size = 2, stroke = 2))
 #' ggplot2::update_geom_defaults("point", list(colour = "black", fill = "white", size = 5, stroke = 5))
+#'
+#' gg
+#'
+#' gg + ggplot2::facet_wrap(ggplot2::vars(type), scales = "free_y")
+#'
+#' }
 #'
 #'
 #' @importFrom forcats fct_inorder
@@ -37,7 +51,7 @@
 #' @importFrom stringr str_c
 #'
 #' @export
-bin_plot <- function(bin = bins[[3]], labels = TRUE){
+bin_plot <- function(bin = bins[[3]], labels = TRUE, labels_geom = ggplot2::geom_label){
 
   # library(extrafont)
   # ggplot2::theme_set(ggplot2::theme_minimal() + ggplot2::theme(legend.position = "bottom"))
@@ -113,7 +127,20 @@ bin_plot <- function(bin = bins[[3]], labels = TRUE){
       subtitle = stringr::str_c("IV: ", round(iv, 2))
     )
 
-  gg
+  if(labels) {
+
+    df2 <- dplyr::bind_rows(
+      dplyr::mutate(dplyr::select(bin, bin, value = count_distr, count), value_label = scales::comma(count), type = "count_distr"),
+      dplyr::mutate(dplyr::select(bin, bin, value = badprob), value_label = scales::percent(value), type = "badprob")
+    )
+
+    gg <- gg +
+      labels_geom(
+        ggplot2::aes(bin, value, label = value_label),
+        data = df2
+      )
+
+  }
 
   # ggplot2::last_plot() + ggplot2::facet_wrap(ggplot2::vars(type), scales = "free_y")
 
@@ -130,22 +157,6 @@ bin_plot <- function(bin = bins[[3]], labels = TRUE){
   #   modrpley::scale_color_ripley_d(direction = -1) +
   #   ggplot2::theme()
 
-
-  if(labels) {
-
-    df2 <- dplyr::bind_rows(
-      dplyr::mutate(dplyr::select(bin, bin, value = count_distr, count), value_label = scales::comma(count), type = "count_distr"),
-      dplyr::mutate(dplyr::select(bin, bin, value = badprob), value_label = scales::percent(value), type = "badprob")
-    )
-
-    gg <- gg +
-
-      ggplot2::geom_label(
-        ggplot2::aes(bin, value, label = value_label),
-        data = df2
-      )
-
-  }
 
   gg
 

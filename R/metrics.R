@@ -8,7 +8,7 @@ validate_actual_predicted_num <- function(actual, predicted){
   )
 
   if(any(is.na(predicted))) {
-    message("Some NAs values in predicted, they will be ignorated")
+    message(sum(is.na(predicted)), " of ", length(predicted), " predicted values are NAs, they will be ignorated")
   }
 
 }
@@ -23,7 +23,7 @@ validate_actual_predicted_num <- function(actual, predicted){
 #' @return The KS statistic
 #' @examples
 #'
-#' N <- 1000
+#' N <- 10000
 #' actual <- rbinom(N, size = 1, prob = 0.3)
 #' predicted <- runif(N)
 #'
@@ -84,14 +84,16 @@ ks <- function(actual, predicted){
 #' @return A data frame with usual and opinionated metrics
 #' @examples
 #'
-#' N <- 1000
-#' actual <- rbinom(N, size = 1, prob = 0.3)
+#' N <- 10000
 #' predicted <- runif(N)
+#' actual <- rbinom(N, size = 1, prob = predicted)
 #'
 #' metrics(actual, predicted)
+#' scorecard::perf_eva(predicted, actual)$binomial_metric$dat[, c("KS", "AUC")]
 #'
-#' scorecard::perf_eva(predicted, actual)$binomial_metric$dat
-#'
+#' predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
+#' metrics(actual, predicted)
+#' scorecard::perf_eva(predicted, actual)$binomial_metric$dat[, c("KS", "AUC")]
 #'
 #' @export
 metrics <- function(actual, predicted){
@@ -112,7 +114,7 @@ metrics <- function(actual, predicted){
 #'
 #' @examples
 #'
-#' N <- 1000
+#' N <- 10000
 #' actual <- rbinom(N, size = 1, prob = 0.3)
 #' predicted <- runif(N)
 #'

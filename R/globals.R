@@ -15,6 +15,11 @@ if(getRversion() >= "2.15.1") {
       "good",
       "label",
       "value",
+      "total_badprob",
+      "type2",
+      "type",
+      "count",
+      "value_label",
       #
       "variable_1",
       "variable_2",

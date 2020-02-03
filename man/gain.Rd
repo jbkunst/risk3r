@@ -18,7 +18,7 @@ Gains
 }
 \examples{
 
-N <- 1000
+N <- 10000
 actual <- rbinom(N, size = 1, prob = 0.3)
 predicted <- runif(N)
 
