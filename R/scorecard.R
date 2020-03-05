@@ -10,7 +10,7 @@
 #' bins <- scorecard::woebin(
 #'  germancredit,
 #'  y = "creditability",
-#'  x = c("credit.amount", "housing", "duration.in.month"),
+#'  x = c("credit.amount", "housing", "duration.in.month", "purpose"),
 #'  method = "tree"
 #' )
 #'
@@ -136,7 +136,7 @@ woebin_ply_min <- function(variable, bin, value = "woe") {
 #'
 woebin_cor <- function(dat, bins) {
 
-  woebinsum <- woebin_summary(bins)
+  woebinsum   <- woebin_summary(bins)
   woebinsumiv <- dplyr::select(woebinsum, c("variable", "iv"))
 
   datwoe <- scorecard::woebin_ply(dat, bins)
@@ -204,5 +204,206 @@ cor_tidy <- function(datcor, upper = TRUE) {
 }
 
 
+#'
+#' Create a breaklist argument unsing ctree method
+#'
+#' @param dt A data frame using to create the bins
+#' @param y Name of y variable.
+#' @param ctrl A partykit::ctree_control instance
+#' @param save_trees A logical indicating to return the trees objects or not
+#'
+#' @examples
+#'
+#' \dontrun{
+#'
+#' data(germancredit, package = "scorecard")
+#'
+#' brks <- ctree_break_list(germancredit, "creditability", ctrl = partykit::ctree_control())
+#'
+#' bins2 <- scorecard::woebin(germancredit, "creditability", breaks_list = brks)
+#'
+#' bins2$duration.in.month
+#'
+#' woebin_summary(bins2)
+#'
+#' bins1 <- scorecard::woebin(germancredit, "creditability")
+#'
+#' bins1$duration.in.month
+#'
+#' woebin_summary(bins1)
+#'
+#' library(dplyr)
+#'
+#' full_join(
+#'   woebin_summary(bins1) %>% select(variable, iv),
+#'   woebin_summary(bins2) %>% select(variable, iv),
+#'   by = "variable"
+#'   ) %>%
+#'   mutate( iv.x  > iv.y)
+#'
+#' }
+#'
+#' @importFrom stats as.formula
+#'
+#' @export
+ctree_break_list <- function(dt, y, ctrl = partykit::ctree_control(), save_trees = FALSE) {
 
+  # dt <- tibble::as_tibble(germancredit)
+  # y  <- "creditability"
+  # ctrl = partykit::ctree_control()
+  # save_trees <- FALSE
 
+  vars <- setdiff(names(dt), y)
+
+  predparty <- utils::getFromNamespace("predict.party", "partykit")
+
+  brks <- purrr::map(vars, function(var = "duration.in.month"){
+
+    message(var)
+
+    d <- dplyr::select(dt, var, y)
+    d <- dplyr::mutate_if(d, is.character, as.factor)
+    d <- dplyr::filter(d, stats::complete.cases(d))
+
+    tri <- partykit::ctree(
+      as.formula(paste(y, var, sep = " ~ ")),
+      data = d,
+      control = ctrl
+    )
+
+    d <- dplyr::mutate(d, node = predparty(object = tri, newdata = d, type = "node"))
+
+    if(is.factor(dplyr::pull(d, var))) {
+
+      out <- dplyr::select(d, -y)
+      out <- dplyr::distinct(out)
+      out <- dplyr::group_by(out, node)
+      out <- dplyr::summarise_all(out, paste0, collapse = "%,%")
+      out <- dplyr::pull(out, var)
+
+    } else {
+
+      out <- dplyr::select(d, -y)
+      out <- dplyr::group_by(out, node)
+      out <- dplyr::summarise_all(out, max)
+      out <- dplyr::pull(out, var)
+      out <- out[-length(out)]
+      out <- c(-Inf, out, Inf)
+      out <- unique(out)
+
+    }
+
+    if(save_trees) {
+      outf <- list("breaks" = out, "tree" = tri)
+    } else {
+      outf <- list("breaks" = out)
+    }
+
+    outf
+
+  })
+
+  output <- purrr::map(brks, "breaks")
+  output <- purrr::set_names(output, vars)
+
+  if(save_trees) {
+
+    trees <- purrr::map(brks, "tree")
+    trees <- purrr::set_names(trees, vars)
+
+    attr(output, "trees") <- trees
+
+  }
+
+  output
+
+}
+
+# library(dplyr)
+#
+#
+# # bins <- readRDS("~/modelos-provision/data/M2/Segmento 2/1/04_dwoes.rds")
+# data(germancredit, package = "scorecard")
+#
+# bins <- scorecard::woebin(
+#   germancredit,
+#   y = "creditability",
+#   # x = c("credit.amount", "housing", "duration.in.month", "telephone"),
+#   method = "tree"
+# )
+#
+# bin <- bins[["credit.amount"]]
+#
+# binnum_to_tree <- function(bin) {
+#
+#   varname <- bin[[1]][[1]]
+#
+#   tri <- bin %>%
+#     tibble::as_tibble() %>%
+#     dplyr::select(bin, good, bad, breaks) %>%
+#     tidyr::gather(key, value, -bin, -breaks) %>%
+#     tidyr::uncount(value) %>%
+#     dplyr::mutate(breaks = as.numeric(breaks)) %>%
+#     dplyr::mutate(breaks = ifelse(is.infinite(breaks), 9999999999999, breaks)) %>%
+#     dplyr::mutate_if(is.character, as.factor) %>%
+#     dplyr::rename("{ varname }" := breaks) %>%
+#     partykit::ctree(
+#       as.formula(str_c("key", varname, sep = " ~ ")),
+#       data = .,
+#       control = partykit::ctree_control(maxdepth = Inf, alpha = 1)
+#     )
+#
+#   tri
+#
+# }
+#
+# plot(binnum_to_tree(bin))
+#
+# bin <- bins[["credit.history"]]
+#
+#
+#
+# aux <- function(x = c(53, 53, 53)) {
+#   # x <- 100
+#   y <- round(x/length(x))
+#
+#   d <- x[1] - sum(y)
+#
+#   y[1] <- y[1] + d
+#
+#   stopifnot(sum(y) == x[1])
+#
+#   y
+#
+# }
+#
+# binnum_to_tree <- function(bin) {
+#
+#   varname <- bin[[1]][[1]]
+#
+#   tri <- bin %>%
+#     tibble::as_tibble() %>%
+#     dplyr::select(good, bad, breaks) %>%
+#     dplyr::mutate(breaks2 = map(breaks, ~ unlist(stringr::str_split(.x, "%,%")))) %>%
+#     tidyr::unnest(breaks2) %>%
+#     group_by(breaks) %>%
+#     mutate(good = aux(good), bad  = aux(bad)) %>%
+#     ungroup() %>%
+#     select(-breaks) %>%
+#     tidyr::gather(key, value, -breaks2) %>%
+#     tidyr::uncount(value) %>%
+#     dplyr::mutate_if(is.character, as.factor) %>%
+#     dplyr::rename("{ varname }" := breaks2) %>%
+#     partykit::ctree(
+#       as.formula(str_c("key", varname, sep = " ~ ")),
+#       data = .,
+#       control = partykit::ctree_control(maxdepth = Inf, alpha = 0.95)
+#     )
+#
+#   tri
+#
+# }
+#
+# bin
+# plot(binnum_to_tree(bin), gp = gpar(fontsize = 9))
+#

@@ -1,15 +1,9 @@
 validate_actual_predicted_num <- function(actual, predicted){
 
   stopifnot(
-    !any(is.na(actual)),
-    length(unique(actual)) == 2,
     length(predicted) == length(actual),
     is.numeric(predicted)
   )
-
-  if(any(is.na(predicted))) {
-    message(sum(is.na(predicted)), " of ", length(predicted), " predicted values are NAs, they will be ignorated")
-  }
 
 }
 
@@ -42,20 +36,16 @@ ks <- function(actual, predicted){
 
   validate_actual_predicted_num(actual, predicted)
 
-  if(length(unique(actual)) == 1) {
-    warning("Just 1 distinc value in 'actual' vector, returning NA")
+  if(length(unique(actual)) != 2) {
+    warning("Not 2 distinct values in 'actual' vector, returning NA")
     return(NA)
-  } else if (length(unique(actual)) >= 3) {
-    warning("More than 2 unique vaues in 'actual' vector, returning NA")
-    return(NA)
+  }
+
+  if(any(is.na(predicted))) {
+    message(sum(is.na(predicted)), " of ", length(predicted), " 'predicted' values are NAs, they will be ignorated")
   }
 
   actual_values <- unique(actual)
-
-  if(any(is.na(predicted))) {
-    # message("Some NAs values in predicted, they will be ignorated")
-    warning("Some NAs values in predicted, they will be ignorated")
-  }
 
   dist1 <- na.omit(predicted[actual == actual_values[1]])
   dist2 <- na.omit(predicted[actual == actual_values[2]])
@@ -64,7 +54,7 @@ ks <- function(actual, predicted){
   # print(head(dist2))
 
   if(length(dist1) == 0 | length(dist2) == 0) {
-    message("not enough data for one of the distributions")
+    message("Not enough data for one of the distributions")
     return(NA)
   }
 

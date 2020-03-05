@@ -23,7 +23,9 @@ if(getRversion() >= "2.15.1") {
       #
       "variable_1",
       "variable_2",
-      "cor"
+      "cor",
+      #
+      "node"
     )
   )
 }

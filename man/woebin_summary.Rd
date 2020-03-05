@@ -19,7 +19,7 @@ data(germancredit, package = "scorecard")
 bins <- scorecard::woebin(
  germancredit,
  y = "creditability",
- x = c("credit.amount", "housing", "duration.in.month"),
+ x = c("credit.amount", "housing", "duration.in.month", "purpose"),
  method = "tree"
 )
 
