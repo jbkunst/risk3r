@@ -60,6 +60,7 @@ woebin_summary <- function(bins) {
 #' bins <- scorecard::woebin(germancredit, y = "creditability", x = "credit.amount")
 #'
 #' variable <- head(germancredit$credit.amount, 10)
+#'
 #' bin <- bins$credit.amount
 #'
 #' woebin_ply_min(variable, bin)
@@ -95,9 +96,9 @@ woebin_ply_min <- function(variable, bin, value = "woe") {
 }
 
 #'
-#' Create a tidy data frame from a correlation (cor) output
+#' Create a tidy data frame with a correlations and IV
 #'
-#' @param dat A data frame to apply `scorecard::woebin_ply` and calculate correlations.
+#' @param dt A data frame to apply `scorecard::woebin_ply` and calculate correlations.
 #' @param bins An output from `scorecard::woebin` to create woe variables
 #'
 #' @examples
@@ -111,9 +112,9 @@ woebin_ply_min <- function(variable, bin, value = "woe") {
 #'
 #' bins <- scorecard::woebin(dat, y = "creditability", stop_limit = 0.0000001)
 #'
-#' woebin_cor(dat, bins)
+#' woebin_cor_iv(dat, bins)
 #'
-#' datcor <- woebin_cor(dat, bins)
+#' datcor <- woebin_cor_iv(dat, bins)
 #'
 #' library(dplyr)
 #'
@@ -134,12 +135,12 @@ woebin_ply_min <- function(variable, bin, value = "woe") {
 #'
 #' @export
 #'
-woebin_cor <- function(dat, bins) {
+woebin_cor_iv <- function(dt, bins) {
 
   woebinsum   <- woebin_summary(bins)
   woebinsumiv <- dplyr::select(woebinsum, c("variable", "iv"))
 
-  datwoe <- scorecard::woebin_ply(dat, bins)
+  datwoe <- scorecard::woebin_ply(dt, bins)
   datwoe <- dplyr::select(datwoe, paste0(names(bins), "_woe"))
 
   datcor <- cor_tidy(cor(datwoe), upper = FALSE)
@@ -188,7 +189,7 @@ woebin_cor <- function(dat, bins) {
 #' @export
 cor_tidy <- function(datcor, upper = TRUE) {
 
-  class(datcor)
+  # class(datcor)
   stopifnot(class(datcor) %in% "matrix")
 
   daux <- as.data.frame(datcor)
