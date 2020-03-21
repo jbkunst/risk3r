@@ -29,7 +29,6 @@ validate_actual_predicted_num <- function(actual, predicted){
 #'
 #' scorecard::perf_eva(predicted, actual)
 #'
-#'
 #' @importFrom stats ks.test na.omit
 #' @export
 ks <- function(actual, predicted){
@@ -105,10 +104,12 @@ metrics <- function(actual, predicted){
 #' @examples
 #'
 #' N <- 10000
-#' actual <- rbinom(N, size = 1, prob = 0.3)
 #' predicted <- runif(N)
+#' actual <- rbinom(N, size = 1, prob = predicted)
 #'
 #' gain(actual, predicted)
+#'
+#' gain(actual, predicted, c(0.5, 1))
 #'
 #' @importFrom stats ecdf quantile
 #' @export
@@ -120,3 +121,4 @@ gain <- function(actual, predicted, percents = c(0.10, 0.20, 0.30, 0.40, 0.50)){
 
   g
 }
+
