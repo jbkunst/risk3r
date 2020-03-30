@@ -19,7 +19,7 @@ More metrics in the Metrics package https://github.com/mfrasco/Metrics
 }
 \examples{
 
-N <- 1000
+N <- 10000
 actual <- rbinom(N, size = 1, prob = 0.3)
 predicted <- runif(N)
 
@@ -30,6 +30,5 @@ predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- 
 ks(actual, predicted)
 
 scorecard::perf_eva(predicted, actual)
-
 
 }

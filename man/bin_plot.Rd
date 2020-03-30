@@ -4,12 +4,15 @@
 \alias{bin_plot}
 \title{Plot one bin from}
 \usage{
-bin_plot(bin = bins[[3]], labels = TRUE)
+bin_plot(bin = bins[[3]], labels = TRUE, labels_geom = ggplot2::geom_label)
 }
 \arguments{
 \item{bin}{A item from `scorecard::woebin` function.}
 
 \item{labels}{Logical, show text of values (percentages, bad rates).}
+
+\item{labels_geom}{Function to use when add labels, default \code{ggplot2::geom_label}. Can
+be \code{ggrepel::geom_label_repel}.}
 }
 \description{
 Plot one bin from
@@ -25,19 +28,31 @@ bins <- scorecard::woebin(
   method = "tree"
   )
 
-bin_plot(bins[[2]])
+bin_plot(bins[[3]])
 
 scorecard::woebin_plot(bins[3])
 
-gg <- bin_plot(bins[[2]])
-
+gg <- bin_plot(bins[[3]])
 
 gg
 
+gg + ggplot2::facet_wrap(ggplot2::vars(type), scales = "free_y")
+
+
+\dontrun{
+gg <- bin_plot(bins[[3]], labels_geom = ggrepel::geom_label_repel)
+
+gg
 
 require(ggplot2)
 ggplot2::update_geom_defaults("point", list(colour = "black", fill = "white", size = 2, stroke = 2))
 ggplot2::update_geom_defaults("point", list(colour = "black", fill = "white", size = 5, stroke = 5))
+
+gg
+
+gg + ggplot2::facet_wrap(ggplot2::vars(type), scales = "free_y")
+
+}
 
 
 }

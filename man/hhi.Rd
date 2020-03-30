@@ -20,7 +20,6 @@ hhi(x)
 
 plot(table(x), main = hhi_label(hhi(x)))
 
-
 x <- sample(LETTERS[1:5], size = 1000, replace = TRUE, prob = exp(1:5))
 
 hhi(x)

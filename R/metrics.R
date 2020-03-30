@@ -1,15 +1,9 @@
 validate_actual_predicted_num <- function(actual, predicted){
 
   stopifnot(
-    !any(is.na(actual)),
-    length(unique(actual)) == 2,
     length(predicted) == length(actual),
     is.numeric(predicted)
   )
-
-  if(any(is.na(predicted))) {
-    message("Some NAs values in predicted, they will be ignorated")
-  }
 
 }
 
@@ -23,7 +17,7 @@ validate_actual_predicted_num <- function(actual, predicted){
 #' @return The KS statistic
 #' @examples
 #'
-#' N <- 1000
+#' N <- 10000
 #' actual <- rbinom(N, size = 1, prob = 0.3)
 #' predicted <- runif(N)
 #'
@@ -35,27 +29,22 @@ validate_actual_predicted_num <- function(actual, predicted){
 #'
 #' scorecard::perf_eva(predicted, actual)
 #'
-#'
 #' @importFrom stats ks.test na.omit
 #' @export
 ks <- function(actual, predicted){
 
   validate_actual_predicted_num(actual, predicted)
 
-  if(length(unique(actual)) == 1) {
-    warning("Just 1 distinc value in 'actual' vector, returning NA")
+  if(length(unique(actual)) != 2) {
+    warning("Not 2 distinct values in 'actual' vector, returning NA")
     return(NA)
-  } else if (length(unique(actual)) >= 3) {
-    warning("More than 2 unique vaues in 'actual' vector, returning NA")
-    return(NA)
+  }
+
+  if(any(is.na(predicted))) {
+    message(sum(is.na(predicted)), " of ", length(predicted), " 'predicted' values are NAs, they will be ignorated")
   }
 
   actual_values <- unique(actual)
-
-  if(any(is.na(predicted))) {
-    # message("Some NAs values in predicted, they will be ignorated")
-    warning("Some NAs values in predicted, they will be ignorated")
-  }
 
   dist1 <- na.omit(predicted[actual == actual_values[1]])
   dist2 <- na.omit(predicted[actual == actual_values[2]])
@@ -64,7 +53,7 @@ ks <- function(actual, predicted){
   # print(head(dist2))
 
   if(length(dist1) == 0 | length(dist2) == 0) {
-    message("not enough data for one of the distributions")
+    message("Not enough data for one of the distributions")
     return(NA)
   }
 
@@ -84,14 +73,16 @@ ks <- function(actual, predicted){
 #' @return A data frame with usual and opinionated metrics
 #' @examples
 #'
-#' N <- 1000
-#' actual <- rbinom(N, size = 1, prob = 0.3)
+#' N <- 10000
 #' predicted <- runif(N)
+#' actual <- rbinom(N, size = 1, prob = predicted)
 #'
 #' metrics(actual, predicted)
+#' scorecard::perf_eva(predicted, actual)$binomial_metric$dat[, c("KS", "AUC")]
 #'
-#' scorecard::perf_eva(predicted, actual)$binomial_metric$dat
-#'
+#' predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
+#' metrics(actual, predicted)
+#' scorecard::perf_eva(predicted, actual)$binomial_metric$dat[, c("KS", "AUC")]
 #'
 #' @export
 metrics <- function(actual, predicted){
@@ -112,11 +103,13 @@ metrics <- function(actual, predicted){
 #'
 #' @examples
 #'
-#' N <- 1000
-#' actual <- rbinom(N, size = 1, prob = 0.3)
+#' N <- 10000
 #' predicted <- runif(N)
+#' actual <- rbinom(N, size = 1, prob = predicted)
 #'
 #' gain(actual, predicted)
+#'
+#' gain(actual, predicted, c(0.5, 1))
 #'
 #' @importFrom stats ecdf quantile
 #' @export
@@ -128,3 +121,4 @@ gain <- function(actual, predicted, percents = c(0.10, 0.20, 0.30, 0.40, 0.50)){
 
   g
 }
+

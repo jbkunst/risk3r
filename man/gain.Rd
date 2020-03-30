@@ -18,10 +18,12 @@ Gains
 }
 \examples{
 
-N <- 1000
-actual <- rbinom(N, size = 1, prob = 0.3)
+N <- 10000
 predicted <- runif(N)
+actual <- rbinom(N, size = 1, prob = predicted)
 
 gain(actual, predicted)
+
+gain(actual, predicted, c(0.5, 1))
 
 }

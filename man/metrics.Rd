@@ -19,13 +19,15 @@ Metrics from Metrics package https://github.com/mfrasco/Metrics
 }
 \examples{
 
-N <- 1000
-actual <- rbinom(N, size = 1, prob = 0.3)
+N <- 10000
 predicted <- runif(N)
+actual <- rbinom(N, size = 1, prob = predicted)
 
 metrics(actual, predicted)
+scorecard::perf_eva(predicted, actual)$binomial_metric$dat[, c("KS", "AUC")]
 
-scorecard::perf_eva(predicted, actual)$binomial_metric$dat
-
+predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
+metrics(actual, predicted)
+scorecard::perf_eva(predicted, actual)$binomial_metric$dat[, c("KS", "AUC")]
 
 }
