@@ -25,7 +25,12 @@ bins <- scorecard::woebin(
   method = "tree"
   )
 
+bin_plot(bins[[2]])
+
+scorecard::woebin_plot(bins[3])
+
 gg <- bin_plot(bins[[2]])
+
 
 gg
 
