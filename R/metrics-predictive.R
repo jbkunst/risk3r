@@ -18,16 +18,16 @@ validate_actual_predicted_num <- function(actual, predicted){
 #' @examples
 #'
 #' N <- 10000
-#' actual <- rbinom(N, size = 1, prob = 0.3)
+#'
 #' predicted <- runif(N)
+#'
+#' actual <- rbinom(N, size = 1, prob = predicted)
 #'
 #' ks(actual, predicted)
 #'
 #' predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
 #'
 #' ks(actual, predicted)
-#'
-#' scorecard::perf_eva(predicted, actual)
 #'
 #' @importFrom stats ks.test na.omit
 #' @export
@@ -74,22 +74,24 @@ ks <- function(actual, predicted){
 #' @examples
 #'
 #' N <- 10000
+#'
 #' predicted <- runif(N)
+#'
 #' actual <- rbinom(N, size = 1, prob = predicted)
 #'
 #' metrics(actual, predicted)
-#' scorecard::perf_eva(predicted, actual)$binomial_metric$dat[, c("KS", "AUC")]
 #'
 #' predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
+#'
 #' metrics(actual, predicted)
-#' scorecard::perf_eva(predicted, actual)$binomial_metric$dat[, c("KS", "AUC")]
 #'
 #' @export
 metrics <- function(actual, predicted){
 
   data.frame(
     ks = ks(actual, predicted),
-    auc= Metrics::auc(actual, predicted)
+    auc= Metrics::auc(actual, predicted),
+    iv = information_value(actual, predicted)
   )
 
 }
@@ -104,7 +106,9 @@ metrics <- function(actual, predicted){
 #' @examples
 #'
 #' N <- 10000
+#'
 #' predicted <- runif(N)
+#'
 #' actual <- rbinom(N, size = 1, prob = predicted)
 #'
 #' gain(actual, predicted)
@@ -120,5 +124,69 @@ gain <- function(actual, predicted, percents = c(0.10, 0.20, 0.30, 0.40, 0.50)){
   g <- ecdf(predicted[actual == 0])(quantile(predicted, percents))
 
   g
+}
+
+#'
+#' Calculate Information Value
+#'
+#' @param actual A binary vector
+#' @param predicted A vector: character, numeric or containing scores or probabilities
+#' @return The KS statistic
+#' @examples
+#'
+#' N <- 10000
+#'
+#' predicted <- runif(N)
+#'
+#' actual <- rbinom(N, size = 1, prob = predicted)
+#'
+#' information_value(actual, predicted)
+#'
+#' predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
+#'
+#' information_value(actual, predicted)
+#'
+#' @export
+information_value <- function(actual, predicted) {
+
+  validate_actual_predicted_num(actual, predicted)
+
+  df <- data.frame(y = actual, x = predicted)
+
+  bin <- quiet(scorecard::woebin(df, "y", "x"))
+
+  out <- bin[["x"]][["total_iv"]][[1]]
+
+  out
+
+}
+
+#'
+#' Get labels for Information Values
+#'
+#' @param x A numeric vector
+#'
+#' @examples
+#'
+#' N <- 10000
+#'
+#' predicted <- runif(N)
+#'
+#' actual <- rbinom(N, size = 1, prob = predicted)
+#'
+#' iv_label(information_value(actual, predicted))
+#'
+#' predicted <- runif(N)
+#'
+#' iv_label(information_value(actual, predicted))
+#'
+#' @export
+iv_label <- function(x) {
+  cut(
+    x,
+    include.lowest = TRUE,
+    breaks = c(0, 0.02, 0.1, 0.3, 0.5, Inf),
+    labels = c("unpredictive", "weak", "medium", "strong", "suspicious")
+  )
 }
 

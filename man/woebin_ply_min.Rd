@@ -20,7 +20,7 @@ Minimalistic version of woebin_ply
 
 data(germancredit, package = "scorecard")
 
-bins <- scorecard::woebin(germancredit, y = "creditability", x = "credit.amount")
+bins <- woebin2(germancredit, y = "creditability", x = "credit.amount")
 
 variable <- head(germancredit$credit.amount, 10)
 
@@ -28,6 +28,6 @@ bin <- bins$credit.amount
 
 woebin_ply_min(variable, bin)
 
-woebin_ply_min(variable, bin,  value = "badprob")
+woebin_ply_min(variable, bin, value = "posprob")
 
 }

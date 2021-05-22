@@ -4,10 +4,12 @@
 \alias{woebin_summary}
 \title{Get scorecard's woe_bin summary}
 \usage{
-woebin_summary(bins)
+woebin_summary(bins, sort = TRUE)
 }
 \arguments{
-\item{bins}{An output from `scorecard::woebin` function.}
+\item{bins}{An output from `scorecard::woebin` or `risk3r::woebin2` functions.}
+
+\item{sort}{Sort the data frame by information value. Default TRUE.}
 }
 \description{
 Get scorecard's woe_bin summary
@@ -16,7 +18,7 @@ Get scorecard's woe_bin summary
 
 data(germancredit, package = "scorecard")
 
-bins <- scorecard::woebin(
+bins <- woebin2(
  germancredit,
  y = "creditability",
  x = c("credit.amount", "housing", "duration.in.month", "purpose"),

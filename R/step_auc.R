@@ -19,6 +19,13 @@
 #
 # plot_cum_auc(model_auc)
 
+#' Function to stem model given aux gains
+#'
+#' @param model The model to test
+#' @param trace Show the trace
+#'
+#' @importFrom stats binomial glm
+#' @export
 step_auc <- function(model, trace = TRUE){
 
   yvar  <- as.character(as.formula(model))[2]
@@ -78,23 +85,33 @@ step_auc <- function(model, trace = TRUE){
 }
 
 
-# plot_cum_auc <- function(model, list_dataframes = NULL) {
-#
-#   yvar  <- as.character(as.formula(model))[2]
-#   xvars <- as.character(as.formula(model))[3]
-#   xvars <- unlist(strsplit(xvars, "\\s+\\+\\s+"))
-#
-#   purrr::map(1:length(xvars), function(nv = 3){
-#
-#     mod_aux <- paste(xvars[1:nv], collapse = " + ")
-#     mod_aux <- paste(yvar, " ~ ", mod_aux)
-#
-#     mod_aux
-#
-#   })
-#
-#   mod
-#
-#   Reduce(paste, xvars, accumulate = TRUE, )
-#   purrr::reduce(xvars, paste)
-# }
+plot_cum_auc <- function(model, list_dataframes = NULL) {
+
+  yvar  <- as.character(as.formula(model))[2]
+  xvars <- as.character(as.formula(model))[3]
+  xvars <- unlist(strsplit(xvars, "\\s+\\+\\s+"))
+
+  formulas <- purrr::map(1:length(xvars), function(nv = 3){
+
+    mod_aux <- paste(xvars[1:nv], collapse = " + ")
+    mod_aux <- paste(yvar, " ~ ", mod_aux)
+
+    mod_aux
+
+  })
+
+  df_auc <- purrr::map_df(formulas, function(f = "creditability  ~  status.of.existing.checking.account_woe + duration.in.month_woe + credit.history_woe"){
+
+    fitaux <- glm(as.formula(f), family = binomial(), data = model$data)
+
+    tibble::tibble(
+      auc = Metrics::auc(model$data[[yvar]], fitaux$fitted.values)
+    )
+
+  })
+
+  df_auc <- tibble::add_column(df_auc, variable = xvars, .before = 1)
+
+  df_auc
+
+}

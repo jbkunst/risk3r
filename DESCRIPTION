@@ -1,6 +1,6 @@
 Package: risk3r
 Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Version: 0.3.0.9000
 Authors@R: 
     person(given = "Joshua",
            family = "Kunst",
@@ -21,9 +21,10 @@ Imports:
     tidyr,
     tibble,
     stringr,
-    scales
+    scales,
+    scorecard (>= 0.3.2),
+    skimr
 Suggests:
     partykit,
-    scorecard,
     patchwork
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
