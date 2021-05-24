@@ -21,10 +21,19 @@ data(germancredit, package = "scorecard")
 bins <- woebin2(
  germancredit,
  y = "creditability",
- x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+ # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
  method = "tree"
 )
 
-woebin_summary(bins)
+bin_summary <- woebin_summary(bins)
+bin_summary
+
+if(require(dplyr)){
+
+  dplyr::glimpse(bin_summary)
+
+  dplyr::filter(bin_summary, !monotone, !factor)
+
+}
 
 }

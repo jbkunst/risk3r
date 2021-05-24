@@ -57,6 +57,7 @@
 #'   # ggplot2::theme_set(ggplot2::theme_minimal() + ggplot2::theme(legend.position = "bottom"))
 #'
 #'   # values
+#'   bin <- tibble::as_tibble(bin)
 #'   iv   <- unique(dplyr::pull(bin, total_iv))
 #'   var  <- unique(dplyr::pull(bin, variable))
 #'   lvls <- dplyr::pull(bin, bin)
@@ -65,16 +66,16 @@
 #'   bin <- dplyr::mutate(
 #'     bin,
 #'     bin = factor(bin, levels = lvls),
-#'     total_badprob = sum(count_distr*badprob)
+#'     total_badprob = sum(count_distr*posprob)
 #'     )
 #'
-#'   bing <- tidyr::gather(dplyr::select(bin, bin, good, bad), label, value, -bin)
+#'   bing <- tidyr::gather(dplyr::select(bin, bin, pos, neg), label, value, -bin)
 #'   bing <- dplyr::mutate(bing, count_distr = value/sum(value))
 #'
 #'   df <- dplyr::bind_rows(
 #'     dplyr::mutate(dplyr::select(bing, bin, value, count_distr, label), type = "count_distr"),
-#'     dplyr::mutate(dplyr::select(bin , bin, badprob)                  , type = "badprob", type2 = "bin"),
-#'     dplyr::mutate(dplyr::select(bin , bin, badprob = total_badprob)  , type = "badprob", type2 = "total")
+#'     dplyr::mutate(dplyr::select(bin , bin, posprob)                  , type = "badprob", type2 = "bin"),
+#'     dplyr::mutate(dplyr::select(bin , bin, posprob = total_badprob)  , type = "badprob", type2 = "total")
 #'   )
 #'
 #'   df <- dplyr::mutate(
@@ -82,7 +83,7 @@
 #'     bin               = factor(bin, levels = lvls),
 #'     value_label       = scales::comma(value),
 #'     count_distr_label = scales::percent(count_distr),
-#'     badprob_label     = scales::percent(badprob)
+#'     badprob_label     = scales::percent(posprob)
 #'     )
 #'
 #'   df
@@ -95,8 +96,8 @@
 #'     #   ) +
 #'
 #'     ggplot2::geom_hline(
-#'       ggplot2::aes(yintercept = badprob, group = type2, color = type2),
-#'       data = dplyr::filter(df, type == "badprob", type2 == "total")
+#'       ggplot2::aes(yintercept = posprob, group = type2, color = type2),
+#'       data = dplyr::filter(df, type == "posprob", type2 == "total")
 #'       ) +
 #'
 #'     ggplot2::geom_col(
@@ -105,13 +106,14 @@
 #'       ) +
 #'
 #'     ggplot2::geom_line(
-#'       ggplot2::aes(bin, badprob, group = type2, color = type2),
-#'       data = dplyr::filter(df, type == "badprob", type2 == "bin")
+#'       ggplot2::aes(bin, posprob, group = type2, color = type2),
+#'       data = dplyr::filter(df, type == "posprob", type2 == "bin")
 #'       ) +
 #'
+#'
 #'     ggplot2::geom_point(
-#'       ggplot2::aes(bin, badprob, group = type2, color = type2),
-#'       data = dplyr::filter(df, type == "badprob", type2 == "bin"),
+#'       ggplot2::aes(bin, posprob, group = type2, color = type2),
+#'       data = dplyr::filter(df, type == "posprob", type2 == "bin"),
 #'       shape = 21
 #'       ) +
 #'
@@ -131,7 +133,7 @@
 #'
 #'     df2 <- dplyr::bind_rows(
 #'       dplyr::mutate(dplyr::select(bin, bin, value = count_distr, count), value_label = scales::comma(count), type = "count_distr"),
-#'       dplyr::mutate(dplyr::select(bin, bin, value = badprob), value_label = scales::percent(value), type = "badprob")
+#'       dplyr::mutate(dplyr::select(bin, bin, value = posprob), value_label = scales::percent(value), type = "badprob")
 #'     )
 #'
 #'     gg <- gg +
@@ -161,7 +163,7 @@
 #'   gg
 #'
 #' }
-
+#'
 #' #'
 #' #' Alternative plot for woe_bin
 #' #'
@@ -195,4 +197,4 @@
 #'   purrr::map(bins, bin_plot)
 #'
 #' }
-
+#'

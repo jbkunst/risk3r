@@ -1,0 +1,17 @@
+#' Credit data
+#'
+#' @docType data
+#' @name credit
+#' @usage credit
+#' @format A \code{data frame} with 49,694 observations and 17 variables.
+"credit"
+
+#' hmeq data
+#'
+#' http://www.creditriskanalytics.net/datasets-private2.html
+#'
+#' @docType data
+#' @name hmeq
+#' @usage hmeq
+#' @format A \code{data frame} with 5,960 observations and 13 variables.
+"hmeq"

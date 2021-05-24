@@ -22,7 +22,9 @@ woebin2(
   ignore_const_cols = TRUE,
   ignore_datetime_cols = TRUE,
   check_cate_num = TRUE,
-  replace_blank_inf = TRUE
+  replace_blank_inf = TRUE,
+  bin_close_right = TRUE,
+  control = partykit::ctree_control()
 )
 }
 \description{
@@ -38,10 +40,35 @@ data(germancredit, package = "scorecard")
 bins <- woebin2(
  dt = germancredit,
  y = "creditability",
- x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+ # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
  method = "tree"
 )
 
 bins
+
+if(require(scorecard)) {
+  library(scorecard)
+  options(bin_close_right = TRUE)
+}
+
+bins <- woebin2(
+ dt = germancredit,
+ y = "creditability",
+ # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+ method = "tree"
+)
+
+bins
+
+bins_ctree <- woebin2(
+  dt = germancredit,
+  y = "creditability",
+  method = "ctree",
+  control = partykit::ctree_control(alpha = 1, maxdepth = 4)
+  )
+
+woebin_summary(bins)
+woebin_summary(bins_ctree)
+
 
 }

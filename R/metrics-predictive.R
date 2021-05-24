@@ -88,10 +88,11 @@ ks <- function(actual, predicted){
 #' @export
 metrics <- function(actual, predicted){
 
-  data.frame(
+  tibble::tibble(
     ks = ks(actual, predicted),
     auc= Metrics::auc(actual, predicted),
-    iv = information_value(actual, predicted)
+    iv = information_value(actual, predicted),
+    gini = 2*auc - 1
   )
 
 }

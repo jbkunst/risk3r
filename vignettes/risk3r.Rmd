@@ -1,0 +1,135 @@
+---
+title: "Example using risk3r"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{risk3r}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+You can also embed plots, for example:
+
+## Packages and data
+
+```{r}
+library(risk3r)
+library(scorecard)
+
+library(dplyr)
+library(stringr)
+library(broom)
+library(ggplot2)
+
+data(credit)
+
+glimpse(credit)
+
+set.seed(123)
+
+credit <- credit %>% 
+  mutate(
+    sample = sample(
+      c("train", "test"), 
+      prob = c(0.5, .5), 
+      size = nrow(credit),
+      replace = TRUE
+      )
+  )
+
+credit %>% count(sample, bad)
+
+```
+
+## Getting woes
+
+```{r}
+dtrain <- credit %>% 
+  filter(sample == "train") %>% 
+  select(-sample, id_client)
+
+bins <- scorecard::woebin(dtrain, y = "bad")
+```
+
+```{r}
+dbiv <- woebin_summary(bins)
+
+glimpse(dbiv)
+```
+
+```{r}
+# bins2 <- woebin2(dtrain, y = "bad", method = "ctree")
+```
+
+Remove variables woebin exclude:
+
+```{r}
+vars <- dbiv %>% 
+  pull(variable)
+
+dtrain <- dtrain %>% 
+  select(bad, all_of(vars))
+```
+
+Apply woes to train table.
+
+```{r}
+dtrain <- as_tibble(woebin_ply(dtrain, bins))
+
+dtest <-  credit %>% 
+  filter(sample == "test") %>% 
+  woebin_ply(bins) %>% 
+  as_tibble()
+
+glimpse(dtrain)
+```
+
+
+## Modelling
+
+We'll remove _unpredictive_ variables.
+
+```{r}
+vars <- dbiv %>% 
+  filter(iv > 0.02) %>% 
+  pull(variable) %>% 
+  str_c("_woe")
+
+dtrain <- dtrain %>% 
+  select(bad, all_of(vars))
+
+model <- glm(bad ~ ., data = dtrain, family = binomial(link = logit))
+
+broom::tidy(model)
+
+model_metrics(model)
+
+model_metrics(model, newdata = dtest)
+```
+
+We can get a simple model:
+
+```{r}
+model_step <- step_forward(model)
+
+broom::tidy(model_step)
+```
+
+See if we can remove variables via inspecting predictive measures.
+
+```{r}
+dfmetrics <- model_partials(model_step, newdata = dtest)
+dfmetrics
+
+dfmetrics %>% 
+  select(-gini, -iv) %>% 
+  risk3r:::plot.model_partials() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+

@@ -2,7 +2,7 @@
 % Please edit documentation in R/scorecard.R
 \name{woebin_ctree}
 \alias{woebin_ctree}
-\title{woebin_ctree}
+\title{Interface scorecard::woebin for partykiy::ctree}
 \usage{
 woebin_ctree(
   y,
@@ -13,7 +13,7 @@ woebin_ctree(
 )
 }
 \description{
-Interface scorecard::woebin/partykiy::ctree
+Interface scorecard::woebin for partykiy::ctree
 }
 \examples{
 
@@ -22,7 +22,18 @@ data(germancredit, package = "scorecard")
 y <- germancredit$creditability
 
 x <- germancredit$duration.in.month
-woebin_ctree(y, x, "duration")
+
+woebin_ctree(y, x, "duration", count_distr_limit = 0.05)
+
+woebin_ctree(y, x, "duration", count_distr_limit = 0.2)
+
+woebin_ctree(
+  y,
+  x,
+  "duration",
+  count_distr_limit = 0.05,
+  control = partykit::ctree_control(alpha = 0.5)
+  )
 
 x[sample(c(TRUE, FALSE), size = length(x), prob = c(1, 99), replace = TRUE)] <- NA
 woebin_ctree(y, x, "duration")

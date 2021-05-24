@@ -25,6 +25,11 @@ Imports:
     scorecard (>= 0.3.2),
     skimr
 Suggests:
+    rmarkdown,
+    knitr,
     partykit,
     patchwork
 RoxygenNote: 7.1.1
+Depends: 
+    R (>= 2.10)
+VignetteBuilder: knitr
