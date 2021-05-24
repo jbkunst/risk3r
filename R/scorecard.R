@@ -113,8 +113,8 @@ woebin2 <- function(dt, y, x = NULL,
   # ignore_const_cols = TRUE; ignore_datetime_cols = TRUE;
   # check_cate_num = TRUE; replace_blank_inf = TRUE
 
-  default <- getOption("bin_close_right")
-  options(bin_close_right = TRUE)
+  # default <- getOption("bin_close_right")
+  # options(bin_close_right = TRUE)
 
 
   if(method %in% c("tree", "chimerge")){
@@ -163,7 +163,7 @@ woebin2 <- function(dt, y, x = NULL,
 
   }
 
-  options(bin_close_right = default)
+  # options(bin_close_right = default)
 
   bins <- map(bins, tibble::as_tibble)
 
