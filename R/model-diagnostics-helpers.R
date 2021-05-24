@@ -1,112 +1,3 @@
-#' Function to stem model given aux gains
-#'
-#' @param model The model to test
-#' @param trace Show the trace
-#'
-#' @export
-step_auc <- function(model, trace = TRUE){
-
-  yvar  <- as.character(as.formula(model))[2]
-  xvars <- as.character(as.formula(model))[3]
-  xvars <- unlist(strsplit(xvars, "\\s+\\+\\s+"))
-
-  vars_act  <- c(1)
-  vars_add <- xvars
-
-  for(s in 1:length(xvars)) {
-
-    mod_act <- paste(vars_act, collapse = "+")
-    mod_act <- paste(yvar, "~", mod_act)
-
-    fit <- glm(as.formula(mod_act), family = binomial(), data = model$data)
-
-    if(length(vars_act) == 1) {
-      actual_auc <- 0.5
-    } else {
-      actual_auc <- Metrics::auc(model$data[[yvar]], fit$fitted.values)
-    }
-
-    if(length(vars_act) == 0) break()
-
-    fit_metrics <- purrr::map_df(vars_add, function(m = "credit.amount_woe"){
-
-      # message(m)
-
-      mod_prp <- paste(mod_act, m, sep = " + ")
-
-      fitaux <- glm(as.formula(mod_prp), family = binomial(), data = model$data)
-
-      tibble::tibble(
-        var_added = m,
-        auc = Metrics::auc(model$data[[yvar]], fitaux$fitted.values)
-      )
-
-    })
-
-    fit_metrics <- dplyr::arrange(fit_metrics, desc(auc))
-    fit_metrics <- mutate(fit_metrics, gain_auc = (auc - actual_auc)/auc)
-
-    print(fit_metrics)
-
-    var_to_add <- dplyr::pull(fit_metrics, var_added)[1]
-    gain       <- dplyr::pull(fit_metrics, gain_auc)[1]
-
-    if(gain <= 0) break()
-
-    vars_act  <- c(vars_act, var_to_add)
-    vars_add  <- setdiff(xvars, var_to_add)
-
-  }
-
-  fit
-
-}
-
-
-
-# model_metrics(model)
-# model_metrics(model, dplyr::sample_frac(dt_woe_list[[2]], 0.3))
-# model_metrics(model, dplyr::sample_frac(dt_woe_list[[2]], 0.1))
-
-#' Shortcut for step forward
-#'
-#' @examples
-#'
-#' library(scorecard)
-#' data("germancredit")
-#'
-#' dt    <-  var_filter(germancredit, "creditability")
-#' bins  <-  woebin(dt, "creditability")
-#' dtwoe <-  woebin_ply(dt, bins)
-#' model <- glm(creditability ~ ., family = binomial(), data = dtwoe)
-#'
-#' step_forward(model)
-#'
-#' @export
-step_forward <- function(model, ...) {
-
-  yvar  <- as.character(as.formula(model))[2]
-
-  model_null <- glm(
-    as.formula(paste0(yvar, " ~ 1")),
-    data = model$data,
-    family = binomial(link = logit)
-  )
-
-  model_full <- as.formula(model)
-
-  model_step <- step(
-    model_null,
-    scope = list(upper = model_full, lower = ~1),
-    direction = "both",
-    ...
-  )
-
-  model_step
-
-}
-
-
 #' Calculate predictive metrics for glm models
 #'
 #' @examples
@@ -162,9 +53,7 @@ model_metrics <- function(model, newdata = NULL) {
 #' dtwoe <-  woebin_ply(dt, bins)
 #' model <- glm(creditability ~ ., family = binomial(), data = dtwoe)
 #'
-#' modelf <- step_forward(model)
-#'
-#' model_partials(modelf)
+#' model_partials(model)
 #'
 #' @importFrom stats binomial glm
 #' @export
@@ -232,9 +121,7 @@ model_partials <- function(model, newdata = NULL) {
 #' dtwoe <-  woebin_ply(dt, bins)
 #' model <- glm(creditability ~ ., family = binomial(), data = dtwoe)
 #'
-#' modelf <- step_forward(model)
-#'
-#' dfmetrics <- model_partials(modelf)
+#' dfmetrics <- model_partials(model)
 #'
 #' plot(dfmetrics)
 #'
@@ -250,9 +137,10 @@ model_partials <- function(model, newdata = NULL) {
 #'
 #'
 #' @importFrom utils hasName
+#' @export
 plot.model_partials <- function(dfmetrics, ...) {
 
-  stopifnot(attr(dfmetrics, "function") == "model_partials")
+  # stopifnot(attr(dfmetrics, "function") == "model_partials")
 
   if(hasName(dfmetrics, "sample")) {
 
@@ -271,3 +159,69 @@ plot.model_partials <- function(dfmetrics, ...) {
     ggplot2::facet_wrap(ggplot2::vars(.data$key), ncol = 1, scales = "free_y")
 
 }
+
+
+#' #' Function to stem model given aux gains
+#' #'
+#' #' @param model The model to test
+#' #' @param trace Show the trace
+#' #'
+#' #' @export
+#' step_auc <- function(model, trace = TRUE){
+#'
+#'   yvar  <- as.character(as.formula(model))[2]
+#'   xvars <- as.character(as.formula(model))[3]
+#'   xvars <- unlist(strsplit(xvars, "\\s+\\+\\s+"))
+#'
+#'   vars_act  <- c(1)
+#'   vars_add <- xvars
+#'
+#'   for(s in 1:length(xvars)) {
+#'
+#'     mod_act <- paste(vars_act, collapse = "+")
+#'     mod_act <- paste(yvar, "~", mod_act)
+#'
+#'     fit <- glm(as.formula(mod_act), family = binomial(), data = model$data)
+#'
+#'     if(length(vars_act) == 1) {
+#'       actual_auc <- 0.5
+#'     } else {
+#'       actual_auc <- Metrics::auc(model$data[[yvar]], fit$fitted.values)
+#'     }
+#'
+#'     if(length(vars_act) == 0) break()
+#'
+#'     fit_metrics <- purrr::map_df(vars_add, function(m = "credit.amount_woe"){
+#'
+#'       # message(m)
+#'
+#'       mod_prp <- paste(mod_act, m, sep = " + ")
+#'
+#'       fitaux <- glm(as.formula(mod_prp), family = binomial(), data = model$data)
+#'
+#'       tibble::tibble(
+#'         var_added = m,
+#'         auc = Metrics::auc(model$data[[yvar]], fitaux$fitted.values)
+#'       )
+#'
+#'     })
+#'
+#'     fit_metrics <- dplyr::arrange(fit_metrics, desc(auc))
+#'     fit_metrics <- mutate(fit_metrics, gain_auc = (auc - actual_auc)/auc)
+#'
+#'     print(fit_metrics)
+#'
+#'     var_to_add <- dplyr::pull(fit_metrics, var_added)[1]
+#'     gain       <- dplyr::pull(fit_metrics, gain_auc)[1]
+#'
+#'     if(gain <= 0) break()
+#'
+#'     vars_act  <- c(vars_act, var_to_add)
+#'     vars_add  <- setdiff(xvars, var_to_add)
+#'
+#'   }
+#'
+#'   fit
+#'
+#' }
+#'

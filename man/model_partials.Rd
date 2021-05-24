@@ -19,8 +19,6 @@ bins  <-  woebin(dt, "creditability")
 dtwoe <-  woebin_ply(dt, bins)
 model <- glm(creditability ~ ., family = binomial(), data = dtwoe)
 
-modelf <- step_forward(model)
-
-model_partials(modelf)
+model_partials(model)
 
 }
