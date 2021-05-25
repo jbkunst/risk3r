@@ -24,8 +24,7 @@ Imports:
     scales,
     scorecard (>= 0.3.2),
     skimr,
-    glmnet,
-    stringr
+    glmnet
 Suggests:
     rmarkdown,
     knitr,

@@ -51,12 +51,15 @@ bin_ks <- function(bin) {
 #'
 #' @examples
 #'
+#' if(FALSE) {
+#'
 #' data(germancredit, package = "scorecard")
 #'
 #' bins <- woebin2(
 #'  dt = germancredit,
 #'  y = "creditability",
 #'  # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+#'  no_cores = 0,
 #'  method = "tree"
 #' )
 #'
@@ -71,6 +74,7 @@ bin_ks <- function(bin) {
 #'  dt = germancredit,
 #'  y = "creditability",
 #'  # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+#'  no_cores = 0,
 #'  method = "tree"
 #' )
 #'
@@ -80,12 +84,14 @@ bin_ks <- function(bin) {
 #'   dt = germancredit,
 #'   y = "creditability",
 #'   method = "ctree",
+#'   no_cores = 0,
 #'   control = partykit::ctree_control(alpha = 1, maxdepth = 4)
 #'   )
 #'
 #' woebin_summary(bins)
 #' woebin_summary(bins_ctree)
 #'
+#' }
 #'
 #' @importFrom scorecard woebin
 #' @importFrom purrr map pluck
@@ -204,7 +210,9 @@ woebin2 <- function(dt, y, x = NULL,
 #' woebin_ctree(y, x, "purpose_with_na")
 #'
 #'
+#'
 #' @importFrom stats var as.formula complete.cases setNames
+#' @export
 woebin_ctree <- function(y, x, namevar = "variable", count_distr_limit = 0.05,
                          control = partykit::ctree_control()) {
 
@@ -263,12 +271,15 @@ woebin_ctree <- function(y, x, namevar = "variable", count_distr_limit = 0.05,
 
   }
 
-  bin <- quiet(scorecard::woebin(
-    dplyr::rename(tibble::tibble(y = y, x = x), !!namevar := x),
-    y = "y",
-    x = namevar,
-    breaks_list = setNames(list(out), namevar)
-    ))
+  bin <- quiet(
+    scorecard::woebin(
+      dplyr::rename(tibble::tibble(y = y, x = x), !!namevar := x),
+      y = "y",
+      x = namevar,
+      breaks_list = setNames(list(out), namevar),
+      no_cores = 0,
+      )
+    )
 
   bin[[namevar]]
 
@@ -282,12 +293,15 @@ woebin_ctree <- function(y, x, namevar = "variable", count_distr_limit = 0.05,
 #'
 #' @examples
 #'
+#' if(FALSE) {
+#'
 #' data(germancredit, package = "scorecard")
 #'
 #' bins <- woebin2(
 #'  germancredit,
 #'  y = "creditability",
 #'  # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+#'  no_cores = 0,
 #'  method = "tree"
 #' )
 #'
@@ -302,9 +316,10 @@ woebin_ctree <- function(y, x, namevar = "variable", count_distr_limit = 0.05,
 #'
 #' }
 #'
+#' }
+#'
 #' @importFrom dplyr bind_rows group_by mutate summarize n as_tibble arrange desc
 #' @importFrom rlang .data :=
-#'
 #' @export
 woebin_summary <- function(bins, sort = TRUE) {
 

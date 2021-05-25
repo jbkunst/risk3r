@@ -57,7 +57,7 @@ dtrain <- credit %>%
   filter(sample == "train") %>% 
   select(-sample)
 
-bins <- scorecard::woebin(dtrain, y = "bad")
+bins <- scorecard::woebin(dtrain, y = "bad", no_cores = 1)
 ```
 
 ```{r}

@@ -45,4 +45,5 @@ x[sample(c(TRUE, FALSE), size = length(x), prob = c(1, 99), replace = TRUE)] <- 
 woebin_ctree(y, x, "purpose_with_na")
 
 
+
 }

@@ -11,18 +11,4 @@ Shortcut for step forward
 }
 \examples{
 
-library(scorecard)
-data("germancredit")
-
-bins  <-  woebin(germancredit, "creditability")
-dtwoe <-  woebin_ply(germancredit, bins)
-model <- glm(creditability ~ ., family = binomial(), data = dtwoe)
-
-broom::tidy(model)
-
-model_fssfwd <- featsel_stepforward(model)
-
-broom::tidy(model_fssfwd)
-
-
 }

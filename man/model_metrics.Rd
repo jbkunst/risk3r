@@ -11,16 +11,5 @@ Calculate predictive metrics for glm models
 }
 \examples{
 
-library(scorecard)
-data("germancredit")
-
-dt    <-  var_filter(germancredit, "creditability")
-bins  <-  woebin(dt, "creditability")
-dtwoe <-  woebin_ply(dt, bins)
-model <- glm(creditability ~ ., family = binomial(), data = dtwoe)
-
-model_metrics(model)
-
-model_metrics(model, newdata = head(dtwoe, 100))
 
 }

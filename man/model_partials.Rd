@@ -11,14 +11,5 @@ Get predictive indicator for partial models given a model
 }
 \examples{
 
-library(scorecard)
-data("germancredit")
-
-dt    <-  var_filter(germancredit, "creditability")
-bins  <-  woebin(dt, "creditability")
-dtwoe <-  woebin_ply(dt, bins)
-model <- glm(creditability ~ ., family = binomial(), data = dtwoe)
-
-model_partials(model)
 
 }

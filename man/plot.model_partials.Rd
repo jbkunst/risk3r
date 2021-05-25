@@ -11,27 +11,5 @@ Plot model_partials output
 }
 \examples{
 
-library(scorecard)
-data("germancredit")
-
-dt    <-  var_filter(germancredit, "creditability")
-bins  <-  woebin(dt, "creditability")
-dtwoe <-  woebin_ply(dt, bins)
-model <- glm(creditability ~ ., family = binomial(), data = dtwoe)
-
-dfmetrics <- model_partials(model)
-
-plot(dfmetrics)
-
-library(ggplot2)
-
-plot(dfmetrics)
-
-plot(dfmetrics[,-c(4, 5)]) +
-  geom_text(
-  aes(variable, value + 0.01, label = scales::percent(value, accuracy = 0.1)),
-   size = 3
-   )
-
 
 }

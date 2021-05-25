@@ -35,12 +35,15 @@ See https://github.com/ShichenXie/scorecard/issues/50 for more details.#'
 }
 \examples{
 
+if(FALSE) {
+
 data(germancredit, package = "scorecard")
 
 bins <- woebin2(
  dt = germancredit,
  y = "creditability",
  # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+ no_cores = 0,
  method = "tree"
 )
 
@@ -55,6 +58,7 @@ bins <- woebin2(
  dt = germancredit,
  y = "creditability",
  # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+ no_cores = 0,
  method = "tree"
 )
 
@@ -64,11 +68,13 @@ bins_ctree <- woebin2(
   dt = germancredit,
   y = "creditability",
   method = "ctree",
+  no_cores = 0,
   control = partykit::ctree_control(alpha = 1, maxdepth = 4)
   )
 
 woebin_summary(bins)
 woebin_summary(bins_ctree)
 
+}
 
 }

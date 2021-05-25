@@ -19,18 +19,5 @@ Feature selection via glmnet
 }
 \examples{
 
-library(scorecard)
-data("germancredit")
-
-bins  <-  woebin(germancredit, "creditability")
-dtwoe <-  woebin_ply(germancredit, bins)
-model <- glm(creditability ~ ., family = binomial(), data = dtwoe)
-
-broom::tidy(model)
-
-model_fsglmmet <- featsel_glmnet(model)
-
-broom::tidy(model_fsglmmet)
-
 
 }

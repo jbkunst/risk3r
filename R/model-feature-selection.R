@@ -2,19 +2,6 @@
 #'
 #' @examples
 #'
-#' library(scorecard)
-#' data("germancredit")
-#'
-#' bins  <-  woebin(germancredit, "creditability")
-#' dtwoe <-  woebin_ply(germancredit, bins)
-#' model <- glm(creditability ~ ., family = binomial(), data = dtwoe)
-#'
-#' broom::tidy(model)
-#'
-#' model_fsglmmet <- featsel_glmnet(model)
-#'
-#' broom::tidy(model_fsglmmet)
-#'
 #'
 #' @importFrom glmnet cv.glmnet
 #' @importFrom stringr str_remove_all
@@ -114,20 +101,7 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
 #'
 #' @examples
 #'
-#' library(scorecard)
-#' data("germancredit")
-#'
-#' bins  <-  woebin(germancredit, "creditability")
-#' dtwoe <-  woebin_ply(germancredit, bins)
-#' model <- glm(creditability ~ ., family = binomial(), data = dtwoe)
-#'
-#' broom::tidy(model)
-#'
-#' model_fssfwd <- featsel_stepforward(model)
-#'
-#' broom::tidy(model_fssfwd)
-#'
-#'
+#' @importFrom stats step
 #' @export
 featsel_stepforward <- function(model, ...) {
 
