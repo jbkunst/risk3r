@@ -6,10 +6,14 @@
 \usage{
 model_metrics(model, newdata = NULL)
 }
+\arguments{
+\item{model}{model}
+
+\item{newdata}{Optional data frame}
+}
 \description{
 Calculate predictive metrics for glm models
 }
 \examples{
-
 
 }

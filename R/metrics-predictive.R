@@ -94,7 +94,7 @@ metrics <- function(actual, predicted){
     ks = ks(actual, predicted),
     auc= Metrics::auc(actual, predicted),
     iv = information_value(actual, predicted),
-    gini = 2*auc - 1
+    gini = 2*.data$auc - 1
   )
 
 }

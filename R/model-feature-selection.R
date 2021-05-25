@@ -1,10 +1,19 @@
 #' Feature selection via glmnet
 #'
+#' @param model model
+#' @param S S
+#' @param plot plot
+#' @param seed seed
+#' @param trace.it trace.it
+#' @param type.measue type.measue
+#' @param ... Additional argumentos for glmnet::cv.glmnet
+#'
 #' @examples
 #'
 #'
 #' @importFrom glmnet cv.glmnet
 #' @importFrom stringr str_remove_all
+#' @importFrom stats coef
 #' @export
 featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
                            trace.it = 1, type.measue = "auc", ...) {
@@ -31,13 +40,13 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
     L1_Norm = stringr::str_remove_all(.data$L1_Norm, "s"),
     L1_Norm = as.numeric(.data$L1_Norm)
     )
-  dm <- dplyr::filter(dm, coefficient != 0)
+  dm <- dplyr::filter(dm, .data$coefficient != 0)
   dm <- dplyr::group_by(dm, .data$variable)
   dm <- dplyr::arrange(dm, .data$L1_Norm)
   dm <- dplyr::filter(dm, dplyr::row_number() == 1)
   dm <- dplyr::ungroup(dm)
   dm <- dplyr::mutate(dm, position = dplyr::row_number())
-  dm <- dplyr::select(dm, variable, position)
+  dm <- dplyr::select(dm, .data$variable, .data$position)
 
   # cv fit
   set.seed(seed)
@@ -55,9 +64,9 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
 
   if(plot) {
 
-    glmnet:::plot.glmnet(fit, xvar = "norm")
-    glmnet:::plot.glmnet(fit, xvar = "lambda")
-    glmnet:::plot.cv.glmnet(cvfit, sign.lambda = 1)
+    graphics::plot(fit, xvar = "norm")
+    graphics::plot(fit, xvar = "lambda")
+    graphics::plot(cvfit, sign.lambda = 1)
 
   }
 
@@ -70,7 +79,7 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
   # glmnet:::coef.cv.glmnet(cvfit, s = "lambda.min")
   # glmnet:::coef.cv.glmnet(cvfit, s = "lambda.1se")
 
-  dcoefs <- coef(cvfit, s = S)
+  dcoefs <- stats::coef(cvfit, s = S)
   dcoefs <- as.matrix(dcoefs)
 
   colnames(dcoefs) <- "coefficient"
@@ -79,8 +88,8 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
   dcoefs <- tibble::rownames_to_column(dcoefs, var = "variable")
   dcoefs <- dplyr::left_join(dcoefs, dm, by = "variable")
   dcoefs <- dplyr::mutate(dcoefs, position = ifelse(is.na(.data$position), Inf, .data$position))
-  dcoefs <- dplyr::filter(dcoefs, coefficient != 0, variable != "(Intercept)")
-  dcoefs <- dplyr::arrange(dcoefs, position)
+  dcoefs <- dplyr::filter(dcoefs, .data$coefficient != 0, .data$variable != "(Intercept)")
+  dcoefs <- dplyr::arrange(dcoefs, .data$position)
 
   xnewvars <- dplyr::pull(dcoefs, .data$variable)
   xnewvars <- paste0(xnewvars, collapse = " + ")
@@ -98,6 +107,9 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
 }
 
 #' Shortcut for step forward
+#'
+#' @param model model
+#' @param ... Additional argumentos for stats::step
 #'
 #' @examples
 #'

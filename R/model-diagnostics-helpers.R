@@ -1,7 +1,9 @@
 #' Calculate predictive metrics for glm models
 #'
-#' @examples
+#' @param model model
+#' @param newdata Optional data frame
 #'
+#' @examples
 #'
 #' @importFrom stats predict.glm
 #' @export
@@ -29,8 +31,10 @@ model_metrics <- function(model, newdata = NULL) {
 
 }
 
+#' Get predictive indicator for partial models given a model
 #'
-#' @title Get predictive indicator for partial models given a model
+#' @param model model
+#' @param newdata Optional data frame
 #'
 #' @examples
 #'
@@ -89,25 +93,29 @@ model_partials <- function(model, newdata = NULL) {
 
 }
 
+
 #' Plot model_partials output
+#'
+#' @param x Result from model_partials function
+#' @param ... Optional arguments for ggplot2::geom_line
 #'
 #' @examples
 #'
-#'
+#' @method plot model_partials
 #' @importFrom utils hasName
 #' @export
-plot.model_partials <- function(dfmetrics, ...) {
+plot.model_partials <- function(x, ...) {
 
   # stopifnot(attr(dfmetrics, "function") == "model_partials")
 
-  if(hasName(dfmetrics, "sample")) {
+  if(hasName(x, "sample")) {
 
-    dfg <- tidyr::gather(dfmetrics, "key", "value", -.data$variable, -.data$sample)
+    dfg <- tidyr::gather(x, "key", "value", -.data$variable, -.data$sample)
     mapng <- ggplot2::aes(.data$variable, .data$value, group = .data$sample, color = .data$sample)
 
   } else {
 
-    dfg <- tidyr::gather(dfmetrics, "key", "value", -.data$variable)
+    dfg <- tidyr::gather(x, "key", "value", -.data$variable)
     mapng <- ggplot2::aes(.data$variable, .data$value, group = .data$key)
 
   }
