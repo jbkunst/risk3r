@@ -88,6 +88,8 @@ ks <- function(actual, predicted){
 #' @export
 metrics <- function(actual, predicted){
 
+  if(is.factor(actual)) actual <- as.numeric(actual) - 1
+
   tibble::tibble(
     ks = ks(actual, predicted),
     auc= Metrics::auc(actual, predicted),

@@ -18,7 +18,7 @@ You can also embed plots, for example:
 
 ## Packages and data
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 library(risk3r)
 library(scorecard)
 library(dplyr)
@@ -28,8 +28,11 @@ library(ggplot2)
 ```
 
 ```{r}
-data(credit)
+data("germancredit", package = "scorecard")
 
+credit <- germancredit
+credit <- rename(credit, bad = creditability)
+credit <- mutate(credit, bad = as.numeric(bad == "bad"))
 glimpse(credit)
 
 set.seed(123)
@@ -45,7 +48,6 @@ credit <- credit %>%
   )
 
 credit %>% count(sample, bad)
-
 ```
 
 ## Getting woes
@@ -53,7 +55,7 @@ credit %>% count(sample, bad)
 ```{r}
 dtrain <- credit %>% 
   filter(sample == "train") %>% 
-  select(-sample, id_client)
+  select(-sample)
 
 bins <- scorecard::woebin(dtrain, y = "bad")
 ```
@@ -146,10 +148,50 @@ dfmetrics <- model_partials(model_fsglmnet, newdata = dtest)
 dfmetrics
 
 dfmetrics %>% 
-  # select(-gini, -iv) %>% 
+  select(-gini, -iv) %>% 
   risk3r:::plot.model_partials() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+### Scorecard
+
+```{r}
+POINTS0   <- 600
+PDO       <- 20
+ODDS0     <- 1/50
+
+scrcrd <- scorecard::scorecard(
+  bins = bins, 
+  model = model_fsglmnet, 
+  points0 = POINTS0,
+  pdo = PDO,
+  odds0 = ODDS0,
+  basepoints_eq0 = TRUE
+  )
+
+scrcrd$age.in.years
+
+scrcrd2 <- scorecard::scorecard2(
+  dt = filter(credit, sample == "train"),
+  y = "bad",
+  bins = bins,
+  x = str_remove(names(coef(model_fsglmnet))[-1], "_woe$"),
+  points0 = POINTS0,
+  pdo = PDO,
+  odds0 = ODDS0,
+  basepoints_eq0 = TRUE
+  )
+
+scrcrd2$age.in.years
+
+dtrain %>% 
+  group_by(age.in.years_woe) %>% 
+  summarise(
+    dplyr::n(),
+    mean(bad)
+  )
+
+
+```
 
 
