@@ -17,6 +17,7 @@
 #'
 #'
 #' @importFrom glmnet cv.glmnet
+#' @importFrom stringr str_remove_all
 #' @export
 featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
                            trace.it = 1, type.measue = "auc", ...) {
@@ -40,7 +41,7 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
   dm <- tidyr::gather(dm, "L1_Norm", "coefficient", -.data$variable)
   dm <- dplyr::mutate(
     dm,
-    L1_Norm = str_remove_all(.data$L1_Norm, "s"),
+    L1_Norm = stringr::str_remove_all(.data$L1_Norm, "s"),
     L1_Norm = as.numeric(.data$L1_Norm)
     )
   dm <- dplyr::filter(dm, coefficient != 0)
