@@ -6,6 +6,11 @@
 \usage{
 model_partials(model, newdata = NULL)
 }
+\arguments{
+\item{model}{model}
+
+\item{newdata}{Optional data frame}
+}
 \description{
 Get predictive indicator for partial models given a model
 }

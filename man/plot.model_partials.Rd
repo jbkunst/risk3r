@@ -4,12 +4,16 @@
 \alias{plot.model_partials}
 \title{Plot model_partials output}
 \usage{
-\method{plot}{model_partials}(dfmetrics, ...)
+\method{plot}{model_partials}(x, ...)
+}
+\arguments{
+\item{x}{Result from model_partials function}
+
+\item{...}{Optional arguments for ggplot2::geom_line}
 }
 \description{
 Plot model_partials output
 }
 \examples{
-
 
 }

@@ -6,6 +6,11 @@
 \usage{
 featsel_stepforward(model, ...)
 }
+\arguments{
+\item{model}{model}
+
+\item{...}{Additional argumentos for stats::step}
+}
 \description{
 Shortcut for step forward
 }

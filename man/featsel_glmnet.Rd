@@ -14,6 +14,21 @@ featsel_glmnet(
   ...
 )
 }
+\arguments{
+\item{model}{model}
+
+\item{S}{S}
+
+\item{plot}{plot}
+
+\item{seed}{seed}
+
+\item{trace.it}{trace.it}
+
+\item{type.measue}{type.measue}
+
+\item{...}{Additional argumentos for glmnet::cv.glmnet}
+}
 \description{
 Feature selection via glmnet
 }
