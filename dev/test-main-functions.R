@@ -4,7 +4,7 @@ library(risk3r)
 data("germancredit")
 
 dt    <- var_filter(germancredit, "creditability")
-bins  <- woebin(germancredit, "creditability", no_cores = 1)
+bins  <- woebin(germancredit, "creditability")
 dtwoe <- woebin_ply(dt, bins)
 model <- glm(creditability ~ ., family = binomial(), data = dtwoe)
 
