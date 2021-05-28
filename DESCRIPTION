@@ -7,9 +7,9 @@ Authors@R:
            role = c("aut", "cre"),
            email = "jbkunst@gmail.com"
            )
-Description: This package contains a set of convenient functions for the 
-development of risk models. Some of these functions were designed to be 
-in conjunction with the scorecard package.
+Description: This package contains a set of convenient functions for the development of
+ risk models. Some of this functions where designed to be in conjunction with the 
+ package scorecard.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
