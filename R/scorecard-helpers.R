@@ -5,6 +5,43 @@ quiet <- function(x) {
   invisible(force(x))
 }
 
+inline_bar <- function(x = NULL, width = 5, add_percent = TRUE, ...) {
+
+  # x <- runif(1)
+  # x <- runif(2)
+  stopifnot(
+    is.numeric(x),
+    # length(x) == 1,
+    0 <= x,
+    x <= 1
+  )
+
+  b <- round(width * x)
+  s <- width - b
+
+  out <- purrr::map2_chr(b, s, function(x, y) {
+
+    z <- rep(c("\U2588", "\U2591"), times = c(x, y))
+    z <- paste0(z, collapse = "")
+
+  })
+
+  out
+
+  if(add_percent) {
+
+    out2 <- scales::percent(x, ...)
+
+    out2 <- stringr::str_pad(out2, width = max(nchar(out2)) + 1, pad = " ")
+
+    out <- paste0(out, out2)
+
+  }
+
+  out
+
+}
+
 #' @importFrom skimr inline_hist
 inline_hist_aux <- function(counts = c(267, 105, 382, 196, 50)){
 
@@ -39,6 +76,20 @@ bin_ks <- function(bin) {
   # ks(bin[["y"]], predict(mod))
 
   ks(bin[["y"]], bin[["woe"]])
+
+}
+
+bin_pretty <- function(bin) {
+
+  bin <- tibble::as_tibble(bin)
+
+  bin <- dplyr::mutate(
+    bin,
+    count_distr2 = inline_bar(.data$count_distr),
+    posprob2 = inline_bar(.data$posprob)
+    )
+
+  bin
 
 }
 
@@ -195,7 +246,7 @@ woebin2 <- function(dt, y, x = NULL,
 
   # options(bin_close_right = default)
 
-  bins <- map(bins, tibble::as_tibble)
+  bins <- map(bins, bin_pretty)
 
   bins
 

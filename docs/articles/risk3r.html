@@ -72,42 +72,41 @@
 <div id="packages-and-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#packages-and-data" class="anchor"></a>Packages and data</h2>
-<pre><code>## 
-## Attaching package: 'dplyr'</code></pre>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">credit</span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"germancredit"</span>, package <span class="op">=</span> <span class="st">"scorecard"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">credit</span><span class="op">)</span></code></pre></div>
-<pre><code>## Rows: 49,694
-## Columns: 17
-## $ id_client           &lt;dbl&gt; 1, 7, 9, 12, 14, 19, 22, 26, 28, 30, 32, 35, 36, 3~
-## $ sex                 &lt;chr&gt; "F", "F", "F", "F", "M", "F", "M", "M", "F", "F", ~
-## $ marital_status      &lt;chr&gt; "O", "S", "S", "C", "C", "V", "C", "S", "D", "S", ~
-## $ age                 &lt;dbl&gt; 44, 22, 27, 32, 36, 46, 17, 20, 71, 46, 23, 23, 27~
-## $ flag_res_phone      &lt;chr&gt; "N", "Y", "Y", "Y", "Y", "N", "N", "Y", "Y", "Y", ~
-## $ area_code_res_phone &lt;dbl&gt; 31, 31, 31, 31, 31, 50, 50, 50, 31, 31, 31, 50, 31~
-## $ payment_day         &lt;dbl&gt; 12, 12, 20, 12, 12, 12, 12, 12, 18, 8, 18, 12, 23,~
-## $ residence_type      &lt;chr&gt; "P", "A", "A", "P", "P", "P", "A", "P", "A", "P", ~
-## $ months_in_residence &lt;dbl&gt; 12, 0, 0, 24, 120, 360, 12, 12, 96, 72, 276, 36, 2~
-## $ months_in_the_job   &lt;dbl&gt; 48, 48, 0, 0, 36, 120, 12, 24, 12, 12, 0, 24, 12, ~
-## $ profession_code     &lt;dbl&gt; 731, 999, 950, 165, 15, 704, 38, 39, 13, 801, 999,~
-## $ flag_other_card     &lt;chr&gt; "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", ~
-## $ flag_mobile_phone   &lt;chr&gt; "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", ~
-## $ flag_contact_phone  &lt;chr&gt; "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", ~
-## $ personal_net_income &lt;dbl&gt; 300, 410, 1000, 700, 1987, 520, 426, 285, 180, 442~
-## $ quant_add_cards     &lt;dbl&gt; 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
-## $ bad                 &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0,~</code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<span class="va">credit</span> <span class="op">&lt;-</span> <span class="va">germancredit</span>
+<span class="va">credit</span> <span class="op">&lt;-</span> <span class="fu">rename</span><span class="op">(</span><span class="va">credit</span>, bad <span class="op">=</span> <span class="va">creditability</span><span class="op">)</span>
+<span class="va">credit</span> <span class="op">&lt;-</span> <span class="fu">mutate</span><span class="op">(</span><span class="va">credit</span>, bad <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">bad</span> <span class="op">==</span> <span class="st">"bad"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">glimpse</span><span class="op">(</span><span class="va">credit</span><span class="op">)</span></code></pre></div>
+<pre><code>## Rows: 1,000
+## Columns: 21
+## $ status.of.existing.checking.account                      &lt;fct&gt; ... &lt; 0 DM, 0~
+## $ duration.in.month                                        &lt;dbl&gt; 6, 48, 12, 42~
+## $ credit.history                                           &lt;fct&gt; critical acco~
+## $ purpose                                                  &lt;chr&gt; "radio/televi~
+## $ credit.amount                                            &lt;dbl&gt; 1169, 5951, 2~
+## $ savings.account.and.bonds                                &lt;fct&gt; unknown/ no s~
+## $ present.employment.since                                 &lt;fct&gt; ... &gt;= 7 year~
+## $ installment.rate.in.percentage.of.disposable.income      &lt;dbl&gt; 4, 2, 2, 2, 3~
+## $ personal.status.and.sex                                  &lt;fct&gt; male : divorc~
+## $ other.debtors.or.guarantors                              &lt;fct&gt; none, none, n~
+## $ present.residence.since                                  &lt;dbl&gt; 4, 2, 3, 4, 4~
+## $ property                                                 &lt;fct&gt; "real estate"~
+## $ age.in.years                                             &lt;dbl&gt; 67, 22, 49, 4~
+## $ other.installment.plans                                  &lt;fct&gt; none, none, n~
+## $ housing                                                  &lt;fct&gt; own, own, own~
+## $ number.of.existing.credits.at.this.bank                  &lt;dbl&gt; 2, 1, 1, 1, 2~
+## $ job                                                      &lt;fct&gt; skilled emplo~
+## $ number.of.people.being.liable.to.provide.maintenance.for &lt;dbl&gt; 1, 1, 2, 2, 2~
+## $ telephone                                                &lt;fct&gt; "yes, registe~
+## $ foreign.worker                                           &lt;fct&gt; yes, yes, yes~
+## $ bad                                                      &lt;dbl&gt; 0, 1, 0, 0, 1~</code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 
 <span class="va">credit</span> <span class="op">&lt;-</span> <span class="va">credit</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+  <span class="fu">mutate</span><span class="op">(</span>
     sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span>
       <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"train"</span>, <span class="st">"test"</span><span class="op">)</span>, 
       prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">.5</span><span class="op">)</span>, 
@@ -116,126 +115,475 @@
       <span class="op">)</span>
   <span class="op">)</span>
 
-<span class="va">credit</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">sample</span>, <span class="va">bad</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 4 x 3
-##   sample   bad     n
-##   &lt;chr&gt;  &lt;dbl&gt; &lt;int&gt;
-## 1 test       0 20192
-## 2 test       1  4929
-## 3 train      0 19689
-## 4 train      1  4884</code></pre>
+<span class="va">credit</span> <span class="op">%&gt;%</span> <span class="fu">count</span><span class="op">(</span><span class="va">sample</span>, <span class="va">bad</span><span class="op">)</span></code></pre></div>
+<pre><code>##   sample bad   n
+## 1   test   0 371
+## 2   test   1 136
+## 3  train   0 329
+## 4  train   1 164</code></pre>
 </div>
 <div id="getting-woes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#getting-woes" class="anchor"></a>Getting woes</h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dtrain</span> <span class="op">&lt;-</span> <span class="va">credit</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">sample</span> <span class="op">==</span> <span class="st">"train"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">sample</span>, <span class="va">id_client</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">sample</span> <span class="op">==</span> <span class="st">"train"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">sample</span><span class="op">)</span>
 
 <span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu">scorecard</span><span class="fu">::</span><span class="fu"><a href="http://shichen.name/scorecard/reference/woebin.html">woebin</a></span><span class="op">(</span><span class="va">dtrain</span>, y <span class="op">=</span> <span class="st">"bad"</span><span class="op">)</span></code></pre></div>
 <pre><code>## [INFO] creating woe binning ...</code></pre>
-<pre><code>## Warning in check_const_cols(dt): There were 3 constant columns removed from input dataset,
-## flag_other_card, flag_mobile_phone, flag_contact_phone</code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dbiv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/woebin_summary.html">woebin_summary</a></span><span class="op">(</span><span class="va">bins</span><span class="op">)</span>
 
-<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">dbiv</span><span class="op">)</span></code></pre></div>
-<pre><code>## Rows: 13
-## Columns: 14
-## $ variable           &lt;chr&gt; "age", "months_in_the_job", "marital_status", "flag~
-## $ n_categories       &lt;int&gt; 5, 4, 3, 2, 5, 4, 3, 3, 5, 4, 2, 3, 6
-## $ iv                 &lt;dbl&gt; 0.175905407, 0.085626642, 0.077665953, 0.073565141,~
-## $ ks                 &lt;dbl&gt; 0.17420823, 0.12803371, 0.13552635, 0.11075389, 0.0~
-## $ hhi                &lt;dbl&gt; 0.2000000, 0.2500000, 0.3333333, 0.5000000, 0.20000~
-## $ count_distr_max    &lt;dbl&gt; 0.3857486, 0.5958165, 0.5103162, 0.8166280, 0.47828~
-## $ count_distr_min    &lt;dbl&gt; 5.172344e-02, 7.487893e-02, 5.676963e-02, 1.833720e~
-## $ has_missing        &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TR~
-## $ has_special_values &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TR~
-## $ monotone           &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, FA~
-## $ factor             &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, TRUE~
-## $ iv_lbl             &lt;fct&gt; medium, weak, weak, weak, weak, weak, weak, weak, w~
-## $ hhi_lbl            &lt;fct&gt; moderate concentration, moderate concentration, hig~
-## $ distribution       &lt;chr&gt; "&lt;U+2583&gt;&lt;U+2587&gt;&lt;U+2583&gt;&lt;U+2583&gt;&lt;U+2581&gt;", "&lt;U+2587&gt;&lt;U+2581&gt;&lt;U+2583&gt;&lt;U+2582&gt;", "&lt;U+2587&gt;&lt;U+2581&gt;&lt;U+2587&gt;", "&lt;U+2587&gt;&lt;U+2582&gt;", "&lt;U+2581&gt;&lt;U+2587&gt;&lt;U+2583&gt;&lt;U+2582&gt;&lt;U+2582&gt;", "&lt;U+2587&gt;&lt;U+2582&gt;&lt;U+2583&gt;&lt;U+2581&gt;", "&lt;U+2581&gt;&lt;U+2587&gt;&lt;U+2582&gt;~</code></pre>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">dbiv</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="21%">
+<col width="4%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+<col width="6%">
+<col width="6%">
+<col width="4%">
+<col width="7%">
+<col width="3%">
+<col width="2%">
+<col width="4%">
+<col width="8%">
+<col width="18%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">variable</th>
+<th align="right">n_categories</th>
+<th align="right">iv</th>
+<th align="right">ks</th>
+<th align="right">hhi</th>
+<th align="right">count_distr_max</th>
+<th align="right">count_distr_min</th>
+<th align="left">has_missing</th>
+<th align="left">has_special_values</th>
+<th align="left">monotone</th>
+<th align="left">factor</th>
+<th align="left">iv_lbl</th>
+<th align="left">hhi_lbl</th>
+<th align="left">distribution</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">status.of.existing.checking.account</td>
+<td align="right">3</td>
+<td align="right">0.5992609</td>
+<td align="right">0.3399437</td>
+<td align="right">0.3333333</td>
+<td align="right">0.3853955</td>
+<td align="right">0.2920892</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">suspicious</td>
+<td align="left">high concentration</td>
+<td align="left">&lt;U+2586&gt;&lt;U+2587&gt;&lt;U+2587&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">purpose</td>
+<td align="right">4</td>
+<td align="right">0.3058962</td>
+<td align="right">0.2452554</td>
+<td align="right">0.2500000</td>
+<td align="right">0.4401623</td>
+<td align="right">0.0851927</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">strong</td>
+<td align="left">moderate concentration</td>
+<td align="left">&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2587&gt;&lt;U+2582&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">credit.history</td>
+<td align="right">4</td>
+<td align="right">0.2994583</td>
+<td align="right">0.1788124</td>
+<td align="right">0.2500000</td>
+<td align="right">0.5354970</td>
+<td align="right">0.0791075</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">medium</td>
+<td align="left">moderate concentration</td>
+<td align="left">&lt;U+2581&gt;&lt;U+2587&gt;&lt;U+2582&gt;&lt;U+2585&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">duration.in.month</td>
+<td align="right">4</td>
+<td align="right">0.2696017</td>
+<td align="right">0.1619282</td>
+<td align="right">0.2500000</td>
+<td align="right">0.6653144</td>
+<td align="right">0.0791075</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+<td align="left">medium</td>
+<td align="left">moderate concentration</td>
+<td align="left">&lt;U+2581&gt;&lt;U+2581&gt;&lt;U+2587&gt;&lt;U+2582&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">credit.amount</td>
+<td align="right">6</td>
+<td align="right">0.2538377</td>
+<td align="right">0.2081511</td>
+<td align="right">0.1666667</td>
+<td align="right">0.4361055</td>
+<td align="right">0.0750507</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">medium</td>
+<td align="left">moderate concentration</td>
+<td align="left">&lt;U+2582&gt;&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2583&gt;&lt;U+2582&gt;&lt;U+2582&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">savings.account.and.bonds</td>
+<td align="right">3</td>
+<td align="right">0.2130209</td>
+<td align="right">0.1970680</td>
+<td align="right">0.3333333</td>
+<td align="right">0.7038540</td>
+<td align="right">0.0628803</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">medium</td>
+<td align="left">high concentration</td>
+<td align="left">&lt;U+2587&gt;&lt;U+2581&gt;&lt;U+2582&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">present.employment.since</td>
+<td align="right">4</td>
+<td align="right">0.1372332</td>
+<td align="right">0.1570910</td>
+<td align="right">0.2500000</td>
+<td align="right">0.3691684</td>
+<td align="right">0.1866126</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">medium</td>
+<td align="left">moderate concentration</td>
+<td align="left">&lt;U+2585&gt;&lt;U+2587&gt;&lt;U+2585&gt;&lt;U+2585&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">age.in.years</td>
+<td align="right">3</td>
+<td align="right">0.1273082</td>
+<td align="right">0.1407072</td>
+<td align="right">0.3333333</td>
+<td align="right">0.7444219</td>
+<td align="right">0.0567951</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">medium</td>
+<td align="left">high concentration</td>
+<td align="left">&lt;U+2582&gt;&lt;U+2581&gt;&lt;U+2587&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">other.installment.plans</td>
+<td align="right">2</td>
+<td align="right">0.0972155</td>
+<td align="right">0.1316258</td>
+<td align="right">0.5000000</td>
+<td align="right">0.7829615</td>
+<td align="right">0.2170385</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">weak</td>
+<td align="left">high concentration</td>
+<td align="left">&lt;U+2582&gt;&lt;U+2587&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">housing</td>
+<td align="right">3</td>
+<td align="right">0.0783145</td>
+<td align="right">0.1288087</td>
+<td align="right">0.3333333</td>
+<td align="right">0.7079108</td>
+<td align="right">0.1054767</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">weak</td>
+<td align="left">high concentration</td>
+<td align="left">&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2581&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">property</td>
+<td align="right">4</td>
+<td align="right">0.0599644</td>
+<td align="right">0.0898695</td>
+<td align="right">0.2500000</td>
+<td align="right">0.3630832</td>
+<td align="right">0.1440162</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">weak</td>
+<td align="left">moderate concentration</td>
+<td align="left">&lt;U+2586&gt;&lt;U+2585&gt;&lt;U+2587&gt;&lt;U+2583&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">installment.rate.in.percentage.of.disposable.income</td>
+<td align="right">3</td>
+<td align="right">0.0459881</td>
+<td align="right">0.1024168</td>
+<td align="right">0.3333333</td>
+<td align="right">0.6267748</td>
+<td align="right">0.1196755</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+<td align="left">weak</td>
+<td align="left">high concentration</td>
+<td align="left">&lt;U+2582&gt;&lt;U+2583&gt;&lt;U+2587&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">number.of.existing.credits.at.this.bank</td>
+<td align="right">2</td>
+<td align="right">0.0325907</td>
+<td align="right">0.0871451</td>
+<td align="right">0.5000000</td>
+<td align="right">0.6125761</td>
+<td align="right">0.3874239</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">weak</td>
+<td align="left">high concentration</td>
+<td align="left">&lt;U+2587&gt;&lt;U+2585&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">telephone</td>
+<td align="right">2</td>
+<td align="right">0.0299851</td>
+<td align="right">0.0840685</td>
+<td align="right">0.5000000</td>
+<td align="right">0.6024341</td>
+<td align="right">0.3975659</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">weak</td>
+<td align="left">high concentration</td>
+<td align="left">&lt;U+2587&gt;&lt;U+2585&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">personal.status.and.sex</td>
+<td align="right">4</td>
+<td align="right">0.0274701</td>
+<td align="right">0.0473905</td>
+<td align="right">0.2500000</td>
+<td align="right">0.5598377</td>
+<td align="right">0.0507099</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">weak</td>
+<td align="left">moderate concentration</td>
+<td align="left">&lt;U+2581&gt;&lt;U+2585&gt;&lt;U+2587&gt;&lt;U+2581&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">other.debtors.or.guarantors</td>
+<td align="right">2</td>
+<td align="right">0.0089823</td>
+<td align="right">0.0211469</td>
+<td align="right">0.5000000</td>
+<td align="right">0.9432049</td>
+<td align="right">0.0567951</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">unpredictive</td>
+<td align="left">high concentration</td>
+<td align="left">&lt;U+2587&gt;&lt;U+2581&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">present.residence.since</td>
+<td align="right">3</td>
+<td align="right">0.0018099</td>
+<td align="right">0.0191823</td>
+<td align="right">0.3333333</td>
+<td align="right">0.5821501</td>
+<td align="right">0.1196755</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">unpredictive</td>
+<td align="left">high concentration</td>
+<td align="left">&lt;U+2582&gt;&lt;U+2585&gt;&lt;U+2587&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">job</td>
+<td align="right">3</td>
+<td align="right">0.0017746</td>
+<td align="right">0.0146230</td>
+<td align="right">0.3333333</td>
+<td align="right">0.6612576</td>
+<td align="right">0.1399594</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">unpredictive</td>
+<td align="left">high concentration</td>
+<td align="left">&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2582&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">foreign.worker</td>
+<td align="right">1</td>
+<td align="right">0.0000000</td>
+<td align="right">0.0000000</td>
+<td align="right">1.0000000</td>
+<td align="right">1.0000000</td>
+<td align="right">1.0000000</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">unpredictive</td>
+<td align="left">high concentration</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">number.of.people.being.liable.to.provide.maintenance.for</td>
+<td align="right">1</td>
+<td align="right">0.0000000</td>
+<td align="right">0.0000000</td>
+<td align="right">1.0000000</td>
+<td align="right">1.0000000</td>
+<td align="right">1.0000000</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">unpredictive</td>
+<td align="left">high concentration</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># bins2 &lt;- woebin2(dtrain, y = "bad", method = "ctree")</span></code></pre></div>
 <p>Remove variables woebin exclude:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">vars</span> <span class="op">&lt;-</span> <span class="va">dbiv</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">variable</span><span class="op">)</span>
+  <span class="fu">pull</span><span class="op">(</span><span class="va">variable</span><span class="op">)</span>
 
 <span class="va">dtrain</span> <span class="op">&lt;-</span> <span class="va">dtrain</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">bad</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">vars</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+  <span class="fu">select</span><span class="op">(</span><span class="va">bad</span>, <span class="fu">all_of</span><span class="op">(</span><span class="va">vars</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Apply woes to train table.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dtrain</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="fu"><a href="http://shichen.name/scorecard/reference/woebin_ply.html">woebin_ply</a></span><span class="op">(</span><span class="va">dtrain</span>, <span class="va">bins</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dtrain</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="fu">woebin_ply</span><span class="op">(</span><span class="va">dtrain</span>, <span class="va">bins</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [INFO] converting into woe values ...</code></pre>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dtest</span> <span class="op">&lt;-</span>  <span class="va">credit</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">sample</span> <span class="op">==</span> <span class="st">"test"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="http://shichen.name/scorecard/reference/woebin_ply.html">woebin_ply</a></span><span class="op">(</span><span class="va">bins</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">sample</span> <span class="op">==</span> <span class="st">"test"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">woebin_ply</span><span class="op">(</span><span class="va">bins</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## [INFO] converting into woe values ...</code></pre>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">dtrain</span><span class="op">)</span></code></pre></div>
-<pre><code>## Rows: 24,573
-## Columns: 14
-## $ bad                     &lt;dbl&gt; 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0~
-## $ id_client_woe           &lt;dbl&gt; -0.03401675, -0.03401675, -0.03401675, -0.0340~
-## $ sex_woe                 &lt;dbl&gt; -0.1097554, -0.1097554, 0.2263878, 0.2263878, ~
-## $ marital_status_woe      &lt;dbl&gt; 0.2249065, -0.3491578, -0.3491578, -0.3491578,~
-## $ age_woe                 &lt;dbl&gt; 0.1489799, 0.1489799, -0.2478290, 0.5275513, 0~
-## $ flag_res_phone_woe      &lt;dbl&gt; -0.1416368, -0.1416368, -0.1416368, 0.5225850,~
-## $ area_code_res_phone_woe &lt;dbl&gt; -0.06031838, -0.06031838, -0.06031838, 0.29252~
-## $ payment_day_woe         &lt;dbl&gt; -0.18172112, -0.18172112, -0.18172112, -0.1817~
-## $ residence_type_woe      &lt;dbl&gt; 0.19733098, -0.04852483, -0.04852483, 0.197330~
-## $ months_in_residence_woe &lt;dbl&gt; 0.20871226, 0.09290052, -0.03072071, 0.2087122~
-## $ months_in_the_job_woe   &lt;dbl&gt; -0.31008349, 0.20251228, -0.08297988, 0.202512~
-## $ profession_code_woe     &lt;dbl&gt; 0.09649989, 0.04742594, -0.79329749, 0.0474259~
-## $ personal_net_income_woe &lt;dbl&gt; 0.123055547, -0.192405105, -0.616509752, 0.123~
-## $ quant_add_cards_woe     &lt;dbl&gt; 0.04389115, 0.04389115, -0.33022264, 0.0438911~</code></pre>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">glimpse</span><span class="op">(</span><span class="va">dtrain</span><span class="op">)</span></code></pre></div>
+<pre><code>## Rows: 493
+## Columns: 21
+## $ bad                                                          &lt;dbl&gt; 1, 0, 1, ~
+## $ status.of.existing.checking.account_woe                      &lt;dbl&gt; 0.3011975~
+## $ duration.in.month_woe                                        &lt;dbl&gt; 0.8919359~
+## $ credit.history_woe                                           &lt;dbl&gt; 0.1036876~
+## $ purpose_woe                                                  &lt;dbl&gt; -0.469862~
+## $ credit.amount_woe                                            &lt;dbl&gt; 0.1525758~
+## $ savings.account.and.bonds_woe                                &lt;dbl&gt; 0.2690647~
+## $ present.employment.since_woe                                 &lt;dbl&gt; 0.0843897~
+## $ installment.rate.in.percentage.of.disposable.income_woe      &lt;dbl&gt; -0.288307~
+## $ personal.status.and.sex_woe                                  &lt;dbl&gt; -0.690103~
+## $ other.debtors.or.guarantors_woe                              &lt;dbl&gt; 0.0223373~
+## $ present.residence.since_woe                                  &lt;dbl&gt; 0.0636687~
+## $ property_woe                                                 &lt;dbl&gt; -0.281060~
+## $ age.in.years_woe                                             &lt;dbl&gt; 0.6553693~
+## $ other.installment.plans_woe                                  &lt;dbl&gt; -0.173412~
+## $ housing_woe                                                  &lt;dbl&gt; -0.188224~
+## $ number.of.existing.credits.at.this.bank_woe                  &lt;dbl&gt; 0.1391763~
+## $ job_woe                                                      &lt;dbl&gt; 0.0076418~
+## $ number.of.people.being.liable.to.provide.maintenance.for_woe &lt;dbl&gt; 0, 0, 0, ~
+## $ telephone_woe                                                &lt;dbl&gt; 0.1365755~
+## $ foreign.worker_woe                                           &lt;dbl&gt; 0, 0, 0, ~</code></pre>
 </div>
 <div id="modelling" class="section level2">
 <h2 class="hasAnchor">
 <a href="#modelling" class="anchor"></a>Modelling</h2>
 <p>We’ll remove <em>unpredictive</em> variables.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">vars</span> <span class="op">&lt;-</span> <span class="va">dbiv</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">iv</span> <span class="op">&gt;</span> <span class="fl">0.02</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">variable</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">iv</span> <span class="op">&gt;</span> <span class="fl">0.02</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">pull</span><span class="op">(</span><span class="va">variable</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">str_c</span><span class="op">(</span><span class="st">"_woe"</span><span class="op">)</span>
 
 <span class="va">dtrain</span> <span class="op">&lt;-</span> <span class="va">dtrain</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">bad</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">vars</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu">select</span><span class="op">(</span><span class="va">bad</span>, <span class="fu">all_of</span><span class="op">(</span><span class="va">vars</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">bad</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">dtrain</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="va">logit</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 10 x 5
-##    term                    estimate std.error statistic  p.value
-##    &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-##  1 (Intercept)              -1.40      0.0167   -83.8   0       
-##  2 age_woe                   0.591     0.0500    11.8   3.47e-32
-##  3 months_in_the_job_woe     0.623     0.0650     9.59  9.20e-22
-##  4 marital_status_woe        0.332     0.0674     4.93  8.22e- 7
-##  5 flag_res_phone_woe        0.692     0.0659    10.5   8.94e-26
-##  6 profession_code_woe       0.552     0.0744     7.42  1.19e-13
-##  7 personal_net_income_woe   0.0172    0.0986     0.174 8.62e- 1
-##  8 area_code_res_phone_woe   0.463     0.0961     4.82  1.43e- 6
-##  9 sex_woe                   0.788     0.104      7.56  4.06e-14
-## 10 payment_day_woe           0.879     0.105      8.35  6.91e-17</code></pre>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<pre><code>## # A tibble: 16 x 5
+##    term                                  estimate std.error statistic    p.value
+##    &lt;chr&gt;                                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+##  1 (Intercept)                             -0.732     0.124    -5.92     3.25e-9
+##  2 status.of.existing.checking.account_~    0.778     0.167     4.66     3.22e-6
+##  3 purpose_woe                              0.909     0.228     3.99     6.51e-5
+##  4 credit.history_woe                       0.694     0.239     2.90     3.71e-3
+##  5 duration.in.month_woe                    1.05      0.251     4.18     2.98e-5
+##  6 credit.amount_woe                        1.19      0.255     4.69     2.76e-6
+##  7 savings.account.and.bonds_woe            0.748     0.283     2.64     8.31e-3
+##  8 present.employment.since_woe             1.02      0.340     3.01     2.64e-3
+##  9 age.in.years_woe                         0.716     0.342     2.09     3.64e-2
+## 10 other.installment.plans_woe              0.852     0.394     2.16     3.06e-2
+## 11 housing_woe                              1.00      0.495     2.02     4.29e-2
+## 12 property_woe                             0.189     0.588     0.322    7.48e-1
+## 13 installment.rate.in.percentage.of.di~    1.93      0.580     3.32     8.86e-4
+## 14 number.of.existing.credits.at.this.b~    0.149     0.719     0.207    8.36e-1
+## 15 telephone_woe                            1.31      0.739     1.77     7.59e-2
+## 16 personal.status.and.sex_woe              1.38      0.763     1.81     7.02e-2</code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##      ks   auc    iv  gini
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 0.229 0.657 0.305 0.314</code></pre>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+## 1 0.559 0.859  2.39 0.719</code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model</span>, newdata <span class="op">=</span> <span class="va">dtest</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##      ks   auc    iv  gini
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 0.255 0.669 0.345 0.339</code></pre>
+## 1 0.447 0.762  1.09 0.524</code></pre>
 <p>We can do feature selection:</p>
 <div id="feature-selection" class="section level3">
 <h3 class="hasAnchor">
@@ -243,97 +591,161 @@
 <div id="glmnet" class="section level4">
 <h4 class="hasAnchor">
 <a href="#glmnet" class="anchor"></a>glmnet</h4>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model_fsglmnet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/featsel_glmnet.html">featsel_glmnet</a></span><span class="op">(</span><span class="va">model</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p><img src="risk3r_files/figure-html/unnamed-chunk-9-1.png" width="700"><img src="risk3r_files/figure-html/unnamed-chunk-9-2.png" width="700"><img src="risk3r_files/figure-html/unnamed-chunk-9-3.png" width="700"></p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 9 x 5
-##   term                    estimate std.error statistic  p.value
-##   &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)               -1.40     0.0167    -83.8  0       
-## 2 age_woe                    0.592    0.0494     12.0  4.02e-33
-## 3 flag_res_phone_woe         0.694    0.0653     10.6  2.40e-26
-## 4 months_in_the_job_woe      0.625    0.0633      9.87 5.55e-23
-## 5 marital_status_woe         0.333    0.0672      4.96 7.01e- 7
-## 6 profession_code_woe        0.552    0.0743      7.42 1.14e-13
-## 7 payment_day_woe            0.879    0.105       8.35 7.02e-17
-## 8 area_code_res_phone_woe    0.463    0.0961      4.82 1.42e- 6
-## 9 sex_woe                    0.786    0.103       7.60 2.93e-14</code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<pre><code>## # A tibble: 12 x 5
+##    term                                  estimate std.error statistic    p.value
+##    &lt;chr&gt;                                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+##  1 (Intercept)                             -0.723     0.122     -5.93    3.02e-9
+##  2 status.of.existing.checking.account_~    0.764     0.165      4.63    3.61e-6
+##  3 purpose_woe                              0.936     0.224      4.18    2.90e-5
+##  4 credit.history_woe                       0.741     0.224      3.31    9.40e-4
+##  5 duration.in.month_woe                    1.03      0.246      4.19    2.80e-5
+##  6 credit.amount_woe                        1.12      0.246      4.57    4.92e-6
+##  7 savings.account.and.bonds_woe            0.740     0.280      2.64    8.22e-3
+##  8 present.employment.since_woe             1.03      0.333      3.10    1.91e-3
+##  9 age.in.years_woe                         0.799     0.327      2.44    1.46e-2
+## 10 other.installment.plans_woe              0.787     0.385      2.05    4.08e-2
+## 11 housing_woe                              0.938     0.429      2.19    2.87e-2
+## 12 installment.rate.in.percentage.of.di~    1.98      0.576      3.43    6.02e-4</code></pre>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##      ks   auc    iv  gini
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 0.228 0.657 0.303 0.314</code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+## 1 0.559 0.855  2.44 0.709</code></pre>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_fsglmnet</span>, newdata <span class="op">=</span> <span class="va">dtest</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##      ks   auc    iv  gini
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 0.255 0.669 0.343 0.339</code></pre>
+## 1 0.456 0.770  1.15 0.540</code></pre>
 </div>
 <div id="setpwise-forward" class="section level4">
 <h4 class="hasAnchor">
 <a href="#setpwise-forward" class="anchor"></a>Setpwise forward</h4>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model_fsstep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/featsel_stepforward.html">featsel_stepforward</a></span><span class="op">(</span><span class="va">model</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 9 x 5
-##   term                    estimate std.error statistic  p.value
-##   &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)               -1.40     0.0167    -83.8  0       
-## 2 age_woe                    0.592    0.0494     12.0  4.02e-33
-## 3 flag_res_phone_woe         0.694    0.0653     10.6  2.40e-26
-## 4 months_in_the_job_woe      0.625    0.0633      9.87 5.55e-23
-## 5 payment_day_woe            0.879    0.105       8.35 7.02e-17
-## 6 profession_code_woe        0.552    0.0743      7.42 1.14e-13
-## 7 sex_woe                    0.786    0.103       7.60 2.93e-14
-## 8 marital_status_woe         0.333    0.0672      4.96 7.01e- 7
-## 9 area_code_res_phone_woe    0.463    0.0961      4.82 1.42e- 6</code></pre>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<pre><code>## # A tibble: 14 x 5
+##    term                                  estimate std.error statistic    p.value
+##    &lt;chr&gt;                                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+##  1 (Intercept)                             -0.735     0.124     -5.94    2.78e-9
+##  2 status.of.existing.checking.account_~    0.779     0.167      4.67    3.01e-6
+##  3 credit.amount_woe                        1.19      0.251      4.76    1.96e-6
+##  4 purpose_woe                              0.918     0.226      4.06    4.98e-5
+##  5 duration.in.month_woe                    1.06      0.248      4.28    1.91e-5
+##  6 credit.history_woe                       0.712     0.228      3.12    1.79e-3
+##  7 present.employment.since_woe             1.02      0.338      3.02    2.57e-3
+##  8 installment.rate.in.percentage.of.di~    1.93      0.579      3.34    8.45e-4
+##  9 age.in.years_woe                         0.702     0.332      2.12    3.44e-2
+## 10 savings.account.and.bonds_woe            0.748     0.283      2.64    8.22e-3
+## 11 housing_woe                              1.07      0.437      2.45    1.41e-2
+## 12 other.installment.plans_woe              0.853     0.388      2.20    2.80e-2
+## 13 personal.status.and.sex_woe              1.37      0.761      1.80    7.13e-2
+## 14 telephone_woe                            1.29      0.735      1.75    7.97e-2</code></pre>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##      ks   auc    iv  gini
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 0.228 0.657 0.303 0.314</code></pre>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+## 1 0.562 0.859  2.36 0.718</code></pre>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_fsstep</span>, newdata <span class="op">=</span> <span class="va">dtest</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##      ks   auc    iv  gini
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 0.255 0.669 0.343 0.339</code></pre>
+## 1 0.449 0.762  1.12 0.523</code></pre>
 <p>See if we can remove variables via inspecting predictive measures.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dfmetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_partials.html">model_partials</a></span><span class="op">(</span><span class="va">model_fsglmnet</span>, newdata <span class="op">=</span> <span class="va">dtest</span><span class="op">)</span>
 <span class="va">dfmetrics</span></code></pre></div>
-<pre><code>## # A tibble: 16 x 6
-##    variable                sample    ks   auc    iv  gini
-##    &lt;fct&gt;                   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 age_woe                 train  0.174 0.612 0.156 0.224
-##  2 age_woe                 test   0.184 0.621 0.174 0.243
-##  3 flag_res_phone_woe      train  0.184 0.630 0.206 0.261
-##  4 flag_res_phone_woe      test   0.196 0.641 0.245 0.283
-##  5 months_in_the_job_woe   train  0.203 0.640 0.240 0.279
-##  6 months_in_the_job_woe   test   0.229 0.651 0.278 0.302
-##  7 marital_status_woe      train  0.205 0.641 0.268 0.282
-##  8 marital_status_woe      test   0.236 0.655 0.307 0.311
-##  9 profession_code_woe     train  0.213 0.646 0.273 0.291
-## 10 profession_code_woe     test   0.239 0.659 0.316 0.318
-## 11 payment_day_woe         train  0.215 0.651 0.279 0.301
-## 12 payment_day_woe         test   0.244 0.662 0.337 0.325
-## 13 area_code_res_phone_woe train  0.219 0.653 0.280 0.305
-## 14 area_code_res_phone_woe test   0.249 0.665 0.338 0.330
-## 15 sex_woe                 train  0.228 0.657 0.303 0.314
-## 16 sex_woe                 test   0.255 0.669 0.343 0.339</code></pre>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<pre><code>## # A tibble: 22 x 6
+##    variable                                sample    ks   auc    iv  gini
+##    &lt;fct&gt;                                   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 status.of.existing.checking.account_woe train  0.340 0.694 0.565 0.387
+##  2 status.of.existing.checking.account_woe test   0.349 0.708 0.608 0.416
+##  3 purpose_woe                             train  0.376 0.735 0.811 0.469
+##  4 purpose_woe                             test   0.343 0.696 0.627 0.392
+##  5 credit.history_woe                      train  0.413 0.759 1.10  0.518
+##  6 credit.history_woe                      test   0.363 0.733 0.781 0.466
+##  7 duration.in.month_woe                   train  0.489 0.800 1.69  0.599
+##  8 duration.in.month_woe                   test   0.457 0.769 1.13  0.538
+##  9 credit.amount_woe                       train  0.519 0.817 1.75  0.635
+## 10 credit.amount_woe                       test   0.452 0.764 1.13  0.529
+## # ... with 12 more rows</code></pre>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dfmetrics</span> <span class="op">%&gt;%</span> 
-  <span class="co"># select(-gini, -iv) %&gt;% </span>
+  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">gini</span>, <span class="op">-</span><span class="va">iv</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">risk3r</span><span class="fu">:::</span><span class="fu"><a href="../reference/plot.model_partials.html">plot.model_partials</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+  <span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="risk3r_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 </div>
+</div>
+<div id="scorecard" class="section level3">
+<h3 class="hasAnchor">
+<a href="#scorecard" class="anchor"></a>Scorecard</h3>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">POINTS0</span>   <span class="op">&lt;-</span> <span class="fl">600</span>
+<span class="va">PDO</span>       <span class="op">&lt;-</span> <span class="fl">20</span>
+<span class="va">ODDS0</span>     <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="fl">50</span>
+
+<span class="va">scrcrd</span> <span class="op">&lt;-</span> <span class="fu">scorecard</span><span class="fu">::</span><span class="fu"><a href="http://shichen.name/scorecard/reference/scorecard.html">scorecard</a></span><span class="op">(</span>
+  bins <span class="op">=</span> <span class="va">bins</span>, 
+  model <span class="op">=</span> <span class="va">model_fsglmnet</span>, 
+  points0 <span class="op">=</span> <span class="va">POINTS0</span>,
+  pdo <span class="op">=</span> <span class="va">PDO</span>,
+  odds0 <span class="op">=</span> <span class="va">ODDS0</span>,
+  basepoints_eq0 <span class="op">=</span> <span class="cn">TRUE</span>
+  <span class="op">)</span>
+
+<span class="va">scrcrd</span><span class="op">$</span><span class="va">age.in.years</span></code></pre></div>
+<pre><code>##        variable       bin count count_distr neg pos   posprob        woe
+## 1: age.in.years [-Inf,26)    98  0.19878296  50  48 0.4897959  0.6553693
+## 2: age.in.years   [26,27)    28  0.05679513  22   6 0.2142857 -0.6030917
+## 3: age.in.years [27, Inf)   367  0.74442191 257 110 0.2997275 -0.1524044
+##        bin_iv  total_iv breaks is_special_values points
+## 1: 0.09221521 0.1273082     26             FALSE     31
+## 2: 0.01826399 0.1273082     27             FALSE     60
+## 3: 0.01682900 0.1273082    Inf             FALSE     50</code></pre>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">scrcrd2</span> <span class="op">&lt;-</span> <span class="fu">scorecard</span><span class="fu">::</span><span class="fu"><a href="http://shichen.name/scorecard/reference/scorecard2.html">scorecard2</a></span><span class="op">(</span>
+  dt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">credit</span>, <span class="va">sample</span> <span class="op">==</span> <span class="st">"train"</span><span class="op">)</span>,
+  y <span class="op">=</span> <span class="st">"bad"</span>,
+  bins <span class="op">=</span> <span class="va">bins</span>,
+  x <span class="op">=</span> <span class="fu">str_remove</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"_woe$"</span><span class="op">)</span>,
+  points0 <span class="op">=</span> <span class="va">POINTS0</span>,
+  pdo <span class="op">=</span> <span class="va">PDO</span>,
+  odds0 <span class="op">=</span> <span class="va">ODDS0</span>,
+  basepoints_eq0 <span class="op">=</span> <span class="cn">TRUE</span>
+  <span class="op">)</span>
+
+<span class="va">scrcrd2</span><span class="op">$</span><span class="va">age.in.years</span></code></pre></div>
+<pre><code>##        variable       bin count count_distr neg pos   posprob        woe
+## 1: age.in.years [-Inf,26)    98  0.19878296  50  48 0.4897959  0.6553693
+## 2: age.in.years   [26,27)    28  0.05679513  22   6 0.2142857 -0.6030917
+## 3: age.in.years [27, Inf)   367  0.74442191 257 110 0.2997275 -0.1524044
+##        bin_iv  total_iv breaks is_special_values points
+## 1: 0.09221521 0.1273082     26             FALSE     31
+## 2: 0.01826399 0.1273082     27             FALSE     60
+## 3: 0.01682900 0.1273082    Inf             FALSE     50</code></pre>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dtrain</span> <span class="op">%&gt;%</span> 
+  <span class="fu">group_by</span><span class="op">(</span><span class="va">age.in.years_woe</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">summarise</span><span class="op">(</span>
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">bad</span><span class="op">)</span>
+  <span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 3 x 3
+##   age.in.years_woe `dplyr::n()` `mean(bad)`
+##              &lt;dbl&gt;        &lt;int&gt;       &lt;dbl&gt;
+## 1           -0.603           28       0.214
+## 2           -0.152          367       0.300
+## 3            0.655           98       0.490</code></pre>
 </div>
 </div>
   </div>

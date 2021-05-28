@@ -154,6 +154,8 @@ information_value <- function(actual, predicted) {
 
   validate_actual_predicted_num(actual, predicted)
 
+  if(length(unique(actual)) == 1) return(NA_real_)
+
   df <- data.frame(y = actual, x = predicted)
 
   bin <- quiet(scorecard::woebin(df, "y", "x"))

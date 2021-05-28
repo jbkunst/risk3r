@@ -1,12 +1,11 @@
 Package: risk3r
 Title: What the Package Does (One Line, Title Case)
 Version: 0.3.0.9000
-Authors@R: 
-    person(given = "Joshua",
-           family = "Kunst",
-           role = c("aut", "cre"),
-           email = "jbkunst@gmail.com"
-           )
+Authors@R: c(
+    person(given = "Joshua", family = "Kunst", role = c("aut", "cre"), email = "jbkunst@gmail.com"),
+    person(given = "Javier", family = "Machado", role = c("ctb"), email = "jmachado448@gmail.com"),
+    person(given = "Ignacio", family = "Rossi", role = c("ctb"), email = "ignacio.rvm@gmail.com")
+    )
 Description: This package contains a set of convenient functions for the development of
  risk models. Some of this functions where designed to be in conjunction with the 
  package scorecard.
