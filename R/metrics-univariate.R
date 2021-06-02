@@ -64,6 +64,7 @@ n_growths <- function(x) {
   sum(diff(x)>0)
 
 }
+
 #'
 #' Get the max proportion
 #'
@@ -73,10 +74,10 @@ n_growths <- function(x) {
 #'
 #' x <- sample(letters[1:3], prob = 1:3, size = 10000, replace = TRUE)
 #'
-#' concentration_max(x)
+#' count_distr_max(x)
 #'
 #' @export
-concentration_max  <- function(x) {
+count_distr_max  <- function(x) {
 
   sort(prop.table(table(addNA(x))), decreasing = TRUE)[[1]]
 
