@@ -5,7 +5,7 @@
 #'
 #' @examples
 #'
-#' @importFrom stats predict.glm
+#' @importFrom stats predict.glm predict
 #' @export
 model_metrics <- function(model, newdata = NULL) {
 
@@ -22,7 +22,7 @@ model_metrics <- function(model, newdata = NULL) {
 
     mm <- metrics(
       dplyr::pull(newdata, yvar),
-      predict.glm(model, newdata = newdata)
+      predict(model, newdata = newdata)
     )
 
   }

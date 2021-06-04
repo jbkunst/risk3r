@@ -68,685 +68,1588 @@
 
     
     
-<p>You can also embed plots, for example:</p>
-<div id="packages-and-data" class="section level2">
+<div id="packages" class="section level2">
 <h2 class="hasAnchor">
-<a href="#packages-and-data" class="anchor"></a>Packages and data</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"germancredit"</span>, package <span class="op">=</span> <span class="st">"scorecard"</span><span class="op">)</span>
-
-<span class="va">credit</span> <span class="op">&lt;-</span> <span class="va">germancredit</span>
-<span class="va">credit</span> <span class="op">&lt;-</span> <span class="fu">rename</span><span class="op">(</span><span class="va">credit</span>, bad <span class="op">=</span> <span class="va">creditability</span><span class="op">)</span>
-<span class="va">credit</span> <span class="op">&lt;-</span> <span class="fu">mutate</span><span class="op">(</span><span class="va">credit</span>, bad <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">bad</span> <span class="op">==</span> <span class="st">"bad"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">glimpse</span><span class="op">(</span><span class="va">credit</span><span class="op">)</span></code></pre></div>
-<pre><code>## Rows: 1,000
-## Columns: 21
-## $ status.of.existing.checking.account                      &lt;fct&gt; ... &lt; 0 DM, 0~
-## $ duration.in.month                                        &lt;dbl&gt; 6, 48, 12, 42~
-## $ credit.history                                           &lt;fct&gt; critical acco~
-## $ purpose                                                  &lt;chr&gt; "radio/televi~
-## $ credit.amount                                            &lt;dbl&gt; 1169, 5951, 2~
-## $ savings.account.and.bonds                                &lt;fct&gt; unknown/ no s~
-## $ present.employment.since                                 &lt;fct&gt; ... &gt;= 7 year~
-## $ installment.rate.in.percentage.of.disposable.income      &lt;dbl&gt; 4, 2, 2, 2, 3~
-## $ personal.status.and.sex                                  &lt;fct&gt; male : divorc~
-## $ other.debtors.or.guarantors                              &lt;fct&gt; none, none, n~
-## $ present.residence.since                                  &lt;dbl&gt; 4, 2, 3, 4, 4~
-## $ property                                                 &lt;fct&gt; "real estate"~
-## $ age.in.years                                             &lt;dbl&gt; 67, 22, 49, 4~
-## $ other.installment.plans                                  &lt;fct&gt; none, none, n~
-## $ housing                                                  &lt;fct&gt; own, own, own~
-## $ number.of.existing.credits.at.this.bank                  &lt;dbl&gt; 2, 1, 1, 1, 2~
-## $ job                                                      &lt;fct&gt; skilled emplo~
-## $ number.of.people.being.liable.to.provide.maintenance.for &lt;dbl&gt; 1, 1, 2, 2, 2~
-## $ telephone                                                &lt;fct&gt; "yes, registe~
-## $ foreign.worker                                           &lt;fct&gt; yes, yes, yes~
-## $ bad                                                      &lt;dbl&gt; 0, 1, 0, 0, 1~</code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-
-<span class="va">credit</span> <span class="op">&lt;-</span> <span class="va">credit</span> <span class="op">%&gt;%</span> 
-  <span class="fu">mutate</span><span class="op">(</span>
-    sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"train"</span>, <span class="st">"test"</span><span class="op">)</span>, 
-      prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">.5</span><span class="op">)</span>, 
-      size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">credit</span><span class="op">)</span>,
-      replace <span class="op">=</span> <span class="cn">TRUE</span>
-      <span class="op">)</span>
-  <span class="op">)</span>
-
-<span class="va">credit</span> <span class="op">%&gt;%</span> <span class="fu">count</span><span class="op">(</span><span class="va">sample</span>, <span class="va">bad</span><span class="op">)</span></code></pre></div>
-<pre><code>##   sample bad   n
-## 1   test   0 371
-## 2   test   1 136
-## 3  train   0 329
-## 4  train   1 164</code></pre>
+<a href="#packages" class="anchor"></a>Packages</h2>
 </div>
-<div id="getting-woes" class="section level2">
+<div id="parameters" class="section level2">
 <h2 class="hasAnchor">
-<a href="#getting-woes" class="anchor"></a>Getting woes</h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dtrain</span> <span class="op">&lt;-</span> <span class="va">credit</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">sample</span> <span class="op">==</span> <span class="st">"train"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">sample</span><span class="op">)</span>
+<a href="#parameters" class="anchor"></a>Parameters</h2>
+<details><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">PARS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  SEED <span class="op">=</span> <span class="fl">12345</span>,
+  PARALLEL <span class="op">=</span> <span class="cn">TRUE</span>,
+  P_TRAIN <span class="op">=</span> <span class="fl">0.8</span>,
+  P_CONCENTRATION <span class="op">=</span> <span class="fl">.95</span>,
+  IV_MIN <span class="op">=</span> <span class="fl">0.02</span>, <span class="co"># 0.2 WEAK &gt;=</span>
+  COUNT_DISTR_LIMIT <span class="op">=</span> <span class="fl">0.05</span>,
+  POINTS0 <span class="op">=</span> <span class="fl">600</span>,
+  PDO     <span class="op">=</span> <span class="fl">20</span>,
+  ODDS0   <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">50</span>
+<span class="op">)</span></code></pre></div>
+</details>
+</div>
+<div id="data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#data" class="anchor"></a>Data</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data-raw/cd.rds"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu">scorecard</span><span class="fu">::</span><span class="fu"><a href="http://shichen.name/scorecard/reference/woebin.html">woebin</a></span><span class="op">(</span><span class="va">dtrain</span>, y <span class="op">=</span> <span class="st">"bad"</span><span class="op">)</span></code></pre></div>
-<pre><code>## [INFO] creating woe binning ...</code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dbiv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/woebin_summary.html">woebin_summary</a></span><span class="op">(</span><span class="va">bins</span><span class="op">)</span>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">%&gt;%</span> 
+  <span class="fu">select</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">sample_n</span><span class="op">(</span><span class="fl">100000</span><span class="op">)</span>
 
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">dbiv</span><span class="op">)</span></code></pre></div>
+<span class="va">data</span> <span class="op">%&gt;%</span> 
+  <span class="fu">select</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">glimpse</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## Rows: 100,000
+## Columns: 10
+## $ id              &lt;int&gt; 103020, 126826, 93365, 238022, 11812, 225240, 162855, ~
+## $ time            &lt;dbl&gt; 201703, 201701, 200909, 201806, 201708, 201712, 201610~
+## $ bad_good        &lt;int&gt; 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ~
+## $ basemark        &lt;chr&gt; "C", "C", NA, "C", "C", "C", "B", "C", "B", "C", "C", ~
+## $ monte_bank_auto &lt;dbl&gt; 1299251, 396803, 1807300, 170994, 583344, 458110, 1005~
+## $ monte_bank      &lt;dbl&gt; NA, NA, 1337021, NA, NA, NA, NA, NA, NA, NA, NA, 28758~
+## $ monte_auto      &lt;dbl&gt; 1299251, 396803, 470279, 170994, 583344, 458110, 10053~
+## $ monte_save      &lt;dbl&gt; 1047841, 0, 486660, 0, 0, 0, 0, 0, 680579, 146482, 0, ~
+## $ monte_auto_old  &lt;dbl&gt; 1299251, 396803, 470279, 170994, 583344, 458110, 10053~
+## $ saldo           &lt;dbl&gt; 1299251, 396803, 1807300, 170994, 583344, 458110, 1005~</code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 100000    100</code></pre>
+</div>
+<div id="univariate" class="section level2">
+<h2 class="hasAnchor">
+<a href="#univariate" class="anchor"></a>Univariate</h2>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">describe</span> <span class="op">&lt;-</span> <span class="fu">skimr</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html">skim</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
+
+<span class="va">describe</span></code></pre></div>
 <table class="table">
-<colgroup>
-<col width="21%">
-<col width="4%">
-<col width="3%">
-<col width="3%">
-<col width="3%">
-<col width="6%">
-<col width="6%">
-<col width="4%">
-<col width="7%">
-<col width="3%">
-<col width="2%">
-<col width="4%">
-<col width="8%">
-<col width="18%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">variable</th>
-<th align="right">n_categories</th>
-<th align="right">iv</th>
-<th align="right">ks</th>
-<th align="right">hhi</th>
-<th align="right">count_distr_max</th>
-<th align="right">count_distr_min</th>
-<th align="left">has_missing</th>
-<th align="left">has_special_values</th>
-<th align="left">monotone</th>
-<th align="left">factor</th>
-<th align="left">iv_lbl</th>
-<th align="left">hhi_lbl</th>
-<th align="left">distribution</th>
-</tr></thead>
+<caption>Data summary</caption>
 <tbody>
 <tr class="odd">
-<td align="left">status.of.existing.checking.account</td>
-<td align="right">3</td>
-<td align="right">0.5992609</td>
-<td align="right">0.3399437</td>
-<td align="right">0.3333333</td>
-<td align="right">0.3853955</td>
-<td align="right">0.2920892</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">suspicious</td>
-<td align="left">high concentration</td>
-<td align="left">&lt;U+2586&gt;&lt;U+2587&gt;&lt;U+2587&gt;</td>
+<td align="left">Name</td>
+<td align="left">data</td>
 </tr>
 <tr class="even">
-<td align="left">purpose</td>
-<td align="right">4</td>
-<td align="right">0.3058962</td>
-<td align="right">0.2452554</td>
-<td align="right">0.2500000</td>
-<td align="right">0.4401623</td>
-<td align="right">0.0851927</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">strong</td>
-<td align="left">moderate concentration</td>
-<td align="left">&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2587&gt;&lt;U+2582&gt;</td>
+<td align="left">Number of rows</td>
+<td align="left">100000</td>
 </tr>
 <tr class="odd">
-<td align="left">credit.history</td>
-<td align="right">4</td>
-<td align="right">0.2994583</td>
-<td align="right">0.1788124</td>
-<td align="right">0.2500000</td>
-<td align="right">0.5354970</td>
-<td align="right">0.0791075</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">medium</td>
-<td align="left">moderate concentration</td>
-<td align="left">&lt;U+2581&gt;&lt;U+2587&gt;&lt;U+2582&gt;&lt;U+2585&gt;</td>
+<td align="left">Number of columns</td>
+<td align="left">100</td>
 </tr>
 <tr class="even">
-<td align="left">duration.in.month</td>
-<td align="right">4</td>
-<td align="right">0.2696017</td>
-<td align="right">0.1619282</td>
-<td align="right">0.2500000</td>
-<td align="right">0.6653144</td>
-<td align="right">0.0791075</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">FALSE</td>
-<td align="left">medium</td>
-<td align="left">moderate concentration</td>
-<td align="left">&lt;U+2581&gt;&lt;U+2581&gt;&lt;U+2587&gt;&lt;U+2582&gt;</td>
+<td align="left">_______________________</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td align="left">credit.amount</td>
-<td align="right">6</td>
-<td align="right">0.2538377</td>
-<td align="right">0.2081511</td>
-<td align="right">0.1666667</td>
-<td align="right">0.4361055</td>
-<td align="right">0.0750507</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">medium</td>
-<td align="left">moderate concentration</td>
-<td align="left">&lt;U+2582&gt;&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2583&gt;&lt;U+2582&gt;&lt;U+2582&gt;</td>
-</tr>
-<tr class="even">
-<td align="left">savings.account.and.bonds</td>
-<td align="right">3</td>
-<td align="right">0.2130209</td>
-<td align="right">0.1970680</td>
-<td align="right">0.3333333</td>
-<td align="right">0.7038540</td>
-<td align="right">0.0628803</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">medium</td>
-<td align="left">high concentration</td>
-<td align="left">&lt;U+2587&gt;&lt;U+2581&gt;&lt;U+2582&gt;</td>
-</tr>
-<tr class="odd">
-<td align="left">present.employment.since</td>
-<td align="right">4</td>
-<td align="right">0.1372332</td>
-<td align="right">0.1570910</td>
-<td align="right">0.2500000</td>
-<td align="right">0.3691684</td>
-<td align="right">0.1866126</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">medium</td>
-<td align="left">moderate concentration</td>
-<td align="left">&lt;U+2585&gt;&lt;U+2587&gt;&lt;U+2585&gt;&lt;U+2585&gt;</td>
-</tr>
-<tr class="even">
-<td align="left">age.in.years</td>
-<td align="right">3</td>
-<td align="right">0.1273082</td>
-<td align="right">0.1407072</td>
-<td align="right">0.3333333</td>
-<td align="right">0.7444219</td>
-<td align="right">0.0567951</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">medium</td>
-<td align="left">high concentration</td>
-<td align="left">&lt;U+2582&gt;&lt;U+2581&gt;&lt;U+2587&gt;</td>
-</tr>
-<tr class="odd">
-<td align="left">other.installment.plans</td>
-<td align="right">2</td>
-<td align="right">0.0972155</td>
-<td align="right">0.1316258</td>
-<td align="right">0.5000000</td>
-<td align="right">0.7829615</td>
-<td align="right">0.2170385</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">weak</td>
-<td align="left">high concentration</td>
-<td align="left">&lt;U+2582&gt;&lt;U+2587&gt;</td>
-</tr>
-<tr class="even">
-<td align="left">housing</td>
-<td align="right">3</td>
-<td align="right">0.0783145</td>
-<td align="right">0.1288087</td>
-<td align="right">0.3333333</td>
-<td align="right">0.7079108</td>
-<td align="right">0.1054767</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">weak</td>
-<td align="left">high concentration</td>
-<td align="left">&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2581&gt;</td>
-</tr>
-<tr class="odd">
-<td align="left">property</td>
-<td align="right">4</td>
-<td align="right">0.0599644</td>
-<td align="right">0.0898695</td>
-<td align="right">0.2500000</td>
-<td align="right">0.3630832</td>
-<td align="right">0.1440162</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">weak</td>
-<td align="left">moderate concentration</td>
-<td align="left">&lt;U+2586&gt;&lt;U+2585&gt;&lt;U+2587&gt;&lt;U+2583&gt;</td>
-</tr>
-<tr class="even">
-<td align="left">installment.rate.in.percentage.of.disposable.income</td>
-<td align="right">3</td>
-<td align="right">0.0459881</td>
-<td align="right">0.1024168</td>
-<td align="right">0.3333333</td>
-<td align="right">0.6267748</td>
-<td align="right">0.1196755</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">FALSE</td>
-<td align="left">weak</td>
-<td align="left">high concentration</td>
-<td align="left">&lt;U+2582&gt;&lt;U+2583&gt;&lt;U+2587&gt;</td>
-</tr>
-<tr class="odd">
-<td align="left">number.of.existing.credits.at.this.bank</td>
-<td align="right">2</td>
-<td align="right">0.0325907</td>
-<td align="right">0.0871451</td>
-<td align="right">0.5000000</td>
-<td align="right">0.6125761</td>
-<td align="right">0.3874239</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">weak</td>
-<td align="left">high concentration</td>
-<td align="left">&lt;U+2587&gt;&lt;U+2585&gt;</td>
-</tr>
-<tr class="even">
-<td align="left">telephone</td>
-<td align="right">2</td>
-<td align="right">0.0299851</td>
-<td align="right">0.0840685</td>
-<td align="right">0.5000000</td>
-<td align="right">0.6024341</td>
-<td align="right">0.3975659</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">weak</td>
-<td align="left">high concentration</td>
-<td align="left">&lt;U+2587&gt;&lt;U+2585&gt;</td>
-</tr>
-<tr class="odd">
-<td align="left">personal.status.and.sex</td>
-<td align="right">4</td>
-<td align="right">0.0274701</td>
-<td align="right">0.0473905</td>
-<td align="right">0.2500000</td>
-<td align="right">0.5598377</td>
-<td align="right">0.0507099</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">weak</td>
-<td align="left">moderate concentration</td>
-<td align="left">&lt;U+2581&gt;&lt;U+2585&gt;&lt;U+2587&gt;&lt;U+2581&gt;</td>
-</tr>
-<tr class="even">
-<td align="left">other.debtors.or.guarantors</td>
-<td align="right">2</td>
-<td align="right">0.0089823</td>
-<td align="right">0.0211469</td>
-<td align="right">0.5000000</td>
-<td align="right">0.9432049</td>
-<td align="right">0.0567951</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">unpredictive</td>
-<td align="left">high concentration</td>
-<td align="left">&lt;U+2587&gt;&lt;U+2581&gt;</td>
-</tr>
-<tr class="odd">
-<td align="left">present.residence.since</td>
-<td align="right">3</td>
-<td align="right">0.0018099</td>
-<td align="right">0.0191823</td>
-<td align="right">0.3333333</td>
-<td align="right">0.5821501</td>
-<td align="right">0.1196755</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">unpredictive</td>
-<td align="left">high concentration</td>
-<td align="left">&lt;U+2582&gt;&lt;U+2585&gt;&lt;U+2587&gt;</td>
-</tr>
-<tr class="even">
-<td align="left">job</td>
-<td align="right">3</td>
-<td align="right">0.0017746</td>
-<td align="right">0.0146230</td>
-<td align="right">0.3333333</td>
-<td align="right">0.6612576</td>
-<td align="right">0.1399594</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">unpredictive</td>
-<td align="left">high concentration</td>
-<td align="left">&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2582&gt;</td>
-</tr>
-<tr class="odd">
-<td align="left">foreign.worker</td>
-<td align="right">1</td>
-<td align="right">0.0000000</td>
-<td align="right">0.0000000</td>
-<td align="right">1.0000000</td>
-<td align="right">1.0000000</td>
-<td align="right">1.0000000</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">unpredictive</td>
-<td align="left">high concentration</td>
+<td align="left">Column type frequency:</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="left">number.of.people.being.liable.to.provide.maintenance.for</td>
-<td align="right">1</td>
-<td align="right">0.0000000</td>
-<td align="right">0.0000000</td>
-<td align="right">1.0000000</td>
-<td align="right">1.0000000</td>
-<td align="right">1.0000000</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">unpredictive</td>
-<td align="left">high concentration</td>
+<td align="left">character</td>
+<td align="left">3</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">97</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
 <td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># bins2 &lt;- woebin2(dtrain, y = "bad", method = "ctree")</span></code></pre></div>
-<p>Remove variables woebin exclude:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">vars</span> <span class="op">&lt;-</span> <span class="va">dbiv</span> <span class="op">%&gt;%</span> 
-  <span class="fu">pull</span><span class="op">(</span><span class="va">variable</span><span class="op">)</span>
-
-<span class="va">dtrain</span> <span class="op">&lt;-</span> <span class="va">dtrain</span> <span class="op">%&gt;%</span> 
-  <span class="fu">select</span><span class="op">(</span><span class="va">bad</span>, <span class="fu">all_of</span><span class="op">(</span><span class="va">vars</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Apply woes to train table.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dtrain</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="fu">woebin_ply</span><span class="op">(</span><span class="va">dtrain</span>, <span class="va">bins</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## [INFO] converting into woe values ...</code></pre>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dtest</span> <span class="op">&lt;-</span>  <span class="va">credit</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">sample</span> <span class="op">==</span> <span class="st">"test"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">woebin_ply</span><span class="op">(</span><span class="va">bins</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## [INFO] converting into woe values ...</code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">glimpse</span><span class="op">(</span><span class="va">dtrain</span><span class="op">)</span></code></pre></div>
-<pre><code>## Rows: 493
-## Columns: 21
-## $ bad                                                          &lt;dbl&gt; 1, 0, 1, ~
-## $ status.of.existing.checking.account_woe                      &lt;dbl&gt; 0.3011975~
-## $ duration.in.month_woe                                        &lt;dbl&gt; 0.8919359~
-## $ credit.history_woe                                           &lt;dbl&gt; 0.1036876~
-## $ purpose_woe                                                  &lt;dbl&gt; -0.469862~
-## $ credit.amount_woe                                            &lt;dbl&gt; 0.1525758~
-## $ savings.account.and.bonds_woe                                &lt;dbl&gt; 0.2690647~
-## $ present.employment.since_woe                                 &lt;dbl&gt; 0.0843897~
-## $ installment.rate.in.percentage.of.disposable.income_woe      &lt;dbl&gt; -0.288307~
-## $ personal.status.and.sex_woe                                  &lt;dbl&gt; -0.690103~
-## $ other.debtors.or.guarantors_woe                              &lt;dbl&gt; 0.0223373~
-## $ present.residence.since_woe                                  &lt;dbl&gt; 0.0636687~
-## $ property_woe                                                 &lt;dbl&gt; -0.281060~
-## $ age.in.years_woe                                             &lt;dbl&gt; 0.6553693~
-## $ other.installment.plans_woe                                  &lt;dbl&gt; -0.173412~
-## $ housing_woe                                                  &lt;dbl&gt; -0.188224~
-## $ number.of.existing.credits.at.this.bank_woe                  &lt;dbl&gt; 0.1391763~
-## $ job_woe                                                      &lt;dbl&gt; 0.0076418~
-## $ number.of.people.being.liable.to.provide.maintenance.for_woe &lt;dbl&gt; 0, 0, 0, ~
-## $ telephone_woe                                                &lt;dbl&gt; 0.1365755~
-## $ foreign.worker_woe                                           &lt;dbl&gt; 0, 0, 0, ~</code></pre>
+<p><strong>Variable type: character</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">basemark</td>
+<td align="right">15073</td>
+<td align="right">0.85</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">n5</td>
+<td align="right">3104</td>
+<td align="right">0.97</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">interprod</td>
+<td align="right">1</td>
+<td align="right">1.00</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table">
+<colgroup>
+<col width="16%">
+<col width="6%">
+<col width="8%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="7%">
+<col width="24%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">124191.90</td>
+<td align="right">71711.70</td>
+<td align="right">1.00</td>
+<td align="right">62047.50</td>
+<td align="right">124011.50</td>
+<td align="right">186363.50</td>
+<td align="right">248143.00</td>
+<td align="left">▇▇▇▇▇</td>
+</tr>
+<tr class="even">
+<td align="left">time</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">201524.04</td>
+<td align="right">278.75</td>
+<td align="right">200901.00</td>
+<td align="right">201503.00</td>
+<td align="right">201605.00</td>
+<td align="right">201707.00</td>
+<td align="right">201809.00</td>
+<td align="left">▃▁▁▇▇</td>
+</tr>
+<tr class="odd">
+<td align="left">bad_good</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">0.13</td>
+<td align="right">0.34</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_bank_auto</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">692654.55</td>
+<td align="right">498669.77</td>
+<td align="right">1.00</td>
+<td align="right">278259.75</td>
+<td align="right">577298.50</td>
+<td align="right">1019527.50</td>
+<td align="right">1999993.00</td>
+<td align="left">▇▆▅▂▂</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_bank</td>
+<td align="right">87263</td>
+<td align="right">0.13</td>
+<td align="right">806929.88</td>
+<td align="right">463004.30</td>
+<td align="right">10.00</td>
+<td align="right">449134.00</td>
+<td align="right">727290.00</td>
+<td align="right">1133680.00</td>
+<td align="right">1999535.00</td>
+<td align="left">▅▇▆▃▂</td>
+</tr>
+<tr class="even">
+<td align="left">monte_auto</td>
+<td align="right">3758</td>
+<td align="right">0.96</td>
+<td align="right">612909.01</td>
+<td align="right">471520.27</td>
+<td align="right">0.00</td>
+<td align="right">234187.00</td>
+<td align="right">489573.00</td>
+<td align="right">899235.50</td>
+<td align="right">1999933.00</td>
+<td align="left">▇▅▃▂▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_save</td>
+<td align="right">3868</td>
+<td align="right">0.96</td>
+<td align="right">302267.13</td>
+<td align="right">525705.68</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">460966.75</td>
+<td align="right">4519776.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_auto_old</td>
+<td align="right">3758</td>
+<td align="right">0.96</td>
+<td align="right">612908.00</td>
+<td align="right">471521.68</td>
+<td align="right">-96707.00</td>
+<td align="right">234187.00</td>
+<td align="right">489573.00</td>
+<td align="right">899235.50</td>
+<td align="right">1999933.00</td>
+<td align="left">▇▇▅▂▁</td>
+</tr>
+<tr class="odd">
+<td align="left">saldo</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">692654.55</td>
+<td align="right">498669.77</td>
+<td align="right">1.00</td>
+<td align="right">278259.75</td>
+<td align="right">577298.50</td>
+<td align="right">1019527.50</td>
+<td align="right">1999993.00</td>
+<td align="left">▇▆▅▂▂</td>
+</tr>
+<tr class="even">
+<td align="left">periodo_defuncion_m12</td>
+<td align="right">98696</td>
+<td align="right">0.01</td>
+<td align="right">201523.00</td>
+<td align="right">246.61</td>
+<td align="right">200904.00</td>
+<td align="right">201404.00</td>
+<td align="right">201605.00</td>
+<td align="right">201708.00</td>
+<td align="right">201808.00</td>
+<td align="left">▂▂▃▆▇</td>
+</tr>
+<tr class="odd">
+<td align="left">comp_n</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">11.13</td>
+<td align="right">2.01</td>
+<td align="right">3.00</td>
+<td align="right">12.00</td>
+<td align="right">12.00</td>
+<td align="right">12.00</td>
+<td align="right">12.00</td>
+<td align="left">▁▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">antiguage</td>
+<td align="right">349</td>
+<td align="right">1.00</td>
+<td align="right">93.89</td>
+<td align="right">69.76</td>
+<td align="right">0.00</td>
+<td align="right">32.00</td>
+<td align="right">78.00</td>
+<td align="right">143.00</td>
+<td align="right">375.00</td>
+<td align="left">▇▅▃▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_bank_auto_mean_01</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">692654.55</td>
+<td align="right">498669.77</td>
+<td align="right">1.00</td>
+<td align="right">278259.75</td>
+<td align="right">577298.50</td>
+<td align="right">1019527.50</td>
+<td align="right">1999993.00</td>
+<td align="left">▇▆▅▂▂</td>
+</tr>
+<tr class="even">
+<td align="left">monte_bank_mean_01</td>
+<td align="right">87263</td>
+<td align="right">0.13</td>
+<td align="right">806929.88</td>
+<td align="right">463004.30</td>
+<td align="right">10.00</td>
+<td align="right">449134.00</td>
+<td align="right">727290.00</td>
+<td align="right">1133680.00</td>
+<td align="right">1999535.00</td>
+<td align="left">▅▇▆▃▂</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_auto_mean_01</td>
+<td align="right">3758</td>
+<td align="right">0.96</td>
+<td align="right">612909.01</td>
+<td align="right">471520.27</td>
+<td align="right">0.00</td>
+<td align="right">234187.00</td>
+<td align="right">489573.00</td>
+<td align="right">899235.50</td>
+<td align="right">1999933.00</td>
+<td align="left">▇▅▃▂▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_compras_mean_01</td>
+<td align="right">3868</td>
+<td align="right">0.96</td>
+<td align="right">160016.36</td>
+<td align="right">233265.10</td>
+<td align="right">0.00</td>
+<td align="right">3292.00</td>
+<td align="right">67695.00</td>
+<td align="right">220789.75</td>
+<td align="right">2742567.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_advance_mean_01</td>
+<td align="right">3868</td>
+<td align="right">0.96</td>
+<td align="right">147724.12</td>
+<td align="right">214023.61</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">45575.50</td>
+<td align="right">223641.00</td>
+<td align="right">2863878.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_save_mean_01</td>
+<td align="right">3868</td>
+<td align="right">0.96</td>
+<td align="right">302267.13</td>
+<td align="right">525705.68</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">460966.75</td>
+<td align="right">4519776.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_tot_mean_01</td>
+<td align="right">3868</td>
+<td align="right">0.96</td>
+<td align="right">739513.58</td>
+<td align="right">614739.23</td>
+<td align="right">0.00</td>
+<td align="right">257925.75</td>
+<td align="right">556918.00</td>
+<td align="right">1079833.00</td>
+<td align="right">4849344.00</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_bank_cons_mean_01</td>
+<td align="right">88152</td>
+<td align="right">0.12</td>
+<td align="right">826371.04</td>
+<td align="right">459709.17</td>
+<td align="right">10.00</td>
+<td align="right">473004.75</td>
+<td align="right">747815.00</td>
+<td align="right">1149640.25</td>
+<td align="right">1999535.00</td>
+<td align="left">▅▇▆▃▂</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_mean_01</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">692653.58</td>
+<td align="right">498670.57</td>
+<td align="right">1.00</td>
+<td align="right">278257.50</td>
+<td align="right">577298.50</td>
+<td align="right">1019527.50</td>
+<td align="right">1999993.00</td>
+<td align="left">▇▆▅▂▂</td>
+</tr>
+<tr class="even">
+<td align="left">monte_contingente_mean_01</td>
+<td align="right">6297</td>
+<td align="right">0.94</td>
+<td align="right">835099.41</td>
+<td align="right">602550.40</td>
+<td align="right">0.00</td>
+<td align="right">361000.00</td>
+<td align="right">645000.00</td>
+<td align="right">1195000.00</td>
+<td align="right">6200000.00</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">time_mora_auto_mean_01</td>
+<td align="right">3758</td>
+<td align="right">0.96</td>
+<td align="right">4.19</td>
+<td align="right">13.38</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">87.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">time_mora_bank_mean_01</td>
+<td align="right">87263</td>
+<td align="right">0.13</td>
+<td align="right">2.66</td>
+<td align="right">10.43</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">89.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">time_mora_dac_mean_01</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">4.30</td>
+<td align="right">13.53</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">89.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">porc_puso_cav_mean_01</td>
+<td align="right">3524</td>
+<td align="right">0.96</td>
+<td align="right">336.25</td>
+<td align="right">19143.35</td>
+<td align="right">0.00</td>
+<td align="right">0.03</td>
+<td align="right">0.30</td>
+<td align="right">0.85</td>
+<td align="right">1770964.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_bank_auto_max_01</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">692654.55</td>
+<td align="right">498669.77</td>
+<td align="right">1.00</td>
+<td align="right">278259.75</td>
+<td align="right">577298.50</td>
+<td align="right">1019527.50</td>
+<td align="right">1999993.00</td>
+<td align="left">▇▆▅▂▂</td>
+</tr>
+<tr class="even">
+<td align="left">monte_bank_max_01</td>
+<td align="right">87263</td>
+<td align="right">0.13</td>
+<td align="right">806929.88</td>
+<td align="right">463004.30</td>
+<td align="right">10.00</td>
+<td align="right">449134.00</td>
+<td align="right">727290.00</td>
+<td align="right">1133680.00</td>
+<td align="right">1999535.00</td>
+<td align="left">▅▇▆▃▂</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_auto_max_01</td>
+<td align="right">3758</td>
+<td align="right">0.96</td>
+<td align="right">612909.01</td>
+<td align="right">471520.27</td>
+<td align="right">0.00</td>
+<td align="right">234187.00</td>
+<td align="right">489573.00</td>
+<td align="right">899235.50</td>
+<td align="right">1999933.00</td>
+<td align="left">▇▅▃▂▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_compras_max_01</td>
+<td align="right">3868</td>
+<td align="right">0.96</td>
+<td align="right">160016.36</td>
+<td align="right">233265.10</td>
+<td align="right">0.00</td>
+<td align="right">3292.00</td>
+<td align="right">67695.00</td>
+<td align="right">220789.75</td>
+<td align="right">2742567.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_advance_max_01</td>
+<td align="right">3868</td>
+<td align="right">0.96</td>
+<td align="right">147724.12</td>
+<td align="right">214023.61</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">45575.50</td>
+<td align="right">223641.00</td>
+<td align="right">2863878.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_save_max_01</td>
+<td align="right">3868</td>
+<td align="right">0.96</td>
+<td align="right">302267.13</td>
+<td align="right">525705.68</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">460966.75</td>
+<td align="right">4519776.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_tot_max_01</td>
+<td align="right">3868</td>
+<td align="right">0.96</td>
+<td align="right">739513.58</td>
+<td align="right">614739.23</td>
+<td align="right">0.00</td>
+<td align="right">257925.75</td>
+<td align="right">556918.00</td>
+<td align="right">1079833.00</td>
+<td align="right">4849344.00</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_bank_cons_max_01</td>
+<td align="right">88152</td>
+<td align="right">0.12</td>
+<td align="right">826371.04</td>
+<td align="right">459709.17</td>
+<td align="right">10.00</td>
+<td align="right">473004.75</td>
+<td align="right">747815.00</td>
+<td align="right">1149640.25</td>
+<td align="right">1999535.00</td>
+<td align="left">▅▇▆▃▂</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_max_01</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">692653.58</td>
+<td align="right">498670.57</td>
+<td align="right">1.00</td>
+<td align="right">278257.50</td>
+<td align="right">577298.50</td>
+<td align="right">1019527.50</td>
+<td align="right">1999993.00</td>
+<td align="left">▇▆▅▂▂</td>
+</tr>
+<tr class="even">
+<td align="left">monte_contingente_max_01</td>
+<td align="right">6297</td>
+<td align="right">0.94</td>
+<td align="right">835099.41</td>
+<td align="right">602550.40</td>
+<td align="right">0.00</td>
+<td align="right">361000.00</td>
+<td align="right">645000.00</td>
+<td align="right">1195000.00</td>
+<td align="right">6200000.00</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">time_mora_auto_max_01</td>
+<td align="right">3758</td>
+<td align="right">0.96</td>
+<td align="right">4.19</td>
+<td align="right">13.38</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">87.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">time_mora_bank_max_01</td>
+<td align="right">87263</td>
+<td align="right">0.13</td>
+<td align="right">2.66</td>
+<td align="right">10.43</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">89.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">time_mora_dac_max_01</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">4.30</td>
+<td align="right">13.53</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">89.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">porc_puso_cav_max_01</td>
+<td align="right">3524</td>
+<td align="right">0.96</td>
+<td align="right">336.25</td>
+<td align="right">19143.35</td>
+<td align="right">0.00</td>
+<td align="right">0.03</td>
+<td align="right">0.30</td>
+<td align="right">0.85</td>
+<td align="right">1770964.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">porc_puso_compras_rec_50_01</td>
+<td align="right">62767</td>
+<td align="right">0.37</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="left">▁▁▇▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">porc_puso_compras_n_50_01</td>
+<td align="right">62767</td>
+<td align="right">0.37</td>
+<td align="right">1.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="left">▁▁▇▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">porc_puso_compras_rec_75_01</td>
+<td align="right">72748</td>
+<td align="right">0.27</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="left">▁▁▇▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">porc_puso_compras_n_75_01</td>
+<td align="right">72748</td>
+<td align="right">0.27</td>
+<td align="right">1.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="left">▁▁▇▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">porc_puso_compras_rec_90_01</td>
+<td align="right">77119</td>
+<td align="right">0.23</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="left">▁▁▇▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">porc_puso_compras_n_90_01</td>
+<td align="right">77119</td>
+<td align="right">0.23</td>
+<td align="right">1.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="left">▁▁▇▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">mra_dac_rec_30_01</td>
+<td align="right">95766</td>
+<td align="right">0.04</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="left">▁▁▇▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">mra_dac_rec_60_01</td>
+<td align="right">98581</td>
+<td align="right">0.01</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="left">▁▁▇▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">mra_dac_rec_90_01</td>
+<td align="right">100000</td>
+<td align="right">0.00</td>
+<td align="right">NaN</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">n_aplazado_0_01</td>
+<td align="right">40806</td>
+<td align="right">0.59</td>
+<td align="right">1.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="left">▁▁▇▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_bank_auto_mean_03</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">678655.58</td>
+<td align="right">493070.66</td>
+<td align="right">1.00</td>
+<td align="right">273411.42</td>
+<td align="right">557337.17</td>
+<td align="right">989076.50</td>
+<td align="right">4307402.00</td>
+<td align="left">▇▃▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_bank_mean_03</td>
+<td align="right">86916</td>
+<td align="right">0.13</td>
+<td align="right">835340.68</td>
+<td align="right">494920.35</td>
+<td align="right">30.00</td>
+<td align="right">469292.25</td>
+<td align="right">741836.17</td>
+<td align="right">1145789.25</td>
+<td align="right">10401911.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_auto_mean_03</td>
+<td align="right">3321</td>
+<td align="right">0.97</td>
+<td align="right">599669.55</td>
+<td align="right">459925.34</td>
+<td align="right">0.00</td>
+<td align="right">234762.17</td>
+<td align="right">476386.00</td>
+<td align="right">868916.83</td>
+<td align="right">2529875.67</td>
+<td align="left">▇▅▂▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_compras_mean_03</td>
+<td align="right">3428</td>
+<td align="right">0.97</td>
+<td align="right">159489.64</td>
+<td align="right">221036.28</td>
+<td align="right">0.00</td>
+<td align="right">9036.00</td>
+<td align="right">78248.00</td>
+<td align="right">218337.17</td>
+<td align="right">2631826.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_advance_mean_03</td>
+<td align="right">3428</td>
+<td align="right">0.97</td>
+<td align="right">143493.65</td>
+<td align="right">201179.87</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">56715.83</td>
+<td align="right">216874.00</td>
+<td align="right">2450862.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_save_mean_03</td>
+<td align="right">3428</td>
+<td align="right">0.97</td>
+<td align="right">297627.54</td>
+<td align="right">510202.42</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">454681.67</td>
+<td align="right">4571559.33</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_tot_mean_03</td>
+<td align="right">3428</td>
+<td align="right">0.97</td>
+<td align="right">724198.43</td>
+<td align="right">599239.63</td>
+<td align="right">0.00</td>
+<td align="right">259529.75</td>
+<td align="right">543727.00</td>
+<td align="right">1041797.42</td>
+<td align="right">4932938.00</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_bank_cons_mean_03</td>
+<td align="right">87833</td>
+<td align="right">0.12</td>
+<td align="right">856103.30</td>
+<td align="right">491907.51</td>
+<td align="right">16458.00</td>
+<td align="right">499288.67</td>
+<td align="right">763373.00</td>
+<td align="right">1164433.00</td>
+<td align="right">10401911.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_mean_03</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">678653.94</td>
+<td align="right">493072.50</td>
+<td align="right">-1759.67</td>
+<td align="right">273411.42</td>
+<td align="right">557337.17</td>
+<td align="right">989076.50</td>
+<td align="right">4307402.00</td>
+<td align="left">▇▃▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_contingente_mean_03</td>
+<td align="right">4064</td>
+<td align="right">0.96</td>
+<td align="right">817741.11</td>
+<td align="right">594399.30</td>
+<td align="right">0.00</td>
+<td align="right">350000.00</td>
+<td align="right">620500.00</td>
+<td align="right">1152666.67</td>
+<td align="right">6200000.00</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">time_mora_auto_mean_03</td>
+<td align="right">3321</td>
+<td align="right">0.97</td>
+<td align="right">3.22</td>
+<td align="right">9.02</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.33</td>
+<td align="right">87.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">time_mora_bank_mean_03</td>
+<td align="right">86916</td>
+<td align="right">0.13</td>
+<td align="right">2.16</td>
+<td align="right">7.60</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">86.67</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">time_mora_dac_mean_03</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">3.34</td>
+<td align="right">9.20</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.33</td>
+<td align="right">87.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">porc_puso_cav_mean_03</td>
+<td align="right">3056</td>
+<td align="right">0.97</td>
+<td align="right">355.31</td>
+<td align="right">17918.04</td>
+<td align="right">0.00</td>
+<td align="right">0.05</td>
+<td align="right">0.32</td>
+<td align="right">0.85</td>
+<td align="right">1677242.67</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_bank_auto_max_03</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">774070.83</td>
+<td align="right">530222.54</td>
+<td align="right">1.00</td>
+<td align="right">339010.50</td>
+<td align="right">655813.00</td>
+<td align="right">1112633.50</td>
+<td align="right">11281999.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_bank_max_03</td>
+<td align="right">86916</td>
+<td align="right">0.13</td>
+<td align="right">896589.80</td>
+<td align="right">508298.28</td>
+<td align="right">30.00</td>
+<td align="right">526953.00</td>
+<td align="right">794596.00</td>
+<td align="right">1212806.00</td>
+<td align="right">10401911.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_auto_max_03</td>
+<td align="right">3321</td>
+<td align="right">0.97</td>
+<td align="right">682601.30</td>
+<td align="right">494014.77</td>
+<td align="right">0.00</td>
+<td align="right">284339.50</td>
+<td align="right">562806.00</td>
+<td align="right">986811.00</td>
+<td align="right">4188870.00</td>
+<td align="left">▇▃▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_compras_max_03</td>
+<td align="right">3428</td>
+<td align="right">0.97</td>
+<td align="right">203124.52</td>
+<td align="right">263593.17</td>
+<td align="right">0.00</td>
+<td align="right">16292.25</td>
+<td align="right">111409.00</td>
+<td align="right">282048.00</td>
+<td align="right">2790244.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_advance_max_03</td>
+<td align="right">3428</td>
+<td align="right">0.97</td>
+<td align="right">180097.49</td>
+<td align="right">236513.90</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">83078.50</td>
+<td align="right">275601.50</td>
+<td align="right">2863878.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_save_max_03</td>
+<td align="right">3428</td>
+<td align="right">0.97</td>
+<td align="right">344402.70</td>
+<td align="right">567616.84</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">572279.50</td>
+<td align="right">6873726.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_tot_max_03</td>
+<td align="right">3428</td>
+<td align="right">0.97</td>
+<td align="right">826288.34</td>
+<td align="right">646139.18</td>
+<td align="right">0.00</td>
+<td align="right">317686.00</td>
+<td align="right">645708.00</td>
+<td align="right">1192229.00</td>
+<td align="right">7307445.00</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_bank_cons_max_03</td>
+<td align="right">87833</td>
+<td align="right">0.12</td>
+<td align="right">917324.62</td>
+<td align="right">503475.34</td>
+<td align="right">16458.00</td>
+<td align="right">553738.50</td>
+<td align="right">827434.00</td>
+<td align="right">1228029.00</td>
+<td align="right">10401911.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_max_03</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">774069.87</td>
+<td align="right">530223.44</td>
+<td align="right">1.00</td>
+<td align="right">339010.50</td>
+<td align="right">655813.00</td>
+<td align="right">1112633.50</td>
+<td align="right">11281999.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_contingente_max_03</td>
+<td align="right">4064</td>
+<td align="right">0.96</td>
+<td align="right">850772.77</td>
+<td align="right">613734.71</td>
+<td align="right">0.00</td>
+<td align="right">375000.00</td>
+<td align="right">652000.00</td>
+<td align="right">1200000.00</td>
+<td align="right">6200000.00</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">time_mora_auto_max_03</td>
+<td align="right">3321</td>
+<td align="right">0.97</td>
+<td align="right">6.25</td>
+<td align="right">15.14</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">115.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">time_mora_bank_max_03</td>
+<td align="right">86916</td>
+<td align="right">0.13</td>
+<td align="right">3.68</td>
+<td align="right">11.74</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">89.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">time_mora_dac_max_03</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">6.40</td>
+<td align="right">15.30</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">115.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">porc_puso_cav_max_03</td>
+<td align="right">3056</td>
+<td align="right">0.97</td>
+<td align="right">482.63</td>
+<td align="right">22789.63</td>
+<td align="right">0.00</td>
+<td align="right">0.08</td>
+<td align="right">0.43</td>
+<td align="right">1.03</td>
+<td align="right">1770964.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">porc_puso_compras_rec_50_03</td>
+<td align="right">55189</td>
+<td align="right">0.45</td>
+<td align="right">0.25</td>
+<td align="right">0.58</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">2.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">porc_puso_compras_n_50_03</td>
+<td align="right">55189</td>
+<td align="right">0.45</td>
+<td align="right">2.48</td>
+<td align="right">0.77</td>
+<td align="right">1.00</td>
+<td align="right">2.00</td>
+<td align="right">3.00</td>
+<td align="right">3.00</td>
+<td align="right">3.00</td>
+<td align="left">▂▁▂▁▇</td>
+</tr>
+<tr class="odd">
+<td align="left">porc_puso_compras_rec_75_03</td>
+<td align="right">66460</td>
+<td align="right">0.34</td>
+<td align="right">0.27</td>
+<td align="right">0.61</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">2.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">porc_puso_compras_n_75_03</td>
+<td align="right">66460</td>
+<td align="right">0.34</td>
+<td align="right">2.42</td>
+<td align="right">0.80</td>
+<td align="right">1.00</td>
+<td align="right">2.00</td>
+<td align="right">3.00</td>
+<td align="right">3.00</td>
+<td align="right">3.00</td>
+<td align="left">▂▁▂▁▇</td>
+</tr>
+<tr class="odd">
+<td align="left">porc_puso_compras_rec_90_03</td>
+<td align="right">71834</td>
+<td align="right">0.28</td>
+<td align="right">0.28</td>
+<td align="right">0.61</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">2.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">porc_puso_compras_n_90_03</td>
+<td align="right">71834</td>
+<td align="right">0.28</td>
+<td align="right">2.41</td>
+<td align="right">0.81</td>
+<td align="right">1.00</td>
+<td align="right">2.00</td>
+<td align="right">3.00</td>
+<td align="right">3.00</td>
+<td align="right">3.00</td>
+<td align="left">▃▁▂▁▇</td>
+</tr>
+<tr class="odd">
+<td align="left">mra_dac_rec_30_03</td>
+<td align="right">94232</td>
+<td align="right">0.06</td>
+<td align="right">0.39</td>
+<td align="right">0.69</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">2.00</td>
+<td align="left">▇▁▂▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">mra_dac_rec_60_03</td>
+<td align="right">98317</td>
+<td align="right">0.02</td>
+<td align="right">0.22</td>
+<td align="right">0.55</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">2.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">mra_dac_rec_90_03</td>
+<td align="right">99999</td>
+<td align="right">0.00</td>
+<td align="right">2.00</td>
+<td align="right">NA</td>
+<td align="right">2.00</td>
+<td align="right">2.00</td>
+<td align="right">2.00</td>
+<td align="right">2.00</td>
+<td align="right">2.00</td>
+<td align="left">▁▁▇▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">n_aplazado_0_03</td>
+<td align="right">31927</td>
+<td align="right">0.68</td>
+<td align="right">2.54</td>
+<td align="right">0.72</td>
+<td align="right">1.00</td>
+<td align="right">2.00</td>
+<td align="right">3.00</td>
+<td align="right">3.00</td>
+<td align="right">3.00</td>
+<td align="left">▂▁▂▁▇</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_bank_auto_mean_06</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">657299.71</td>
+<td align="right">493484.46</td>
+<td align="right">23.00</td>
+<td align="right">263736.33</td>
+<td align="right">527974.67</td>
+<td align="right">945157.54</td>
+<td align="right">7949340.17</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_bank_mean_06</td>
+<td align="right">86396</td>
+<td align="right">0.14</td>
+<td align="right">875639.22</td>
+<td align="right">559305.79</td>
+<td align="right">30.00</td>
+<td align="right">504267.33</td>
+<td align="right">763740.17</td>
+<td align="right">1167666.96</td>
+<td align="right">12253244.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_auto_mean_06</td>
+<td align="right">2895</td>
+<td align="right">0.97</td>
+<td align="right">579421.12</td>
+<td align="right">448819.67</td>
+<td align="right">0.00</td>
+<td align="right">229630.83</td>
+<td align="right">455875.00</td>
+<td align="right">825188.33</td>
+<td align="right">3220972.50</td>
+<td align="left">▇▃▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_compras_mean_06</td>
+<td align="right">3001</td>
+<td align="right">0.97</td>
+<td align="right">158993.33</td>
+<td align="right">208563.26</td>
+<td align="right">0.00</td>
+<td align="right">17848.25</td>
+<td align="right">87920.17</td>
+<td align="right">215110.50</td>
+<td align="right">2329446.17</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_advance_mean_06</td>
+<td align="right">3001</td>
+<td align="right">0.97</td>
+<td align="right">136180.13</td>
+<td align="right">186770.52</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">58196.33</td>
+<td align="right">203445.75</td>
+<td align="right">2550797.20</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_save_mean_06</td>
+<td align="right">3001</td>
+<td align="right">0.97</td>
+<td align="right">289570.00</td>
+<td align="right">492991.22</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">437714.50</td>
+<td align="right">4608514.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_tot_mean_06</td>
+<td align="right">3001</td>
+<td align="right">0.97</td>
+<td align="right">700784.15</td>
+<td align="right">583739.94</td>
+<td align="right">0.00</td>
+<td align="right">256028.83</td>
+<td align="right">522581.17</td>
+<td align="right">991399.17</td>
+<td align="right">5210003.67</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">monte_bank_cons_mean_06</td>
+<td align="right">87387</td>
+<td align="right">0.13</td>
+<td align="right">898910.66</td>
+<td align="right">551680.02</td>
+<td align="right">21620.00</td>
+<td align="right">532351.67</td>
+<td align="right">791575.67</td>
+<td align="right">1186646.83</td>
+<td align="right">10983746.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">monte_mean_06</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">657298.13</td>
+<td align="right">493486.06</td>
+<td align="right">-13581.33</td>
+<td align="right">263736.33</td>
+<td align="right">527974.67</td>
+<td align="right">945157.54</td>
+<td align="right">7949340.17</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="modelling" class="section level2">
+<div id="split" class="section level2">
 <h2 class="hasAnchor">
-<a href="#modelling" class="anchor"></a>Modelling</h2>
-<p>We’ll remove <em>unpredictive</em> variables.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">vars</span> <span class="op">&lt;-</span> <span class="va">dbiv</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">iv</span> <span class="op">&gt;</span> <span class="fl">0.02</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">pull</span><span class="op">(</span><span class="va">variable</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">str_c</span><span class="op">(</span><span class="st">"_woe"</span><span class="op">)</span>
+<a href="#split" class="anchor"></a>Split</h2>
+<p>From: <a href="https://www.tidymodels.org/start/recipes/#data-split" class="uri">https://www.tidymodels.org/start/recipes/#data-split</a></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Fix the random numbers by setting the seed </span>
+<span class="co"># This enables the analysis to be reproducible when random numbers are used </span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="va">PARS</span><span class="op">$</span><span class="va">SEED</span><span class="op">)</span>
 
-<span class="va">dtrain</span> <span class="op">&lt;-</span> <span class="va">dtrain</span> <span class="op">%&gt;%</span> 
-  <span class="fu">select</span><span class="op">(</span><span class="va">bad</span>, <span class="fu">all_of</span><span class="op">(</span><span class="va">vars</span><span class="op">)</span><span class="op">)</span>
+<span class="va">data_split</span> <span class="op">&lt;-</span> <span class="fu">rsample</span><span class="fu">::</span><span class="fu"><a href="https://rsample.tidymodels.org/reference/initial_split.html">initial_split</a></span><span class="op">(</span><span class="va">data</span>, prop <span class="op">=</span> <span class="va">PARS</span><span class="op">$</span><span class="va">P_TRAIN</span><span class="op">)</span>
 
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">bad</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">dtrain</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="va">logit</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 16 x 5
-##    term                                  estimate std.error statistic    p.value
-##    &lt;chr&gt;                                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
-##  1 (Intercept)                             -0.732     0.124    -5.92     3.25e-9
-##  2 status.of.existing.checking.account_~    0.778     0.167     4.66     3.22e-6
-##  3 purpose_woe                              0.909     0.228     3.99     6.51e-5
-##  4 credit.history_woe                       0.694     0.239     2.90     3.71e-3
-##  5 duration.in.month_woe                    1.05      0.251     4.18     2.98e-5
-##  6 credit.amount_woe                        1.19      0.255     4.69     2.76e-6
-##  7 savings.account.and.bonds_woe            0.748     0.283     2.64     8.31e-3
-##  8 present.employment.since_woe             1.02      0.340     3.01     2.64e-3
-##  9 age.in.years_woe                         0.716     0.342     2.09     3.64e-2
-## 10 other.installment.plans_woe              0.852     0.394     2.16     3.06e-2
-## 11 housing_woe                              1.00      0.495     2.02     4.29e-2
-## 12 property_woe                             0.189     0.588     0.322    7.48e-1
-## 13 installment.rate.in.percentage.of.di~    1.93      0.580     3.32     8.86e-4
-## 14 number.of.existing.credits.at.this.b~    0.149     0.719     0.207    8.36e-1
-## 15 telephone_woe                            1.31      0.739     1.77     7.59e-2
-## 16 personal.status.and.sex_woe              1.38      0.763     1.81     7.02e-2</code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 4
-##      ks   auc    iv  gini
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 0.559 0.859  2.39 0.719</code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model</span>, newdata <span class="op">=</span> <span class="va">dtest</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 4
-##      ks   auc    iv  gini
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 0.447 0.762  1.09 0.524</code></pre>
-<p>We can do feature selection:</p>
-<div id="feature-selection" class="section level3">
-<h3 class="hasAnchor">
-<a href="#feature-selection" class="anchor"></a>Feature selection</h3>
-<div id="glmnet" class="section level4">
-<h4 class="hasAnchor">
-<a href="#glmnet" class="anchor"></a>glmnet</h4>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model_fsglmnet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/featsel_glmnet.html">featsel_glmnet</a></span><span class="op">(</span><span class="va">model</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<p><img src="risk3r_files/figure-html/unnamed-chunk-9-1.png" width="700"><img src="risk3r_files/figure-html/unnamed-chunk-9-2.png" width="700"><img src="risk3r_files/figure-html/unnamed-chunk-9-3.png" width="700"></p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 12 x 5
-##    term                                  estimate std.error statistic    p.value
-##    &lt;chr&gt;                                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
-##  1 (Intercept)                             -0.723     0.122     -5.93    3.02e-9
-##  2 status.of.existing.checking.account_~    0.764     0.165      4.63    3.61e-6
-##  3 purpose_woe                              0.936     0.224      4.18    2.90e-5
-##  4 credit.history_woe                       0.741     0.224      3.31    9.40e-4
-##  5 duration.in.month_woe                    1.03      0.246      4.19    2.80e-5
-##  6 credit.amount_woe                        1.12      0.246      4.57    4.92e-6
-##  7 savings.account.and.bonds_woe            0.740     0.280      2.64    8.22e-3
-##  8 present.employment.since_woe             1.03      0.333      3.10    1.91e-3
-##  9 age.in.years_woe                         0.799     0.327      2.44    1.46e-2
-## 10 other.installment.plans_woe              0.787     0.385      2.05    4.08e-2
-## 11 housing_woe                              0.938     0.429      2.19    2.87e-2
-## 12 installment.rate.in.percentage.of.di~    1.98      0.576      3.43    6.02e-4</code></pre>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 4
-##      ks   auc    iv  gini
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 0.559 0.855  2.44 0.709</code></pre>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_fsglmnet</span>, newdata <span class="op">=</span> <span class="va">dtest</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 4
-##      ks   auc    iv  gini
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 0.456 0.770  1.15 0.540</code></pre>
-</div>
-<div id="setpwise-forward" class="section level4">
-<h4 class="hasAnchor">
-<a href="#setpwise-forward" class="anchor"></a>Setpwise forward</h4>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model_fsstep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/featsel_stepforward.html">featsel_stepforward</a></span><span class="op">(</span><span class="va">model</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 14 x 5
-##    term                                  estimate std.error statistic    p.value
-##    &lt;chr&gt;                                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
-##  1 (Intercept)                             -0.735     0.124     -5.94    2.78e-9
-##  2 status.of.existing.checking.account_~    0.779     0.167      4.67    3.01e-6
-##  3 credit.amount_woe                        1.19      0.251      4.76    1.96e-6
-##  4 purpose_woe                              0.918     0.226      4.06    4.98e-5
-##  5 duration.in.month_woe                    1.06      0.248      4.28    1.91e-5
-##  6 credit.history_woe                       0.712     0.228      3.12    1.79e-3
-##  7 present.employment.since_woe             1.02      0.338      3.02    2.57e-3
-##  8 installment.rate.in.percentage.of.di~    1.93      0.579      3.34    8.45e-4
-##  9 age.in.years_woe                         0.702     0.332      2.12    3.44e-2
-## 10 savings.account.and.bonds_woe            0.748     0.283      2.64    8.22e-3
-## 11 housing_woe                              1.07      0.437      2.45    1.41e-2
-## 12 other.installment.plans_woe              0.853     0.388      2.20    2.80e-2
-## 13 personal.status.and.sex_woe              1.37      0.761      1.80    7.13e-2
-## 14 telephone_woe                            1.29      0.735      1.75    7.97e-2</code></pre>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 4
-##      ks   auc    iv  gini
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 0.562 0.859  2.36 0.718</code></pre>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_fsstep</span>, newdata <span class="op">=</span> <span class="va">dtest</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 4
-##      ks   auc    iv  gini
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 0.449 0.762  1.12 0.523</code></pre>
-<p>See if we can remove variables via inspecting predictive measures.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dfmetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_partials.html">model_partials</a></span><span class="op">(</span><span class="va">model_fsglmnet</span>, newdata <span class="op">=</span> <span class="va">dtest</span><span class="op">)</span>
-<span class="va">dfmetrics</span></code></pre></div>
-<pre><code>## # A tibble: 22 x 6
-##    variable                                sample    ks   auc    iv  gini
-##    &lt;fct&gt;                                   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 status.of.existing.checking.account_woe train  0.340 0.694 0.565 0.387
-##  2 status.of.existing.checking.account_woe test   0.349 0.708 0.608 0.416
-##  3 purpose_woe                             train  0.376 0.735 0.811 0.469
-##  4 purpose_woe                             test   0.343 0.696 0.627 0.392
-##  5 credit.history_woe                      train  0.413 0.759 1.10  0.518
-##  6 credit.history_woe                      test   0.363 0.733 0.781 0.466
-##  7 duration.in.month_woe                   train  0.489 0.800 1.69  0.599
-##  8 duration.in.month_woe                   test   0.457 0.769 1.13  0.538
-##  9 credit.amount_woe                       train  0.519 0.817 1.75  0.635
-## 10 credit.amount_woe                       test   0.452 0.764 1.13  0.529
-## # ... with 12 more rows</code></pre>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dfmetrics</span> <span class="op">%&gt;%</span> 
-  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">gini</span>, <span class="op">-</span><span class="va">iv</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">risk3r</span><span class="fu">:::</span><span class="fu"><a href="../reference/plot.model_partials.html">plot.model_partials</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="risk3r_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
-</div>
-</div>
-<div id="scorecard" class="section level3">
-<h3 class="hasAnchor">
-<a href="#scorecard" class="anchor"></a>Scorecard</h3>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">POINTS0</span>   <span class="op">&lt;-</span> <span class="fl">600</span>
-<span class="va">PDO</span>       <span class="op">&lt;-</span> <span class="fl">20</span>
-<span class="va">ODDS0</span>     <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="fl">50</span>
-
-<span class="va">scrcrd</span> <span class="op">&lt;-</span> <span class="fu">scorecard</span><span class="fu">::</span><span class="fu"><a href="http://shichen.name/scorecard/reference/scorecard.html">scorecard</a></span><span class="op">(</span>
-  bins <span class="op">=</span> <span class="va">bins</span>, 
-  model <span class="op">=</span> <span class="va">model_fsglmnet</span>, 
-  points0 <span class="op">=</span> <span class="va">POINTS0</span>,
-  pdo <span class="op">=</span> <span class="va">PDO</span>,
-  odds0 <span class="op">=</span> <span class="va">ODDS0</span>,
-  basepoints_eq0 <span class="op">=</span> <span class="cn">TRUE</span>
-  <span class="op">)</span>
-
-<span class="va">scrcrd</span><span class="op">$</span><span class="va">age.in.years</span></code></pre></div>
-<pre><code>##        variable       bin count count_distr neg pos   posprob        woe
-## 1: age.in.years [-Inf,26)    98  0.19878296  50  48 0.4897959  0.6553693
-## 2: age.in.years   [26,27)    28  0.05679513  22   6 0.2142857 -0.6030917
-## 3: age.in.years [27, Inf)   367  0.74442191 257 110 0.2997275 -0.1524044
-##        bin_iv  total_iv breaks is_special_values points
-## 1: 0.09221521 0.1273082     26             FALSE     31
-## 2: 0.01826399 0.1273082     27             FALSE     60
-## 3: 0.01682900 0.1273082    Inf             FALSE     50</code></pre>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">scrcrd2</span> <span class="op">&lt;-</span> <span class="fu">scorecard</span><span class="fu">::</span><span class="fu"><a href="http://shichen.name/scorecard/reference/scorecard2.html">scorecard2</a></span><span class="op">(</span>
-  dt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">credit</span>, <span class="va">sample</span> <span class="op">==</span> <span class="st">"train"</span><span class="op">)</span>,
-  y <span class="op">=</span> <span class="st">"bad"</span>,
-  bins <span class="op">=</span> <span class="va">bins</span>,
-  x <span class="op">=</span> <span class="fu">str_remove</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"_woe$"</span><span class="op">)</span>,
-  points0 <span class="op">=</span> <span class="va">POINTS0</span>,
-  pdo <span class="op">=</span> <span class="va">PDO</span>,
-  odds0 <span class="op">=</span> <span class="va">ODDS0</span>,
-  basepoints_eq0 <span class="op">=</span> <span class="cn">TRUE</span>
-  <span class="op">)</span>
-
-<span class="va">scrcrd2</span><span class="op">$</span><span class="va">age.in.years</span></code></pre></div>
-<pre><code>##        variable       bin count count_distr neg pos   posprob        woe
-## 1: age.in.years [-Inf,26)    98  0.19878296  50  48 0.4897959  0.6553693
-## 2: age.in.years   [26,27)    28  0.05679513  22   6 0.2142857 -0.6030917
-## 3: age.in.years [27, Inf)   367  0.74442191 257 110 0.2997275 -0.1524044
-##        bin_iv  total_iv breaks is_special_values points
-## 1: 0.09221521 0.1273082     26             FALSE     31
-## 2: 0.01826399 0.1273082     27             FALSE     60
-## 3: 0.01682900 0.1273082    Inf             FALSE     50</code></pre>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dtrain</span> <span class="op">%&gt;%</span> 
-  <span class="fu">group_by</span><span class="op">(</span><span class="va">age.in.years_woe</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">summarise</span><span class="op">(</span>
-    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">bad</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 3 x 3
-##   age.in.years_woe `dplyr::n()` `mean(bad)`
-##              &lt;dbl&gt;        &lt;int&gt;       &lt;dbl&gt;
-## 1           -0.603           28       0.214
-## 2           -0.152          367       0.300
-## 3            0.655           98       0.490</code></pre>
-</div>
+<span class="co"># Create data frames for the two sets:</span>
+<span class="va">train_data</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">data_split</span><span class="op">)</span>
+<span class="va">test_data</span>  <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">data_split</span><span class="op">)</span></code></pre></div>
+<!-- ## Getting woes -->
+<!-- ```{r} -->
+<!-- dtrain <- credit %>% -->
+<!--   filter(sample == "train") %>% -->
+<!--   select(-sample) -->
+<!-- bins <- scorecard::woebin(dtrain, y = "bad") -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- dbiv <- woebin_summary(bins) -->
+<!-- glimpse(dbiv) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- # bins2 <- woebin2(dtrain, y = "bad", method = "ctree") -->
+<!-- ``` -->
+<!-- Remove variables woebin exclude: -->
+<!-- ```{r} -->
+<!-- vars <- dbiv %>% -->
+<!--   pull(variable) -->
+<!-- dtrain <- dtrain %>% -->
+<!--   select(bad, all_of(vars)) -->
+<!-- ``` -->
+<!-- Apply woes to train table. -->
+<!-- ```{r} -->
+<!-- dtrain <- as_tibble(woebin_ply(dtrain, bins)) -->
+<!-- dtest <-  credit %>% -->
+<!--   filter(sample == "test") %>% -->
+<!--   woebin_ply(bins) %>% -->
+<!--   as_tibble() -->
+<!-- glimpse(dtrain) -->
+<!-- ``` -->
+<!-- ## Modelling -->
+<!-- We'll remove _unpredictive_ variables. -->
+<!-- ```{r} -->
+<!-- vars <- dbiv %>% -->
+<!--   filter(iv > 0.02) %>% -->
+<!--   pull(variable) %>% -->
+<!--   str_c("_woe") -->
+<!-- dtrain <- dtrain %>% -->
+<!--   select(bad, all_of(vars)) -->
+<!-- model <- glm(bad ~ ., data = dtrain, family = binomial(link = logit)) -->
+<!-- broom::tidy(model) -->
+<!-- model_metrics(model) -->
+<!-- model_metrics(model, newdata = dtest) -->
+<!-- ``` -->
+<!-- We can do feature selection: -->
+<!-- ### Feature selection -->
+<!-- #### glmnet -->
+<!-- ```{r} -->
+<!-- model_fsglmnet <- featsel_glmnet(model, trace = FALSE) -->
+<!-- broom::tidy(model_fsglmnet) -->
+<!-- model_metrics(model_fsglmnet) -->
+<!-- model_metrics(model_fsglmnet, newdata = dtest) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- model_fsglmnet2 <- featsel_glmnet(model, S = "lambda.min", trace = FALSE) -->
+<!-- broom::tidy(model_fsglmnet2) -->
+<!-- model_metrics(model_fsglmnet2) -->
+<!-- model_metrics(model_fsglmnet2, newdata = dtest) -->
+<!-- ``` -->
+<!-- #### Setpwise forward -->
+<!-- ```{r} -->
+<!-- model_fsstep <- featsel_stepforward(model, trace = FALSE) -->
+<!-- broom::tidy(model_fsstep) -->
+<!-- model_metrics(model_fsstep) -->
+<!-- model_metrics(model_fsstep, newdata = dtest) -->
+<!-- ``` -->
+<!-- See if we can remove variables via inspecting predictive measures. -->
+<!-- ```{r} -->
+<!-- dfmetrics <- model_partials(model_fsglmnet, newdata = dtest) -->
+<!-- dfmetrics -->
+<!-- dfmetrics %>% -->
+<!--   select(-gini, -iv) %>% -->
+<!--   risk3r:::plot.model_partials() + -->
+<!--   theme(axis.text.x = element_text(angle = 45, hjust = 1)) -->
+<!-- ``` -->
+<!-- ## `{performance}` package -->
+<!-- ```{r} -->
+<!-- res <- performance::check_model(model) -->
+<!-- performance::check_collinearity(model) -->
+<!-- car::vif(model) -->
+<!-- stats::vcov(model) -->
+<!-- model -->
+<!-- model_metrics(model_fsstep) -->
+<!-- performance::model_performance(model) -->
+<!-- compperft <- performance::compare_performance( -->
+<!--   model, -->
+<!--   model_fsglmnet, -->
+<!--   model_fsglmnet2, -->
+<!--   model_fsstep, -->
+<!--   rank = TRUE -->
+<!-- ) -->
+<!-- as.data.frame(compperft) -->
+<!-- testperf <- performance::test_performance( -->
+<!--   model, -->
+<!--   model_fsglmnet, -->
+<!--   model_fsglmnet2, -->
+<!--   model_fsstep -->
+<!-- ) -->
+<!-- testperf -->
+<!-- ``` -->
+<!-- ### Scorecard -->
+<!-- ```{r} -->
+<!-- POINTS0   <- 600 -->
+<!-- PDO       <- 20 -->
+<!-- ODDS0     <- 1/50 -->
+<!-- scrcrd <- scorecard::scorecard( -->
+<!--   bins = bins, -->
+<!--   model = model_fsglmnet, -->
+<!--   points0 = POINTS0, -->
+<!--   pdo = PDO, -->
+<!--   odds0 = ODDS0, -->
+<!--   basepoints_eq0 = TRUE -->
+<!--   ) -->
+<!-- scrcrd$age.in.years -->
+<!-- scrcrd2 <- scorecard::scorecard2( -->
+<!--   dt = filter(credit, sample == "train"), -->
+<!--   y = "bad", -->
+<!--   bins = bins, -->
+<!--   x = str_remove(names(coef(model_fsglmnet))[-1], "_woe$"), -->
+<!--   points0 = POINTS0, -->
+<!--   pdo = PDO, -->
+<!--   odds0 = ODDS0, -->
+<!--   basepoints_eq0 = TRUE -->
+<!--   ) -->
+<!-- scrcrd2$age.in.years -->
+<!-- dtrain %>% -->
+<!--   group_by(age.in.years_woe) %>% -->
+<!--   summarise( -->
+<!--     dplyr::n(), -->
+<!--     mean(bad) -->
+<!--   ) -->
+<!-- ``` -->
 </div>
   </div>
 

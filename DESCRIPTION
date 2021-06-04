@@ -25,7 +25,9 @@ Imports:
     scales,
     scorecard (>= 0.3.2),
     skimr,
-    glmnet
+    glmnet,
+    corrr,
+    tidyselect
 Suggests:
     rmarkdown,
     knitr,

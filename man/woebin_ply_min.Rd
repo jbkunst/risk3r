@@ -2,7 +2,7 @@
 % Please edit documentation in R/scorecard-helpers.R
 \name{woebin_ply_min}
 \alias{woebin_ply_min}
-\title{Minimalistic version of woebin_ply}
+\title{Minimalistic version of scorecard::woebin_ply}
 \usage{
 woebin_ply_min(variable, bin, value = "woe")
 }
@@ -14,7 +14,7 @@ woebin_ply_min(variable, bin, value = "woe")
 \item{value}{The value to return (a column of woebin table), defaults to "woe", can be: badprob, bin, etc.}
 }
 \description{
-Minimalistic version of woebin_ply
+Minimalistic version of scorecard::woebin_ply
 }
 \examples{
 

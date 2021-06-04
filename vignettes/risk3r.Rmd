@@ -1,159 +1,511 @@
 ---
 title: "Example using risk3r"
 output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Example using risk3r}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
 ---
 
-
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-You can also embed plots, for example:
-
-## Packages and data
+## Packages 
 
 ```{r, echo=FALSE, message=FALSE}
+# general
+library(dplyr)
+
+# main
 library(risk3r)
 library(scorecard)
-library(dplyr)
-library(stringr)
+
+# descriptive & premodelling
+library(skimr)
+library(moments)
+library(rsample)
+
+# modelling
+library(randomForest)
+
+# post modelling
+library(performance)
 library(broom)
-library(ggplot2)
 ```
 
+## Parameters
+
 ```{r}
-data("germancredit", package = "scorecard")
+PARAMETERS <- list(
+  SEED = 12345,
+  P_TRAIN = 0.5,
+  P_CONCENTRATION = .95,
+  IV_MIN = 0.02, # WEAK >=
+  COUNT_DISTR_LIMIT = 0.05,
+  CORRELATION_LIMIT = 0.5,
+  POINTS0 = 600,
+  PDO     = 20,
+  ODDS0   = 1/50
+)
+```
 
-credit <- germancredit
-credit <- rename(credit, bad = creditability)
-credit <- mutate(credit, bad = as.numeric(bad == "bad"))
-glimpse(credit)
+<details>
 
-set.seed(123)
-
-credit <- credit %>% 
-  mutate(
-    sample = sample(
-      c("train", "test"), 
-      prob = c(0.5, .5), 
-      size = nrow(credit),
-      replace = TRUE
-      )
+```{r}
+custom_skim <- skim_with(
+  numeric = sfl(
+    median = purrr::partial(median, na.rm = TRUE),
+    skewness = purrr::partial(moments::skewness, na.rm = TRUE),
+    kurtosis = purrr::partial(moments::kurtosis, na.rm = TRUE),
+    count_distr_max = risk3r::count_distr_max,
+    n_unique = skimr::n_unique
+    ),
+  factor = sfl(
+    hhi = risk3r::hhi,
+    hhi_lbl = purrr::compose(risk3r::hhi, risk3r::hhi_label, .dir = "forward"),
+    count_distr_max = risk3r::count_distr_max
+    ),
+  append = TRUE
   )
 
-credit %>% count(sample, bad)
+# custom_skim(data %>% select(1:10))
+
 ```
 
-## Getting woes
+
+</details>
+
+
+## Data
 
 ```{r}
-dtrain <- credit %>% 
-  filter(sample == "train") %>% 
-  select(-sample)
+data <- readRDS(here::here("data-raw/cd.rds"))
 
-bins <- scorecard::woebin(dtrain, y = "bad")
+data <- data %>%
+  select(1:100, where(is.character)) %>%
+  sample_n(50000)
+
+data %>% 
+  select(1:10) %>% 
+  glimpse()
+
+data <- data %>% 
+  mutate(
+    bad_good = ifelse(bad_good == 1, "bad", "good"),
+    bad_good = factor(bad_good, levels = c("good", "bad"))
+    ) %>% 
+  mutate(across(where(is.character), as.factor))
+
+dim(data)
 ```
+
+## Univariate analysis
+
+```{r}
+describe <- custom_skim(data)
+
+# use as.list to export skimr (risk3r:::as.list.skim_df)
+# writexl::write_xlsx(as.list(describe), here::here("data-raw/describe.xlsx"))
+```
+
+Remove variables with 0 variance and near 0 variance.
+
+```{r}
+describe_min <- skimr::partition(describe) %>% 
+  purrr::map_df(select, variable = skim_variable, n_unique, count_distr_max) %>% 
+  tibble::as_tibble()
+
+var_to_remove_unique_value <- describe_min %>% 
+  filter(n_unique == 1) %>% 
+  pull(variable)
+
+var_to_remove_near_0_var <- skimr::partition(describe) %>% 
+  purrr::map_df(select, variable = skim_variable, n_unique, count_distr_max) %>% 
+  tibble::as_tibble() %>% 
+  filter(count_distr_max >= PARAMETERS$P_CONCENTRATION) %>% 
+  pull(variable)
+
+var_to_remove_unique_value
+var_to_remove_near_0_var <- setdiff(var_to_remove_near_0_var, var_to_remove_unique_value)
+```
+
+Or using scorecard:
+
+```{r}
+scrd_filter <- scorecard::var_filter(
+  data, 
+  # next 2 parameter are needed even we want only due identical_limit
+  y = "bad_good", iv_limit = 0,
+  missing_limit = 1,
+  identical_limit =  PARAMETERS$P_CONCENTRATION,
+  return_rm_reason = TRUE
+  )
+
+scrd_filter$rm %>% 
+  as_tibble() %>% 
+  filter(!is.na(rm_reason)) %>% 
+  arrange(variable)
+```
+
+Some differences between result due `scorecard::var_filter` exclude NAs 
+to caculate de identical limit.
+
+### Removing variables
+
+Surely we want remove other variables like the id operation/customer or
+a temporal/time variables.
+
+```{r}
+var_to_remove_specials <- c("time", "id")
+
+data <- data %>% 
+  select(-all_of(var_to_remove_unique_value)) %>% 
+  select(-all_of(var_to_remove_near_0_var)) %>% 
+  select(-all_of(var_to_remove_specials))
+```
+
+## Split
+
+From: https://www.tidymodels.org/start/recipes/#data-split
+
+```{r}
+# Fix the random numbers by setting the seed 
+# This enables the analysis to be reproducible when random numbers are used 
+set.seed(PARAMETERS$SEED)
+
+data_split <- rsample::initial_split(data, prop = PARAMETERS$P_TRAIN)
+
+# Create data frames for the two sets:
+train_data <- training(data_split)
+test_data  <- testing(data_split)
+```
+
+We can do check:
+
+```{r}
+train_data %>% count(bad_good) %>% mutate(n/sum(n))
+test_data %>% count(bad_good) %>% mutate(n/sum(n))
+```
+
+## Bivariate analysis
+
+### Getting woes
+
+We'll start with the default `method = "tree"`
+
+```{r}
+bins <- scorecard::woebin(
+  train_data, 
+  y = "bad_good", 
+  method = "tree",
+  count_distr_limit = PARAMETERS$COUNT_DISTR_LIMIT
+  )
+```
+
+Some sanity checks:
+
+```{r}
+train_data$monte_advance_mean_01 %>% is.na() %>% table()
+
+bins$monte_advance_mean_01
+```
+
+The risk3r package have `woebin_summary` to get the summary.
 
 ```{r}
 dbiv <- woebin_summary(bins)
 
+dbiv
+
 glimpse(dbiv)
 ```
 
+Note that `dbiv` object have `breaks` column among other information.
+
+In some cases, monotonic woes are required in continous variables. With the
+`dbiv` object we can check what variables have a high information and no monotonic
+(excluding the missing category oc).
+
 ```{r}
-# bins2 <- woebin2(dtrain, y = "bad", method = "ctree")
+dbiv %>% 
+  filter(
+    iv > 0.02,  # A >= weak iv value
+    !factor,    # is numeric
+    !monotone   # is not monotonic
+    )
 ```
 
-Remove variables woebin exclude:
+<!-- ### Exploring, finding the best cuts/bin -->
+
+<!-- `risk3r::woebin2` -a wrapper around the main `scorecard::woebin` function- -->
+<!-- implement `method = "ctree"` via the partykit package (we'll try implement monotonic binnings from mob package https://github.com/statcompute/mob). -->
+
+<!-- Having this we can iterate among all available methods: -->
+
+<!-- ```{r, message=FALSE} -->
+<!-- binssums <- purrr::map_df(c("tree", "ctree"), function(m = "chimerge"){ -->
+
+<!--   message(m) -->
+
+<!--   bins <- risk3r::woebin2( -->
+<!--     train_data,  -->
+<!--     y = "bad_good",  -->
+<!--     count_distr_limit = PARAMETERS$COUNT_DISTR_LIMIT, -->
+<!--     method = m -->
+<!--     ) -->
+
+<!--    woebin_summary(bins) %>%  -->
+<!--      mutate(method = m, .before = 1) -->
+
+<!-- }) -->
+
+<!-- # x <- train_data$mra_dac_rec_30_03 -->
+<!-- # y <- train_data$bad_good -->
+<!-- ``` -->
+
+<!-- We can check, for each variable: -->
+<!-- - Every method is generated for every variable -->
+<!-- - The methods give same IV in some variables -->
+
+<!-- ```{r} -->
+<!-- binssums %>% -->
+<!--   count(method) -->
+
+<!-- binssums %>% -->
+<!--   count(variable, iv) %>%  -->
+<!--   count(n) -->
+<!-- ``` -->
+
+<!-- Get the best breaks in the sense to maximize the IV, the get the breaks -->
+<!-- and finally uses `scorecard::woebin`. -->
+
+<!-- ```{r} -->
+<!-- binbest <- binssums %>%  -->
+<!--   group_by(variable) %>%  -->
+<!--   arrange(desc(iv)) %>%  -->
+<!--   filter(iv == max(iv)) %>%  -->
+<!--   slice(1) -->
+
+<!-- best_breaks <- binbest %>%  -->
+<!--   select(variable, breaks) %>%  -->
+<!--   tibble::deframe() -->
+
+<!-- bin <- scorecard::woebin( -->
+<!--   train_data,  -->
+<!--   y = "bad_good",  -->
+<!--   count_distr_limit = PARAMETERS$COUNT_DISTR_LIMIT, -->
+<!--   breaks_list = best_breaks -->
+<!--   ) -->
+
+<!-- dbiv <- woebin_summary(bins) -->
+
+<!-- dbiv -->
+
+<!-- glimpse(dbiv) -->
+<!-- ``` -->
+
+Apply woes to train and test table.
+
+### Finding variables with low IV
+
+Just remove variables with low predictive power.
 
 ```{r}
-vars <- dbiv %>% 
+vars_to_remove_low_iv <- dbiv %>% 
+  filter(iv < PARAMETERS$IV_MIN) %>% 
   pull(variable)
-
-dtrain <- dtrain %>% 
-  select(bad, all_of(vars))
 ```
 
-Apply woes to train table.
+### Finding highly correlated woes variables
+
+In risk3r we can get a data frame with correlations between woes and IVs to
+decide what variables remove.
 
 ```{r}
-dtrain <- as_tibble(woebin_ply(dtrain, bins))
+# FALSE to know check the next steps below
+dcors <- woebin_cor_iv(train_data, bins, upper = FALSE)
+dcors
+```
 
-dtest <-  credit %>% 
-  filter(sample == "test") %>% 
-  woebin_ply(bins) %>% 
-  as_tibble()
+Now, we can get the variables which have high correlation
 
-glimpse(dtrain)
+```{r}
+n <- length(bins)
+
+vars_to_rm_correlation <- dcors 
+
+nrow(vars_to_rm_correlation) == n * n 
+
+# remove same vars (diagonal)
+vars_to_rm_correlation <- vars_to_rm_correlation %>% 
+  filter(var1 != var2)
+
+nrow(vars_to_rm_correlation) == n * (n-1)
+
+# keep upper matrix
+vars_to_rm_correlation <- vars_to_rm_correlation %>% 
+  filter(var1_rank < var2_rank)
+
+nrow(vars_to_rm_correlation) == n * (n - 1) /2
+
+# remove variables which causes high correlations and have lower IV 
+# respect the other variable
+vars_to_rm_correlation <- vars_to_rm_correlation %>% 
+  filter(abs(r) >= PARAMETERS$CORRELATION_LIMIT) %>% 
+  distinct(var2) %>% 
+  pull() %>% 
+  as.character()
+```
+
+### Removing variables 
+
+```{r}
+vars_to_rm_correlation <- setdiff(vars_to_rm_correlation, vars_to_remove_low_iv)
+
+train_data <- train_data %>% 
+  select(-all_of(vars_to_remove_low_iv)) %>% 
+  select(-all_of(vars_to_rm_correlation))
+```
+
+### Applying woes
+
+Just `scorecard::woebin_ply` :)
+
+```{r}
+# class before woes
+train_data %>% 
+  purrr::map_chr(class) %>% 
+  table()
+
+train_data <- as_tibble(scorecard::woebin_ply(train_data, bins))
+test_data  <- as_tibble(scorecard::woebin_ply(test_data, bins))
+
+# check all is numeric except response variable
+train_data %>% 
+  purrr::map_chr(class) %>% 
+  table()
 ```
 
 
 ## Modelling
 
-We'll remove _unpredictive_ variables.
+Let fit a very raw model to check:
 
 ```{r}
-vars <- dbiv %>% 
-  filter(iv > 0.02) %>% 
-  pull(variable) %>% 
-  str_c("_woe")
+model_raw <- glm(bad_good ~ ., data = train_data, family = binomial(link = logit))
 
-dtrain <- dtrain %>% 
-  select(bad, all_of(vars))
+broom::tidy(model_raw)
 
-model <- glm(bad ~ ., data = dtrain, family = binomial(link = logit))
+# problems?
+broom::tidy(model_raw) %>% filter(estimate <= 0)
 
-broom::tidy(model)
-
-model_metrics(model)
-model_metrics(model, newdata = dtest)
+model_metrics(model_raw)
+model_metrics(model_raw, newdata = test_data)
 ```
 
-We can do feature selection:
-
-### Feature selection 
-
-#### glmnet
+### Satellite Model
 
 ```{r}
-model_fsglmnet <- featsel_glmnet(model, trace = FALSE)
+model_rf <- randomForest(bad_good ~ ., data = train_data, do.trace = TRUE)
+
+# weird!
+metrics(train_data$bad_good, predict(model_rf, type = "prob")[,2])
+```
+
+### Feature selection using glmnet
+
+From https://glmnet.stanford.edu/articles/glmnet.html
+
+There 2 option for `S`: `lambda.min` and `lambda.1se` , this last option
+you have a more regularized model.
+
+This wrapper around the glmnet package take a model as input, then return the
+model with the variables non zero from the `glmnet::cv.glmnet()` function 
+according with the selected `S` option. This function reorder the variables 
+in the same order the coefficient in the glmnet model turn to non zero 
+(check the plots when run this funtion).
+
+```{r}
+model_fsglmnet <- featsel_glmnet(model_raw, trace = TRUE)
 
 broom::tidy(model_fsglmnet)
+broom::tidy(model_fsglmnet) %>% filter(estimate <= 0)
 
 model_metrics(model_fsglmnet)
-model_metrics(model_fsglmnet, newdata = dtest)
+model_metrics(model_fsglmnet, newdata = test_data)
 ```
 
-#### Setpwise forward
+### Feature selection using Setpwise forward
 
 ```{r}
-model_fsstep <- featsel_stepforward(model, trace = FALSE)
+model_fsstep <- featsel_stepforward(model_raw, trace = TRUE)
 
 broom::tidy(model_fsstep)
+broom::tidy(model_fsstep) %>% filter(estimate <= 0)
 
 model_metrics(model_fsstep)
-model_metrics(model_fsstep, newdata = dtest)
+model_metrics(model_fsstep, newdata = test_data)
 ```
+
+### Variable Importance
+
+From https://ema.drwhy.ai/featureImportance.html
+
+
+```{r}
+library(DALEX)
+library(ingredients)
+
+DALEX::explain(model_raw)
+
+explain_model <- DALEX::explain(
+  model_raw,
+  data = model_raw$data,
+  y = as.numeric(model_raw$data$bad_good),
+  type = "raw"
+  )
+
+fi_glm <- feature_importance(
+  explain_model, 
+  loss_function = DALEX::loss_one_minus_auc,
+  B = 10
+  )
+
+plot(fi_glm)
+
+x <- fi_glm
+x <- as.data.frame(x)
+x <- as_tibble(x)
+x %>% count(permutation) %>% count()
+x
+```
+
+### Partial preditive measures
 
 See if we can remove variables via inspecting predictive measures.
 
 ```{r}
-dfmetrics <- model_partials(model_fsglmnet, newdata = dtest)
+dfmetrics <- model_partials(model_fsglmnet, newdata = test_data)
 dfmetrics
 
-dfmetrics %>% 
-  select(-gini, -iv) %>% 
+dfmetrics %>%
+  select(-gini, -iv) %>%
   risk3r:::plot.model_partials() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1, size = 5))
 ```
 
-### Scorecard
+### `{performance}` package
+
+```{r}
+check <- performance::check_model(model_fsglmnet)
+
+performance::check_collinearity(model_fsglmnet) %>% plot()
+
+car::vif(model_fsglmnet)
+
+```
+
+
+## Scorecard
 
 ```{r}
 POINTS0   <- 600
@@ -161,35 +513,29 @@ PDO       <- 20
 ODDS0     <- 1/50
 
 scrcrd <- scorecard::scorecard(
-  bins = bins, 
-  model = model_fsglmnet, 
+  bins = bins,
+  model = model_fsglmnet,
   points0 = POINTS0,
   pdo = PDO,
   odds0 = ODDS0,
   basepoints_eq0 = TRUE
   )
 
-scrcrd$age.in.years
+scrcrd[[2]]
 
 scrcrd2 <- scorecard::scorecard2(
-  dt = filter(credit, sample == "train"),
-  y = "bad",
+  dt =  training(data_split),
+  y = "bad_good",
   bins = bins,
-  x = str_remove(names(coef(model_fsglmnet))[-1], "_woe$"),
+  x = stringr::str_remove(names(coef(model_fsglmnet))[-1], "_woe$"),
   points0 = POINTS0,
   pdo = PDO,
   odds0 = ODDS0,
   basepoints_eq0 = TRUE
   )
 
-scrcrd2$age.in.years
+scrcrd2[[2]]
 
-dtrain %>% 
-  group_by(age.in.years_woe) %>% 
-  summarise(
-    dplyr::n(),
-    mean(bad)
-  )
 ```
 
 
