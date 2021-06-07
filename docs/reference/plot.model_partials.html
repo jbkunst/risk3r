@@ -114,35 +114,24 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for model_partials</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>dfmetrics</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>Result from model_partials function</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Optional arguments for ggplot2::geom_line</p></td>
+    </tr>
+    </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/ShichenXie/scorecard'>scorecard</a></span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"germancredit"</span><span class='op'>)</span>
-
-<span class='va'>dt</span>    <span class='op'>&lt;-</span>  <span class='fu'><a href='http://shichen.name/scorecard/reference/var_filter.html'>var_filter</a></span><span class='op'>(</span><span class='va'>germancredit</span>, <span class='st'>"creditability"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [INFO] filtering variables ... </div><div class='input'><span class='va'>bins</span>  <span class='op'>&lt;-</span>  <span class='fu'><a href='http://shichen.name/scorecard/reference/woebin.html'>woebin</a></span><span class='op'>(</span><span class='va'>dt</span>, <span class='st'>"creditability"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='input'><span class='va'>dtwoe</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='http://shichen.name/scorecard/reference/woebin_ply.html'>woebin_ply</a></span><span class='op'>(</span><span class='va'>dt</span>, <span class='va'>bins</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [INFO] converting into woe values ... </div><div class='input'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>creditability</span> <span class='op'>~</span> <span class='va'>.</span>, family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>dtwoe</span><span class='op'>)</span>
-
-<span class='va'>dfmetrics</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_partials.html'>model_partials</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>dfmetrics</span><span class='op'>)</span>
-</div><div class='img'><img src='plot.model_partials-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>dfmetrics</span><span class='op'>)</span>
-</div><div class='img'><img src='plot.model_partials-2.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>dfmetrics</span><span class='op'>[</span>,<span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>5</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>geom_text</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>value</span> <span class='op'>+</span> <span class='fl'>0.01</span>, label <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/label_percent.html'>percent</a></span><span class='op'>(</span><span class='va'>value</span>, accuracy <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span><span class='op'>)</span>,
-   size <span class='op'>=</span> <span class='fl'>3</span>
-   <span class='op'>)</span>
-</div><div class='img'><img src='plot.model_partials-3.png' alt='' width='700' height='433' /></div><div class='input'>
-
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -121,6 +121,30 @@
   control <span class='op'>=</span> <span class='fu'>partykit</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/partykit/man/ctree_control.html'>ctree_control</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>y</th>
+      <td><p>A vector of response. Usually 0-1</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>A predictive variable</p></td>
+    </tr>
+    <tr>
+      <th>namevar</th>
+      <td><p>a character element</p></td>
+    </tr>
+    <tr>
+      <th>count_distr_limit</th>
+      <td><p>The minimum count distribution percentage. Accepted range: 0.01-0.2; Defaults to 0.05.</p></td>
+    </tr>
+    <tr>
+      <th>control</th>
+      <td><p>a ctree::ctree_control list element</p></td>
+    </tr>
+    </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -132,9 +156,15 @@
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>germancredit</span><span class='op'>$</span><span class='va'>duration.in.month</span>
 
 <span class='fu'>woebin_ctree</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>x</span>, <span class='st'>"duration"</span>, count_distr_limit <span class='op'>=</span> <span class='fl'>0.05</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in woebin_ctree(y, x, "duration", count_distr_limit = 0.05): no se pudo encontrar la función "woebin_ctree"</span></div><div class='input'>
+</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt;    variable         bin count count_distr neg pos posprob woe bin_iv total_iv
+#&gt; 1: duration [-Inf, Inf)  1000           1 700 300     0.3   0      0        0
+#&gt;    breaks is_special_values
+#&gt; 1:    Inf             FALSE</div><div class='input'>
 <span class='fu'>woebin_ctree</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>x</span>, <span class='st'>"duration"</span>, count_distr_limit <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in woebin_ctree(y, x, "duration", count_distr_limit = 0.2): no se pudo encontrar la función "woebin_ctree"</span></div><div class='input'>
+</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt;    variable         bin count count_distr neg pos posprob woe bin_iv total_iv
+#&gt; 1: duration [-Inf, Inf)  1000           1 700 300     0.3   0      0        0
+#&gt;    breaks is_special_values
+#&gt; 1:    Inf             FALSE</div><div class='input'>
 <span class='fu'>woebin_ctree</span><span class='op'>(</span>
   <span class='va'>y</span>,
   <span class='va'>x</span>,
@@ -142,16 +172,64 @@
   count_distr_limit <span class='op'>=</span> <span class='fl'>0.05</span>,
   control <span class='op'>=</span> <span class='fu'>partykit</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/partykit/man/ctree_control.html'>ctree_control</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
   <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in woebin_ctree(y, x, "duration", count_distr_limit = 0.05, control = partykit::ctree_control(alpha = 0.5)): no se pudo encontrar la función "woebin_ctree"</span></div><div class='input'>
+</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt;    variable       bin count count_distr neg pos   posprob         woe
+#&gt; 1: duration [-Inf,42)   919       0.919 662 257 0.2796518 -0.09889161
+#&gt; 2: duration [42, Inf)    81       0.081  38  43 0.5308642  0.97091182
+#&gt;         bin_iv   total_iv breaks is_special_values
+#&gt; 1: 0.008806062 0.09526345     42             FALSE
+#&gt; 2: 0.086457386 0.09526345    Inf             FALSE</div><div class='input'>
 <span class='va'>x</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>, size <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, prob <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>99</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
 <span class='fu'>woebin_ctree</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>x</span>, <span class='st'>"duration"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in woebin_ctree(y, x, "duration"): no se pudo encontrar la función "woebin_ctree"</span></div><div class='input'>
+</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt;    variable       bin count count_distr neg pos   posprob        woe
+#&gt; 1: duration   missing     9       0.009   6   3 0.3333333  0.1541507
+#&gt; 2: duration [-Inf,42)   910       0.910 656 254 0.2791209 -0.1015287
+#&gt; 3: duration [42, Inf)    81       0.081  38  43 0.5308642  0.9709118
+#&gt;          bin_iv   total_iv  breaks is_special_values
+#&gt; 1: 0.0002202153 0.09586353 missing              TRUE
+#&gt; 2: 0.0091859265 0.09586353      42             FALSE
+#&gt; 3: 0.0864573856 0.09586353     Inf             FALSE</div><div class='input'>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>germancredit</span><span class='op'>$</span><span class='va'>purpose</span>
 <span class='fu'>woebin_ctree</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>x</span>, <span class='st'>"purpose"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in woebin_ctree(y, x, "purpose"): no se pudo encontrar la función "woebin_ctree"</span></div><div class='input'>
+</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt; <span class='warning'>Warning: The categorical values (`radio/television, education, furniture/equipment, car (new), car (used), business, domestic appliances, repairs, others, retraining`) are not specified in `breaks_list` for the column `purpose`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The following columns are removed from binning results due to errors:</span>
+#&gt; <span class='warning'>purpose</span></div><div class='output co'>#&gt;    variable
+#&gt; 1:  purpose
+#&gt; 2:  purpose
+#&gt;                                                                                                bin
+#&gt; 1: education%,%furniture/equipment%,%car (new)%,%business%,%domestic appliances%,%repairs%,%others
+#&gt; 2:                                                      radio/television%,%car (used)%,%retraining
+#&gt;    count count_distr neg pos   posprob        woe     bin_iv total_iv
+#&gt; 1:   608       0.608 388 220 0.3618421  0.2799201 0.05011902 0.142092
+#&gt; 2:   392       0.392 312  80 0.2040816 -0.5136787 0.09197295 0.142092
+#&gt;                                                                                             breaks
+#&gt; 1: education%,%furniture/equipment%,%car (new)%,%business%,%domestic appliances%,%repairs%,%others
+#&gt; 2:                                                      radio/television%,%car (used)%,%retraining
+#&gt;    is_special_values
+#&gt; 1:             FALSE
+#&gt; 2:             FALSE</div><div class='input'>
 <span class='va'>x</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>, size <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, prob <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>99</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
 <span class='fu'>woebin_ctree</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>x</span>, <span class='st'>"purpose_with_na"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in woebin_ctree(y, x, "purpose_with_na"): no se pudo encontrar la función "woebin_ctree"</span></div><div class='input'>
+</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt; <span class='warning'>Warning: The categorical values (`radio/television, education, furniture/equipment, car (new), car (used), business, domestic appliances, repairs, others, retraining`) are not specified in `breaks_list` for the column `purpose_with_na`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The following columns are removed from binning results due to errors:</span>
+#&gt; <span class='warning'>purpose_with_na</span></div><div class='output co'>#&gt;           variable
+#&gt; 1: purpose_with_na
+#&gt; 2: purpose_with_na
+#&gt; 3: purpose_with_na
+#&gt;                                                                                                bin
+#&gt; 1:                                                                                         missing
+#&gt; 2: education%,%furniture/equipment%,%car (new)%,%business%,%domestic appliances%,%repairs%,%others
+#&gt; 3:                                                      radio/television%,%car (used)%,%retraining
+#&gt;    count count_distr neg pos   posprob        woe       bin_iv total_iv
+#&gt; 1:    18       0.018  12   6 0.3333333  0.1541507 0.0004404305 0.138619
+#&gt; 2:   599       0.599 383 216 0.3606010  0.2745413 0.0474564211 0.138619
+#&gt; 3:   383       0.383 305  78 0.2036554 -0.5163051 0.0907221800 0.138619
+#&gt;                                                                                             breaks
+#&gt; 1:                                                                                         missing
+#&gt; 2: education%,%furniture/equipment%,%car (new)%,%business%,%domestic appliances%,%repairs%,%others
+#&gt; 3:                                                      radio/television%,%car (used)%,%retraining
+#&gt;    is_special_values
+#&gt; 1:              TRUE
+#&gt; 2:             FALSE
+#&gt; 3:             FALSE</div><div class='input'>
+
 
 </div></pre>
   </div>

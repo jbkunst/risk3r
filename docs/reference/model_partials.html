@@ -113,38 +113,26 @@
     <p>Get predictive indicator for partial models given a model</p>
     </div>
 
-    <pre class="usage"><span class='fu'>model_partials</span><span class='op'>(</span><span class='va'>model</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>model_partials</span><span class='op'>(</span><span class='va'>model</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>model</th>
+      <td><p>model</p></td>
+    </tr>
+    <tr>
+      <th>newdata</th>
+      <td><p>Optional data frame</p></td>
+    </tr>
+    </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/ShichenXie/scorecard'>scorecard</a></span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"germancredit"</span><span class='op'>)</span>
 
-<span class='va'>dt</span>    <span class='op'>&lt;-</span>  <span class='fu'><a href='http://shichen.name/scorecard/reference/var_filter.html'>var_filter</a></span><span class='op'>(</span><span class='va'>germancredit</span>, <span class='st'>"creditability"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [INFO] filtering variables ... </div><div class='input'><span class='va'>bins</span>  <span class='op'>&lt;-</span>  <span class='fu'><a href='http://shichen.name/scorecard/reference/woebin.html'>woebin</a></span><span class='op'>(</span><span class='va'>dt</span>, <span class='st'>"creditability"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='input'><span class='va'>dtwoe</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='http://shichen.name/scorecard/reference/woebin_ply.html'>woebin_ply</a></span><span class='op'>(</span><span class='va'>dt</span>, <span class='va'>bins</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [INFO] converting into woe values ... </div><div class='input'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>creditability</span> <span class='op'>~</span> <span class='va'>.</span>, family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>dtwoe</span><span class='op'>)</span>
-
-<span class='fu'>model_partials</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 13 x 5</span><span>
-#&gt;    variable                                                 ks   auc    iv  gini
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>                                                 </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> status.of.existing.checking.account_woe               0.367 0.690 0.584 0.380
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> duration.in.month_woe                                 0.385 0.748 0.877 0.497
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> credit.history_woe                                    0.432 0.770 1.11  0.541
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> purpose_woe                                           0.440 0.785 1.31  0.570
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> credit.amount_woe                                     0.473 0.797 1.34  0.595
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> savings.account.and.bonds_woe                         0.477 0.804 1.52  0.608
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> present.employment.since_woe                          0.491 0.809 1.46  0.618
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> installment.rate.in.percentage.of.disposable.income_~ 0.497 0.813 1.53  0.627
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> other.debtors.or.guarantors_woe                       0.507 0.816 1.61  0.633
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> property_woe                                          0.499 0.818 1.57  0.635
-#&gt; </span><span style='color: #BCBCBC;'>11</span><span> age.in.years_woe                                      0.519 0.822 1.72  0.645
-#&gt; </span><span style='color: #BCBCBC;'>12</span><span> other.installment.plans_woe                           0.532 0.825 1.71  0.651
-#&gt; </span><span style='color: #BCBCBC;'>13</span><span> housing_woe                                           0.528 0.827 1.73  0.654</div><div class='input'>
-</div></span></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

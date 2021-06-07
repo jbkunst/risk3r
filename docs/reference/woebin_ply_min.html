@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Minimalistic version of woebin_ply — woebin_ply_min • risk3r</title>
+<title>Minimalistic version of scorecard::woebin_ply — woebin_ply_min • risk3r</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Minimalistic version of woebin_ply — woebin_ply_min" />
-<meta property="og:description" content="Minimalistic version of woebin_ply" />
+<meta property="og:title" content="Minimalistic version of scorecard::woebin_ply — woebin_ply_min" />
+<meta property="og:description" content="Minimalistic version of scorecard::woebin_ply" />
 
 
 
@@ -104,13 +104,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Minimalistic version of woebin_ply</h1>
+    <h1>Minimalistic version of scorecard::woebin_ply</h1>
     
     <div class="hidden name"><code>woebin_ply_min.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Minimalistic version of woebin_ply</p>
+    <p>Minimalistic version of scorecard::woebin_ply</p>
     </div>
 
     <pre class="usage"><span class='fu'>woebin_ply_min</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>bin</span>, value <span class='op'>=</span> <span class='st'>"woe"</span><span class='op'>)</span></pre>
@@ -139,17 +139,15 @@
 
 <span class='va'>bins</span> <span class='op'>&lt;-</span> <span class='fu'><a href='woebin2.html'>woebin2</a></span><span class='op'>(</span><span class='va'>germancredit</span>, y <span class='op'>=</span> <span class='st'>"creditability"</span>, x <span class='op'>=</span> <span class='st'>"credit.amount"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [INFO] creating woe binning ... 
-#&gt; [INFO] creating woe binning ... </div><div class='input'>
+#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt; <span class='message'>Differences between bins</span></div><div class='input'>
 <span class='va'>variable</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>germancredit</span><span class='op'>$</span><span class='va'>credit.amount</span>, <span class='fl'>10</span><span class='op'>)</span>
 
 <span class='va'>bin</span> <span class='op'>&lt;-</span> <span class='va'>bins</span><span class='op'>$</span><span class='va'>credit.amount</span>
 
 <span class='fu'>woebin_ply_min</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>bin</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1]  0.03366128  0.39053946 -0.26236426  0.39053946  0.39053946  0.39053946
-#&gt;  [7] -0.26236426  0.39053946 -0.26236426  0.39053946</div><div class='input'>
+</div><div class='output co'>#&gt;  [1] 0 0 0 0 0 0 0 0 0 0</div><div class='input'>
 <span class='fu'>woebin_ply_min</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>bin</span>, value <span class='op'>=</span> <span class='st'>"posprob"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 0.3071161 0.3877551 0.2479339 0.3877551 0.3877551 0.3877551 0.2479339
-#&gt;  [8] 0.3877551 0.2479339 0.3877551</div><div class='input'>
+</div><div class='output co'>#&gt;  [1] 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

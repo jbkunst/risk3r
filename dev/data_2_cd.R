@@ -12,6 +12,22 @@ data %>% count(segmento_ori, segmento.x, segmento.y)
 data %>% count(incum)
 
 
+# remover variables en monto ----------------------------------------------
+vars_to_rm <- data %>%
+  select(
+    matches("mean_\\d{2}$"),
+    matches("max_\\d{2}$"),
+    matches("max_disponible_compra"),
+    -matches("porc"),
+    -matches("ratio"),
+    -matches("n_inst"),
+    -matches("mora"),
+  ) %>%
+  names()
+
+data <- select(data, setdiff(names(data), vars_to_rm))
+
+
 # select ------------------------------------------------------------------
 d <- data %>%
   filter(segmento.x == "Segmento 4 Montos Bajos") %>%
@@ -33,7 +49,6 @@ d <- data %>%
 names(d)
 
 names(d %>% select(where(negate(is.numeric))))
-
 
 # rename ------------------------------------------------------------------
 rename_vars <- function(x = c("saldo", "saldo_car", "saldo_car_max")){
@@ -93,6 +108,7 @@ d <- d %>%
 
 # export ------------------------------------------------------------------
 glimpse(d %>% select(1:30))
+dim(d)
 
 saveRDS(d, "data-raw/cd.rds")
 
