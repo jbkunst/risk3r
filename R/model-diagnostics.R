@@ -9,8 +9,8 @@
 #' @export
 model_metrics <- function(model, newdata = NULL) {
 
-  yvar  <- as.character(as.formula(model))[2]
-  # newdata <- dplyr::sample_frac(dt_woe_list[[2]], 0.3)
+  r_n_p <- reponse_and_predictors_names(model)
+  yvar  <- r_n_p[["response"]]
 
   if(is.null(newdata)) {
 
@@ -41,21 +41,30 @@ model_metrics <- function(model, newdata = NULL) {
 #'
 #' @importFrom stats binomial glm
 #' @export
-model_partials <- function(model, newdata = NULL) {
+model_partials <- function(model, newdata = NULL, verbose = TRUE) {
 
-  yvar  <- as.character(as.formula(model))[2]
-  xvars <- as.character(as.formula(model))[3]
-  xvars <- unlist(strsplit(xvars, "\\s+\\+\\s+"))
+  r_n_p <- reponse_and_predictors_names(model)
 
-  dfmetrics <- purrr::map_df(1:length(xvars), function(nv = 3){
+  yvar  <- r_n_p[["response"]]
+  xvars <- r_n_p[["predictors"]]
+
+  dfmetrics <- purrr::map_df(1:length(xvars), function(nv = 7){
 
     var <- xvars[nv]
+    new_xvars <- xvars[1:nv]
 
-    f <- paste0(xvars[1:nv], collapse = " + ")
-    f <- paste0(yvar, " ~ ", f)
-    f
+    new_f <- formula_from_reponse_and_predictors_names(yvar, new_xvars)
 
-    fit <- glm(as.formula(f), family = binomial(), data = model$data)
+    if(verbose) {
+      msg <- stringr::str_glue("Fitting and evaluating model with { nv } variables: { new_f }")
+
+      msg <- stringr::str_trunc(msg, getOption("width"))
+
+      message(msg)
+
+    }
+
+    fit <- glm(new_f, family = binomial(), data = model$data)
 
     out <-  model_metrics(fit)
 
@@ -84,8 +93,6 @@ model_partials <- function(model, newdata = NULL) {
     dfmetrics,
     variable = forcats::fct_inorder(.data$variable)
   )
-
-  # attr(dfmetrics, "function") <- "model_partials"
 
   class(dfmetrics) <- c("model_partials", class(dfmetrics))
 
@@ -125,69 +132,3 @@ plot.model_partials <- function(x, ...) {
     ggplot2::facet_wrap(ggplot2::vars(.data$key), ncol = 1, scales = "free_y")
 
 }
-
-
-#' #' Function to stem model given aux gains
-#' #'
-#' #' @param model The model to test
-#' #' @param trace Show the trace
-#' #'
-#' #' @export
-#' step_auc <- function(model, trace = TRUE){
-#'
-#'   yvar  <- as.character(as.formula(model))[2]
-#'   xvars <- as.character(as.formula(model))[3]
-#'   xvars <- unlist(strsplit(xvars, "\\s+\\+\\s+"))
-#'
-#'   vars_act  <- c(1)
-#'   vars_add <- xvars
-#'
-#'   for(s in 1:length(xvars)) {
-#'
-#'     mod_act <- paste(vars_act, collapse = "+")
-#'     mod_act <- paste(yvar, "~", mod_act)
-#'
-#'     fit <- glm(as.formula(mod_act), family = binomial(), data = model$data)
-#'
-#'     if(length(vars_act) == 1) {
-#'       actual_auc <- 0.5
-#'     } else {
-#'       actual_auc <- Metrics::auc(model$data[[yvar]], fit$fitted.values)
-#'     }
-#'
-#'     if(length(vars_act) == 0) break()
-#'
-#'     fit_metrics <- purrr::map_df(vars_add, function(m = "credit.amount_woe"){
-#'
-#'       # message(m)
-#'
-#'       mod_prp <- paste(mod_act, m, sep = " + ")
-#'
-#'       fitaux <- glm(as.formula(mod_prp), family = binomial(), data = model$data)
-#'
-#'       tibble::tibble(
-#'         var_added = m,
-#'         auc = Metrics::auc(model$data[[yvar]], fitaux$fitted.values)
-#'       )
-#'
-#'     })
-#'
-#'     fit_metrics <- dplyr::arrange(fit_metrics, desc(auc))
-#'     fit_metrics <- mutate(fit_metrics, gain_auc = (auc - actual_auc)/auc)
-#'
-#'     print(fit_metrics)
-#'
-#'     var_to_add <- dplyr::pull(fit_metrics, var_added)[1]
-#'     gain       <- dplyr::pull(fit_metrics, gain_auc)[1]
-#'
-#'     if(gain <= 0) break()
-#'
-#'     vars_act  <- c(vars_act, var_to_add)
-#'     vars_add  <- setdiff(xvars, var_to_add)
-#'
-#'   }
-#'
-#'   fit
-#'
-#' }
-#'

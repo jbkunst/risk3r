@@ -4,7 +4,7 @@
 \alias{model_partials}
 \title{Get predictive indicator for partial models given a model}
 \usage{
-model_partials(model, newdata = NULL)
+model_partials(model, newdata = NULL, verbose = TRUE)
 }
 \arguments{
 \item{model}{model}

@@ -27,7 +27,9 @@ Imports:
     skimr,
     glmnet,
     corrr,
-    tidyselect
+    tidyselect,
+    DALEX,
+    ingredients
 Suggests:
     rmarkdown,
     knitr,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/model-feature-selection.R
 \name{featsel_stepforward}
 \alias{featsel_stepforward}
-\title{Shortcut for step forward}
+\title{Feature selection via iterative}
 \usage{
 featsel_stepforward(model, ...)
 }
@@ -12,7 +12,7 @@ featsel_stepforward(model, ...)
 \item{...}{Additional argumentos for stats::step}
 }
 \description{
-Shortcut for step forward
+Feature selection via iterative
 }
 \examples{
 
