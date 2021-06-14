@@ -2,8 +2,6 @@
 #'
 #' @param x A skim_df object
 #' @param ... Optional arguments (non used yet).
-#'
-#' @examples
 #' @export
 as.list.skim_df <- function(x, ...) {
   tsummary <- as.data.frame(summary(x))

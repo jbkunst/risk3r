@@ -18,7 +18,19 @@ featsel_loss_function_permutations(
 \arguments{
 \item{model}{model}
 
-\item{...}{Additional argumentos for stats::step}
+\item{stat}{= c("median", "mean", "min", "q25", "q75", "max"),}
+
+\item{B}{Iterations, defaults to 10 for each variable}
+
+\item{n_sample}{n_sample}
+
+\item{loss_function}{Default to DALEX::loss_one_minus_auc}
+
+\item{verbose}{verbose}
+
+\item{plot}{Save plots}
+
+\item{...}{Additional argumentos for DALEX::explain or ingredients::feature_importance}
 }
 \description{
 Shortcut featsel_loss_function_permutations

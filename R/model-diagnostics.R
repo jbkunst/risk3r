@@ -2,8 +2,20 @@
 #'
 #' @param model model
 #' @param newdata Optional data frame
-#'
 #' @examples
+#'
+#' N <- 10000
+#'
+#' predicted <- runif(N)
+#'
+#' actual <- rbinom(N, size = 1, prob = predicted)
+#'
+#' daux <- data.frame(actual = actual, predicted = predicted)
+#'
+#' m <- glm(actual ~ predicted, family = binomial, data = daux)
+#'
+#' model_metrics(m)
+#'
 #' @importFrom stats predict.glm predict
 #' @export
 model_metrics <- function(model, newdata = NULL) {
@@ -28,8 +40,9 @@ model_metrics <- function(model, newdata = NULL) {
 #'
 #' @param model model
 #' @param newdata Optional data frame
-#'
+#' @param verbose verbose#'
 #' @examples
+#' TRUE
 #' @importFrom stats binomial glm
 #' @export
 model_partials <- function(model, newdata = NULL, verbose = TRUE) {
@@ -91,6 +104,7 @@ model_partials <- function(model, newdata = NULL, verbose = TRUE) {
 #' @param ... Optional arguments for ggplot2::geom_line
 #'
 #' @examples
+#' TRUE
 #' @method plot model_partials
 #' @importFrom utils hasName
 #' @export

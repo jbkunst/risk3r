@@ -14,3 +14,6 @@
 \description{
 Plot model_partials output
 }
+\examples{
+TRUE
+}

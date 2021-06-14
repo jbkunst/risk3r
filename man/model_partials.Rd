@@ -10,7 +10,12 @@ model_partials(model, newdata = NULL, verbose = TRUE)
 \item{model}{model}
 
 \item{newdata}{Optional data frame}
+
+\item{verbose}{verbose#'}
 }
 \description{
 Get predictive indicator for partial models given a model
+}
+\examples{
+TRUE
 }

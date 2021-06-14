@@ -7,8 +7,6 @@
 #' @param trace.it trace.it
 #' @param type.measue type.measue
 #' @param ... Additional argumentos for glmnet::cv.glmnet
-#'
-#' @examples
 #' @importFrom glmnet cv.glmnet
 #' @importFrom stringr str_remove_all
 #' @importFrom stats coef
@@ -107,8 +105,6 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
 #'
 #' @param model model
 #' @param ... Additional argumentos for stats::step
-#'
-#' @examples
 #' @importFrom stats step
 #' @export
 featsel_stepforward <- function(model, ...) {
@@ -137,9 +133,13 @@ featsel_stepforward <- function(model, ...) {
 #' Shortcut featsel_loss_function_permutations
 #'
 #' @param model model
-#' @param ... Additional argumentos for stats::step
-#'
-#' @examples
+#' @param stat = c("median", "mean", "min", "q25", "q75", "max"),
+#' @param B Iterations, defaults to 10 for each variable
+#' @param n_sample n_sample
+#' @param loss_function Default to DALEX::loss_one_minus_auc
+#' @param verbose verbose
+#' @param plot Save plots
+#' @param ... Additional argumentos for DALEX::explain or ingredients::feature_importance
 #' @importFrom stats step
 #' @export
 featsel_loss_function_permutations <- function(model,
