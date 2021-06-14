@@ -23,6 +23,7 @@ library(scorecard)
 
 # descriptive & premodelling
 library(skimr)
+library(xray)
 library(moments)
 library(rsample)
 
@@ -31,7 +32,16 @@ library(randomForest)
 
 # post modelling
 library(performance)
+library(parameters)
 library(broom)
+
+if(require(kunstomverse)){
+  library(extrafont)
+  extrafont::loadfonts(quiet = TRUE)
+  THEME <- kunstomverse::theme_knst_segoe
+  theme_set(kunstomverse::theme_knst_segoe())
+}
+
 ```
 
 ## Parameters
@@ -80,12 +90,13 @@ custom_skim <- skim_with(
 ## Data
 
 ```{r}
-if(TRUE) {
+OPTION <- 1
+if(OPTION == 1) {
 data <- readRDS(here::here("data-raw/cd.rds"))
 
 data <- data %>%
   # select(1:300, where(is.character)) %>%
-  sample_n(50000)
+  sample_n(100000)
 
 data %>% 
   select(1:10) %>% 
@@ -98,12 +109,22 @@ data <- data %>%
     ) %>% 
   mutate(across(where(is.character), as.factor))
   
-} else {
+} else if (OPTION == 2) {
   
   data <- scorecard::germancredit %>% 
     as_tibble() %>% 
     rename(bad_good = creditability) %>% 
     select(bad_good, everything()) %>% 
+    mutate(bad_good = forcats::fct_relevel(bad_good, "good", "bad"))  %>% 
+    mutate(across(where(is.character), as.factor)) %>% 
+    mutate(id = row_number(), .before = 1)
+  
+} else if (OPTION == 3) {
+  
+  data <- risk3r::hmeq %>% 
+    rename(bad_good = bad) %>% 
+    select(bad_good, everything()) %>% 
+    mutate(bad_good = ifelse(bad_good == 1, "bad", "good")) %>% 
     mutate(bad_good = forcats::fct_relevel(bad_good, "good", "bad"))  %>% 
     mutate(across(where(is.character), as.factor)) %>% 
     mutate(id = row_number(), .before = 1)
@@ -158,6 +179,19 @@ scrd_filter$rm %>%
   filter(!is.na(rm_reason)) %>% 
   arrange(variable)
 ```
+
+### Anomalies
+
+From https://github.com/sicarul/xray.
+
+```{r}
+describe_anomalies <- xray::anomalies(data)
+
+as_tibble(describe_anomalies$variables)
+
+as_tibble(describe_anomalies$problem_variables)
+```
+
 
 Some differences between result due `scorecard::var_filter` exclude NAs 
 to caculate de identical limit.
@@ -410,8 +444,9 @@ model_raw <- glm(bad_good ~ ., data = train_data, family = binomial(link = logit
 
 broom::tidy(model_raw)
 
-# problems?
-broom::tidy(model_raw) %>% filter(estimate <= 0)
+broom::tidy(model_raw) %>% filter(estimate <= 0 | p.value > 0.05)
+
+plot(parameters::parameters(model_raw, df_method = "wald")) + THEME()
 
 model_metrics(model_raw)
 model_metrics(model_raw, newdata = test_data)
@@ -446,7 +481,10 @@ in the same order the coefficient in the glmnet model turn to non zero
 model_fsglmnet <- featsel_glmnet(model_raw, S = "lambda.1se", trace = TRUE)
 
 broom::tidy(model_fsglmnet)
-broom::tidy(model_fsglmnet) %>% filter(estimate <= 0)
+
+broom::tidy(model_fsglmnet) %>% filter(estimate <= 0 | p.value > 0.05)
+
+plot(parameters::parameters(model_fsglmnet, df_method = "wald")) + THEME()
 
 model_metrics(model_fsglmnet)
 model_metrics(model_fsglmnet, newdata = test_data)
@@ -458,7 +496,10 @@ model_metrics(model_fsglmnet, newdata = test_data)
 model_fsstep <- featsel_stepforward(model_raw, trace = TRUE)
 
 broom::tidy(model_fsstep)
-broom::tidy(model_fsstep) %>% filter(estimate <= 0)
+
+broom::tidy(model_fsstep) %>% filter(estimate <= 0 | p.value > 0.05)
+
+plot(parameters::parameters(model_fsstep)) + THEME()
 
 model_metrics(model_fsstep)
 model_metrics(model_fsstep, newdata = test_data)
@@ -475,16 +516,21 @@ between `c("q25", "mean", "median")`
 ```{r}
 model_lss_prmt <- featsel_loss_function_permutations(
   model_raw, 
-  stat ="q25",
+  stat ="min",
   B = 50
   )
 
 attr(model_lss_prmt, "plots") %>% 
   purrr::reduce(`+`) &
-  ggplot2::theme_minimal() 
+  patchwork::plot_layout(ncol = 1) &
+  THEME(base_size = 8)
 
-broom::tidy(model_lss_prmt)
-broom::tidy(model_lss_prmt) %>% filter(estimate <= 0)
+broom::tidy(model_lss_prmt) %>% filter(estimate <= 0 | p.value > 0.05)
+
+plot(parameters::parameters(model_lss_prmt, df_method = "wald")) + THEME()
+
+model_metrics(model_lss_prmt)
+model_metrics(model_lss_prmt, newdata = test_data)
 ```
 
 
@@ -539,7 +585,6 @@ dmodels %>%
 See if we can remove variables via inspecting predictive measures.
 
 ```{r}
-
 models %>% 
   purrr::map(broom::tidy) %>% 
   purrr::map(nrow)
@@ -567,10 +612,10 @@ check <- performance::check_model(model_final)
 
 performance::check_collinearity(model_final) %>% 
   plot() +
+  THEME() +
   ggplot2::coord_flip()
 
 car::vif(model_final)
-
 ```
 
 
