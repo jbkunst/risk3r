@@ -15,5 +15,4 @@ Get labels for PSIs
 \examples{
 
 psi_label(c(0.2, 2))
-
 }

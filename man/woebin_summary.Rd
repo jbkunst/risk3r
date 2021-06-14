@@ -16,29 +16,24 @@ Get scorecard's woe_bin summary
 }
 \examples{
 
-if(FALSE) {
+if (FALSE) {
+  data(germancredit, package = "scorecard")
 
-data(germancredit, package = "scorecard")
+  bins <- woebin2(
+    germancredit,
+    y = "creditability",
+    # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+    no_cores = 0,
+    method = "tree"
+  )
 
-bins <- woebin2(
- germancredit,
- y = "creditability",
- # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
- no_cores = 0,
- method = "tree"
-)
+  bin_summary <- woebin_summary(bins)
+  bin_summary
 
-bin_summary <- woebin_summary(bins)
-bin_summary
+  if (require(dplyr)) {
+    dplyr::glimpse(bin_summary)
 
-if(require(dplyr)){
-
-  dplyr::glimpse(bin_summary)
-
-  dplyr::filter(bin_summary, !monotone, !factor)
-
+    dplyr::filter(bin_summary, !monotone, !factor)
+  }
 }
-
-}
-
 }

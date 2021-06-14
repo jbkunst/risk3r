@@ -20,35 +20,35 @@ Create a tidy data frame with a correlations and IV
 }
 \examples{
 
-if(FALSE){
+if (FALSE) {
   data(germancredit, package = "scorecard")
 
-  vars <- c("creditability", "duration.in.month", "credit.history",
-          "purpose", "status.of.existing.checking.account", "property")
+  vars <- c(
+    "creditability", "duration.in.month", "credit.history",
+    "purpose", "status.of.existing.checking.account", "property"
+  )
 
-dat <- germancredit[, vars]
+  dat <- germancredit[, vars]
 
-bins <- woebin2(dat, y = "creditability", stop_limit = 0.0000001)
+  bins <- woebin2(dat, y = "creditability", stop_limit = 0.0000001)
 
-woebin_cor_iv(dat, bins)
+  woebin_cor_iv(dat, bins)
 
-datcor <- woebin_cor_iv(dat, bins)
+  datcor <- woebin_cor_iv(dat, bins)
 
-library(dplyr)
+  library(dplyr)
 
-cor_limit <- 0.15
+  cor_limit <- 0.15
 
-datcor \%>\%
-  filter(variable_1 != variable_2) \%>\%
-  mutate(
-    cor_conflict = ifelse(abs(cor) > cor_limit, TRUE, FALSE),
-    variable_to_remove = ifelse(
-      cor_conflict,
-      ifelse(iv_variable_1 > iv_variable_2, variable_2, variable_1),
-      NA
-   )
-)
-
+  datcor \%>\%
+    filter(variable_1 != variable_2) \%>\%
+    mutate(
+      cor_conflict = ifelse(abs(cor) > cor_limit, TRUE, FALSE),
+      variable_to_remove = ifelse(
+        cor_conflict,
+        ifelse(iv_variable_1 > iv_variable_2, variable_2, variable_1),
+        NA
+      )
+    )
 }
-
 }

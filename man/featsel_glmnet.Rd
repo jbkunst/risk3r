@@ -32,7 +32,3 @@ featsel_glmnet(
 \description{
 Feature selection via glmnet
 }
-\examples{
-
-
-}

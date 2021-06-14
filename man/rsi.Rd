@@ -16,7 +16,7 @@ Relative strength index
 
 set.seed(123)
 
-x <- round(cumsum(rnorm(24))*100, 0)
+x <- round(cumsum(rnorm(24)) * 100, 0)
 x <- abs(x)
 x
 
@@ -28,5 +28,4 @@ rsi(x)
 rsi(rev(x))
 
 rsi(x) + rsi(rev(x))
-
 }

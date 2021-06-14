@@ -14,7 +14,3 @@ model_partials(model, newdata = NULL, verbose = TRUE)
 \description{
 Get predictive indicator for partial models given a model
 }
-\examples{
-
-
-}

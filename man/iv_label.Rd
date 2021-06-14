@@ -25,5 +25,4 @@ iv_label(information_value(actual, predicted))
 predicted <- runif(N)
 
 iv_label(information_value(actual, predicted))
-
 }

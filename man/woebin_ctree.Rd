@@ -44,7 +44,7 @@ woebin_ctree(
   "duration",
   count_distr_limit = 0.05,
   control = partykit::ctree_control(alpha = 0.5)
-  )
+)
 
 x[sample(c(TRUE, FALSE), size = length(x), prob = c(1, 99), replace = TRUE)] <- NA
 woebin_ctree(y, x, "duration")
@@ -54,7 +54,4 @@ woebin_ctree(y, x, "purpose")
 
 x[sample(c(TRUE, FALSE), size = length(x), prob = c(1, 99), replace = TRUE)] <- NA
 woebin_ctree(y, x, "purpose_with_na")
-
-
-
 }

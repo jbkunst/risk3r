@@ -29,5 +29,4 @@ bin <- bins$credit.amount
 woebin_ply_min(variable, bin)
 
 woebin_ply_min(variable, bin, value = "posprob")
-
 }

@@ -23,6 +23,3 @@ featsel_loss_function_permutations(
 \description{
 Shortcut featsel_loss_function_permutations
 }
-\examples{
-
-}

@@ -30,5 +30,4 @@ ks(actual, predicted)
 predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
 
 ks(actual, predicted)
-
 }

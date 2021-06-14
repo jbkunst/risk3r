@@ -16,7 +16,7 @@ Number of up/growths
 
 set.seed(123)
 
-x <- round(cumsum(rnorm(24))*100, 0)
+x <- round(cumsum(rnorm(24)) * 100, 0)
 x <- abs(x)
 x
 
@@ -27,6 +27,4 @@ n_growths(x)
 n_growths(c(1, 2, 0))
 
 n_growths(c(0))
-
-
 }

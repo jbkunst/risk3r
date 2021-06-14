@@ -40,5 +40,4 @@ p
 sum(p)
 
 psi_label(sum(p))
-
 }

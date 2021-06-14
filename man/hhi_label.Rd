@@ -15,5 +15,4 @@ Get labels for HHI. indexes
 \examples{
 
 hhi_label(c(0.2, 2))
-
 }

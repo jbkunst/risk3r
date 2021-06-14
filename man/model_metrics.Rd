@@ -14,6 +14,3 @@ model_metrics(model, newdata = NULL)
 \description{
 Calculate predictive metrics for glm models
 }
-\examples{
-
-}

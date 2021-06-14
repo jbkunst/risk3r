@@ -27,5 +27,4 @@ actual <- rbinom(N, size = 1, prob = predicted)
 gain(actual, predicted)
 
 gain(actual, predicted, c(0.5, 1))
-
 }

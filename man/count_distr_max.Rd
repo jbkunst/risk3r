@@ -17,5 +17,4 @@ Get the max proportion
 x <- sample(letters[1:3], prob = 1:3, size = 10000, replace = TRUE)
 
 count_distr_max(x)
-
 }

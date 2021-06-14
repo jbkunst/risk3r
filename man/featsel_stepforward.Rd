@@ -14,6 +14,3 @@ featsel_stepforward(model, ...)
 \description{
 Feature selection via iterative
 }
-\examples{
-
-}

@@ -74,46 +74,43 @@ See https://github.com/ShichenXie/scorecard/issues/50 for more details.
 }
 \examples{
 
-if(FALSE) {
+if (FALSE) {
+  data(germancredit, package = "scorecard")
 
-data(germancredit, package = "scorecard")
-
-bins <- woebin2(
- dt = germancredit,
- y = "creditability",
- # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
- no_cores = 0,
- method = "tree"
-)
-
-bins
-
-if(require(scorecard)) {
-  library(scorecard)
-  options(bin_close_right = TRUE)
-}
-
-bins <- woebin2(
- dt = germancredit,
- y = "creditability",
- # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
- no_cores = 0,
- method = "tree"
-)
-
-bins
-
-bins_ctree <- woebin2(
-  dt = germancredit,
-  y = "creditability",
-  method = "ctree",
-  no_cores = 0,
-  control = partykit::ctree_control(alpha = 1, maxdepth = 4)
+  bins <- woebin2(
+    dt = germancredit,
+    y = "creditability",
+    # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+    no_cores = 0,
+    method = "tree"
   )
 
-woebin_summary(bins)
-woebin_summary(bins_ctree)
+  bins
 
+  if (require(scorecard)) {
+    library(scorecard)
+    options(bin_close_right = TRUE)
+  }
+
+  bins <- woebin2(
+    dt = germancredit,
+    y = "creditability",
+    # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+    no_cores = 0,
+    method = "tree"
+  )
+
+  bins
+
+  bins_ctree <- woebin2(
+    dt = germancredit,
+    y = "creditability",
+    method = "ctree",
+    no_cores = 0,
+    control = partykit::ctree_control(alpha = 1, maxdepth = 4)
+  )
+
+  woebin_summary(bins)
+  woebin_summary(bins_ctree)
 }
-
 }

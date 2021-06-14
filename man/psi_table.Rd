@@ -23,5 +23,4 @@ o <- factor(sample(letters[1:5], size = 9000, prob = 1:5, replace = TRUE))
 n <- factor(sample(letters[1:5], size = 1000, prob = 1:5 + 4, replace = TRUE))
 
 psi_table(o, n)
-
 }
