@@ -90,7 +90,7 @@ custom_skim <- skim_with(
 ## Data
 
 ```{r}
-OPTION <- 2
+OPTION <- 3
 if(OPTION == 1) {
 data <- readRDS(here::here("data-raw/cd.rds"))
 
