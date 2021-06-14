@@ -36,7 +36,8 @@ jobs:
         run: |
           remotes::install_deps(dependencies = "Imports")
           remotes::install_deps(dependencies = "Suggests")
-          install.packages(c("cachem", "textshaping", "jquerylib"))
+          remotes::install_github("jbkunst/kunstomverse")
+          install.packages(c("cachem", "textshaping", "jquerylib"))          
           install.packages("pkgdown", type = "binary")          
         shell: Rscript {0}
 
