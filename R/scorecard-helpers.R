@@ -20,32 +20,26 @@ inline_bar <- function(x = NULL, width = 5, add_percent = TRUE, ...) {
   s <- width - b
 
   out <- purrr::map2_chr(b, s, function(x, y) {
-
     z <- rep(c("\U2588", "\U2591"), times = c(x, y))
     z <- paste0(z, collapse = "")
-
   })
 
   out
 
-  if(add_percent) {
-
+  if (add_percent) {
     out2 <- scales::percent(x, ...)
 
     out2 <- stringr::str_pad(out2, width = max(nchar(out2)) + 1, pad = " ")
 
     out <- paste0(out, out2)
-
   }
 
   out
-
 }
 
 #' @importFrom skimr inline_hist
-inline_hist_aux <- function(counts = c(267, 105, 382, 196, 50)){
-
-  if(length(counts) == 1) {
+inline_hist_aux <- function(counts = c(267, 105, 382, 196, 50)) {
+  if (length(counts) == 1) {
     return("")
   }
 
@@ -76,21 +70,18 @@ bin_ks <- function(bin) {
   # ks(bin[["y"]], predict(mod))
 
   ks(bin[["y"]], bin[["woe"]])
-
 }
 
 bin_pretty <- function(bin) {
-
   bin <- tibble::as_tibble(bin)
 
   bin <- dplyr::mutate(
     bin,
     count_distr2 = inline_bar(.data$count_distr),
     posprob2 = inline_bar(.data$posprob)
-    )
+  )
 
   bin
-
 }
 
 #' woebin fix for windows
@@ -124,48 +115,45 @@ bin_pretty <- function(bin) {
 #'
 #' @examples
 #'
-#' if(FALSE) {
+#' if (FALSE) {
+#'   data(germancredit, package = "scorecard")
 #'
-#' data(germancredit, package = "scorecard")
-#'
-#' bins <- woebin2(
-#'  dt = germancredit,
-#'  y = "creditability",
-#'  # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
-#'  no_cores = 0,
-#'  method = "tree"
-#' )
-#'
-#' bins
-#'
-#' if(require(scorecard)) {
-#'   library(scorecard)
-#'   options(bin_close_right = TRUE)
-#' }
-#'
-#' bins <- woebin2(
-#'  dt = germancredit,
-#'  y = "creditability",
-#'  # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
-#'  no_cores = 0,
-#'  method = "tree"
-#' )
-#'
-#' bins
-#'
-#' bins_ctree <- woebin2(
-#'   dt = germancredit,
-#'   y = "creditability",
-#'   method = "ctree",
-#'   no_cores = 0,
-#'   control = partykit::ctree_control(alpha = 1, maxdepth = 4)
+#'   bins <- woebin2(
+#'     dt = germancredit,
+#'     y = "creditability",
+#'     # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+#'     no_cores = 0,
+#'     method = "tree"
 #'   )
 #'
-#' woebin_summary(bins)
-#' woebin_summary(bins_ctree)
+#'   bins
 #'
+#'   if (require(scorecard)) {
+#'     library(scorecard)
+#'     options(bin_close_right = TRUE)
+#'   }
+#'
+#'   bins <- woebin2(
+#'     dt = germancredit,
+#'     y = "creditability",
+#'     # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+#'     no_cores = 0,
+#'     method = "tree"
+#'   )
+#'
+#'   bins
+#'
+#'   bins_ctree <- woebin2(
+#'     dt = germancredit,
+#'     y = "creditability",
+#'     method = "ctree",
+#'     no_cores = 0,
+#'     control = partykit::ctree_control(alpha = 1, maxdepth = 4)
+#'   )
+#'
+#'   woebin_summary(bins)
+#'   woebin_summary(bins_ctree)
 #' }
-#'
 #' @importFrom scorecard woebin
 #' @importFrom purrr map pluck
 #'
@@ -178,8 +166,7 @@ woebin2 <- function(dt, y, x = NULL,
                     ignore_const_cols = TRUE, ignore_datetime_cols = TRUE,
                     check_cate_num = TRUE, replace_blank_inf = TRUE,
                     # bin_close_right = TRUE,
-                    control = partykit::ctree_control()
-                    ) {
+                    control = partykit::ctree_control()) {
 
   # dt = germancredit
   # y = "creditability"
@@ -196,10 +183,10 @@ woebin2 <- function(dt, y, x = NULL,
   # options(bin_close_right = TRUE)
 
 
-  if(method %in% c("tree", "chimerge")){
-
+  if (method %in% c("tree", "chimerge")) {
     bins1 <- woebin(
-      dt, y, x = x, var_skip = var_skip, breaks_list = breaks_list,
+      dt, y,
+      x = x, var_skip = var_skip, breaks_list = breaks_list,
       special_values = special_values, stop_limit = stop_limit, count_distr_limit = count_distr_limit,
       bin_num_limit = bin_num_limit, positive = positive, no_cores = no_cores,
       print_step = print_step, method = method, save_breaks_list = save_breaks_list,
@@ -211,13 +198,11 @@ woebin2 <- function(dt, y, x = NULL,
 
     bins <- woebin(dt, y, x = x, breaks_list = brks_lst)
 
-    if(!identical(bins1, bins)) message("Differences between bins")
-
-
-  } else if(method == "ctree") {
-
-    if (!is.null(x))
+    if (!identical(bins1, bins)) message("Differences between bins")
+  } else if (method == "ctree") {
+    if (!is.null(x)) {
       dt <- dplyr::select(dt, y, x)
+    }
 
     x_var <- utils::getFromNamespace("x_variable", "scorecard")
 
@@ -226,22 +211,19 @@ woebin2 <- function(dt, y, x = NULL,
     tbl <- tibble::tibble(
       x = as.list(dplyr::select(dt, dplyr::all_of(xs))),
       variable = xs
-      )
+    )
 
-    bins <- purrr::pmap(tbl, function(x, variable){
-
+    bins <- purrr::pmap(tbl, function(x, variable) {
       message("tree: ", variable)
 
       woebin_ctree(
         y = dplyr::pull(dt, y),
         x = x,
-        namevar  = variable,
+        namevar = variable,
         count_distr_limit = count_distr_limit,
         control = control
-        )
+      )
     })
-
-
   }
 
   # options(bin_close_right = default)
@@ -249,7 +231,6 @@ woebin2 <- function(dt, y, x = NULL,
   bins <- map(bins, bin_pretty)
 
   bins
-
 }
 
 #' Interface scorecard::woebin for partykiy::ctree
@@ -278,7 +259,7 @@ woebin2 <- function(dt, y, x = NULL,
 #'   "duration",
 #'   count_distr_limit = 0.05,
 #'   control = partykit::ctree_control(alpha = 0.5)
-#'   )
+#' )
 #'
 #' x[sample(c(TRUE, FALSE), size = length(x), prob = c(1, 99), replace = TRUE)] <- NA
 #' woebin_ctree(y, x, "duration")
@@ -288,9 +269,6 @@ woebin2 <- function(dt, y, x = NULL,
 #'
 #' x[sample(c(TRUE, FALSE), size = length(x), prob = c(1, 99), replace = TRUE)] <- NA
 #' woebin_ctree(y, x, "purpose_with_na")
-#'
-#'
-#'
 #' @importFrom stats var as.formula complete.cases setNames
 #' @export
 woebin_ctree <- function(y, x, namevar = "variable", count_distr_limit = 0.05,
@@ -327,14 +305,11 @@ woebin_ctree <- function(y, x, namevar = "variable", count_distr_limit = 0.05,
   out <- dplyr::select(d, -.data$y)
   out <- dplyr::group_by(out, .data$node)
 
-  if(is.factor(dplyr::pull(d, .data$x))) {
-
+  if (is.factor(dplyr::pull(d, .data$x))) {
     out <- dplyr::distinct(out)
     out <- dplyr::summarise(out, x = paste0(x, collapse = "%,%"))
     out <- dplyr::pull(out, .data$x)
-
-  } else if(is.numeric(dplyr::pull(d, .data$x))){
-
+  } else if (is.numeric(dplyr::pull(d, .data$x))) {
     out <- dplyr::select(d, -.data$y)
     out <- dplyr::group_by(out, .data$node)
     out <- dplyr::summarise(out, x = max(.data$x))
@@ -345,7 +320,6 @@ woebin_ctree <- function(y, x, namevar = "variable", count_distr_limit = 0.05,
     # out <- out + 1/1e6
     out <- c(out, Inf)
     out <- unique(out)
-
   }
 
   bin <- quiet(
@@ -355,8 +329,8 @@ woebin_ctree <- function(y, x, namevar = "variable", count_distr_limit = 0.05,
       x = namevar,
       breaks_list = setNames(list(out), namevar),
       no_cores = 0,
-      )
     )
+  )
 
   out <- c(0, Inf)
   out <- c(0)
@@ -374,7 +348,6 @@ woebin_ctree <- function(y, x, namevar = "variable", count_distr_limit = 0.05,
 
 
   bin[[namevar]]
-
 }
 
 #'
@@ -385,53 +358,45 @@ woebin_ctree <- function(y, x, namevar = "variable", count_distr_limit = 0.05,
 #'
 #' @examples
 #'
-#' if(FALSE) {
+#' if (FALSE) {
+#'   data(germancredit, package = "scorecard")
 #'
-#' data(germancredit, package = "scorecard")
+#'   bins <- woebin2(
+#'     germancredit,
+#'     y = "creditability",
+#'     # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
+#'     no_cores = 0,
+#'     method = "tree"
+#'   )
 #'
-#' bins <- woebin2(
-#'  germancredit,
-#'  y = "creditability",
-#'  # x = c("credit.amount", "housing", "duration.in.month", "purpose"),
-#'  no_cores = 0,
-#'  method = "tree"
-#' )
+#'   bin_summary <- woebin_summary(bins)
+#'   bin_summary
 #'
-#' bin_summary <- woebin_summary(bins)
-#' bin_summary
+#'   if (require(dplyr)) {
+#'     dplyr::glimpse(bin_summary)
 #'
-#' if(require(dplyr)){
-#'
-#'   dplyr::glimpse(bin_summary)
-#'
-#'   dplyr::filter(bin_summary, !monotone, !factor)
-#'
+#'     dplyr::filter(bin_summary, !monotone, !factor)
+#'   }
 #' }
-#'
-#' }
-#'
 #' @importFrom dplyr bind_rows group_by mutate summarize n as_tibble arrange desc
 #' @importFrom rlang .data :=
 #' @export
 woebin_summary <- function(bins, sort = TRUE) {
-
   is_strictly_monotone <- function(x) {
-
-    if(any(is.na(x))) {
+    if (any(is.na(x))) {
       message("Some value are NA, returning NA")
       return(NA)
     }
 
-    if(length(x) == 1) return(TRUE)
+    if (length(x) == 1) {
+      return(TRUE)
+    }
 
     dim(table(sign(diff(x)))) == 1
-
   }
 
   is_bin_factor_character <- function(bin) {
-
     all(stringr::str_detect(bin, "[a-zA-Z]"))
-
   }
 
   dbiv <- dplyr::bind_rows(bins)
@@ -452,7 +417,7 @@ woebin_summary <- function(bins, sort = TRUE) {
     factor = is_bin_factor_character(.data$bin),
     distribution = inline_hist_aux(.data$count),
     breaks = list(.data$breaks)
-    )
+  )
 
   # KS
   dks <- purrr::map_dbl(bins, bin_ks)
@@ -474,7 +439,7 @@ woebin_summary <- function(bins, sort = TRUE) {
     dbiv,
     iv_lbl  = iv_label(.data$iv),
     hhi_lbl = hhi_label(.data$hhi)
-    )
+  )
 
   # relocate
   dbiv <- dplyr::relocate(dbiv, .data$distribution, .after = dplyr::last_col())
@@ -482,12 +447,11 @@ woebin_summary <- function(bins, sort = TRUE) {
   dbiv <- dplyr::relocate(dbiv, .data$monotone, .before = .data$factor)
   # dbiv <- dplyr::mutate(dbiv, `iv bar` = inline_bar(.data$iv))
 
-  if(sort) dbiv <- dplyr::arrange(dbiv, dplyr::desc(.data$iv))
+  if (sort) dbiv <- dplyr::arrange(dbiv, dplyr::desc(.data$iv))
 
   # glimpse(dbiv)
 
   dbiv
-
 }
 
 #'
@@ -510,12 +474,10 @@ woebin_summary <- function(bins, sort = TRUE) {
 #' woebin_ply_min(variable, bin)
 #'
 #' woebin_ply_min(variable, bin, value = "posprob")
-#'
 #' @importFrom scorecard woebin_ply
 #' @importFrom purrr set_names
 #' @export
 woebin_ply_min <- function(variable, bin, value = "woe") {
-
   namevar <- bin[[1]][[1]]
 
   stopifnot(is.data.frame(bin))
@@ -529,7 +491,9 @@ woebin_ply_min <- function(variable, bin, value = "woe") {
 
   daux <- dplyr::bind_cols(daux, daux2)
 
-  if(value == "woe") return(daux[[2]])
+  if (value == "woe") {
+    return(daux[[2]])
+  }
 
   daux <- dplyr::left_join(
     daux,
@@ -538,7 +502,6 @@ woebin_ply_min <- function(variable, bin, value = "woe") {
   )
 
   daux[[value]]
-
 }
 
 #'
@@ -551,43 +514,42 @@ woebin_ply_min <- function(variable, bin, value = "woe") {
 #'
 #' @examples
 #'
-#' if(FALSE){
+#' if (FALSE) {
 #'   data(germancredit, package = "scorecard")
 #'
-#'   vars <- c("creditability", "duration.in.month", "credit.history",
-#'           "purpose", "status.of.existing.checking.account", "property")
+#'   vars <- c(
+#'     "creditability", "duration.in.month", "credit.history",
+#'     "purpose", "status.of.existing.checking.account", "property"
+#'   )
 #'
-#' dat <- germancredit[, vars]
+#'   dat <- germancredit[, vars]
 #'
-#' bins <- woebin2(dat, y = "creditability", stop_limit = 0.0000001)
+#'   bins <- woebin2(dat, y = "creditability", stop_limit = 0.0000001)
 #'
-#' woebin_cor_iv(dat, bins)
+#'   woebin_cor_iv(dat, bins)
 #'
-#' datcor <- woebin_cor_iv(dat, bins)
+#'   datcor <- woebin_cor_iv(dat, bins)
 #'
-#' library(dplyr)
+#'   library(dplyr)
 #'
-#' cor_limit <- 0.15
+#'   cor_limit <- 0.15
 #'
-#' datcor %>%
-#'   filter(variable_1 != variable_2) %>%
-#'   mutate(
-#'     cor_conflict = ifelse(abs(cor) > cor_limit, TRUE, FALSE),
-#'     variable_to_remove = ifelse(
-#'       cor_conflict,
-#'       ifelse(iv_variable_1 > iv_variable_2, variable_2, variable_1),
-#'       NA
-#'    )
-#' )
-#'
+#'   datcor %>%
+#'     filter(variable_1 != variable_2) %>%
+#'     mutate(
+#'       cor_conflict = ifelse(abs(cor) > cor_limit, TRUE, FALSE),
+#'       variable_to_remove = ifelse(
+#'         cor_conflict,
+#'         ifelse(iv_variable_1 > iv_variable_2, variable_2, variable_1),
+#'         NA
+#'       )
+#'     )
 #' }
-#'
 #' @importFrom stringr str_remove
 #' @importFrom tidyselect any_of
 #' @export
 #'
 woebin_cor_iv <- function(dt, bins, upper = FALSE, plot = TRUE) {
-
   woebinsum <- woebin_summary(bins, sort = TRUE)
   woebinsum <- dplyr::select(woebinsum, .data$variable, .data$iv)
   woebinsum <- dplyr::mutate(woebinsum, rank = dplyr::row_number())
@@ -597,21 +559,23 @@ woebin_cor_iv <- function(dt, bins, upper = FALSE, plot = TRUE) {
   datwoe_nms <- stringr::str_subset(names(datwoe), "_woe$")
   woebin_nms <- stringr::str_c(names(bins), "_woe")
 
-  if(length(setdiff(datwoe_nms, woebin_nms))) {
+  if (length(setdiff(datwoe_nms, woebin_nms))) {
     message("Some variables come in woe form but don't exists in the bin")
     message(
       paste0(
-        stringr::str_remove(setdiff(datwoe_nms, woebin_nms), "_woe$"), collapse = ", "
+        stringr::str_remove(setdiff(datwoe_nms, woebin_nms), "_woe$"),
+        collapse = ", "
       )
     )
   }
 
-  if(length(setdiff(woebin_nms, datwoe_nms))) {
+  if (length(setdiff(woebin_nms, datwoe_nms))) {
     message("Some variables are no in the data frame:")
     message(
       paste0(
-        stringr::str_remove(setdiff(woebin_nms, datwoe_nms), "_woe$"), collapse = ", "
-        )
+        stringr::str_remove(setdiff(woebin_nms, datwoe_nms), "_woe$"),
+        collapse = ", "
+      )
     )
   }
 
@@ -621,12 +585,12 @@ woebin_cor_iv <- function(dt, bins, upper = FALSE, plot = TRUE) {
     .fn = stringr::str_remove_all,
     .cols = tidyselect::everything(),
     pattern = "_woe$"
-    )
+  )
 
   # correlation part
   dcorrs <- corrr::correlate(datwoe)
 
-  if(plot) corrr::rplot(dcorrs)
+  if (plot) corrr::rplot(dcorrs)
 
   dcorrs <- corrr::stretch(dcorrs)
 
@@ -647,17 +611,16 @@ woebin_cor_iv <- function(dt, bins, upper = FALSE, plot = TRUE) {
     var2_iv = .data$iv_y,
     var1_rank = .data$rank_x,
     var2_rank = .data$rank_y
-    )
+  )
 
   dcorrs <- dplyr::arrange(dcorrs, .data$var1, .data$var2)
 
-  if(upper) {
+  if (upper) {
     # piorize the best variable in terms of IV
     dcorrs <- dplyr::filter(dcorrs, .data$var1_rank < .data$var2_rank)
   }
 
   dcorrs
-
 }
 #'
 #' #'

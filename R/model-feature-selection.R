@@ -9,23 +9,20 @@
 #' @param ... Additional argumentos for glmnet::cv.glmnet
 #'
 #' @examples
-#'
-#'
 #' @importFrom glmnet cv.glmnet
 #' @importFrom stringr str_remove_all
 #' @importFrom stats coef
 #' @export
 featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
                            trace.it = 1, type.measue = "auc", ...) {
-
   r_n_p <- reponse_and_predictors_names(model)
 
-  yvar  <- r_n_p[["response"]]
+  yvar <- r_n_p[["response"]]
   xvars <- r_n_p[["predictors"]]
 
   # fit to get order
   fit <- glmnet::glmnet(
-    x = as.matrix(as.data.frame(model$data)[,xvars]),
+    x = as.matrix(as.data.frame(model$data)[, xvars]),
     y = model$data[[yvar]],
     family = model$family$family
   )
@@ -41,7 +38,7 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
     dm,
     L1_Norm = stringr::str_remove_all(.data$L1_Norm, "s"),
     L1_Norm = as.numeric(.data$L1_Norm)
-    )
+  )
   dm <- dplyr::filter(dm, .data$coefficient != 0)
   dm <- dplyr::group_by(dm, .data$variable)
   dm <- dplyr::arrange(dm, .data$L1_Norm)
@@ -54,7 +51,7 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
   set.seed(seed)
 
   cvfit <- glmnet::cv.glmnet(
-    x = as.matrix(as.data.frame(model$data)[,xvars]),
+    x = as.matrix(as.data.frame(model$data)[, xvars]),
     y = model$data[[yvar]],
     family = model$family$family,
     trace.it = trace.it,
@@ -64,12 +61,10 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
 
   cvfit
 
-  if(plot) {
-
+  if (plot) {
     graphics::plot(fit, xvar = "norm")
     graphics::plot(fit, xvar = "lambda")
     graphics::plot(cvfit, sign.lambda = 1)
-
   }
 
   # cvfit$lambda.min
@@ -106,7 +101,6 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
   )
 
   model_fs_glmnet
-
 }
 
 #' Feature selection via iterative
@@ -115,14 +109,12 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
 #' @param ... Additional argumentos for stats::step
 #'
 #' @examples
-#'
 #' @importFrom stats step
 #' @export
 featsel_stepforward <- function(model, ...) {
-
   r_n_p <- reponse_and_predictors_names(model)
 
-  yvar  <- r_n_p[["response"]]
+  yvar <- r_n_p[["response"]]
 
   model_null <- glm(
     as.formula(paste0(yvar, " ~ 1")),
@@ -140,7 +132,6 @@ featsel_stepforward <- function(model, ...) {
   )
 
   model_step
-
 }
 
 #' Shortcut featsel_loss_function_permutations
@@ -149,19 +140,16 @@ featsel_stepforward <- function(model, ...) {
 #' @param ... Additional argumentos for stats::step
 #'
 #' @examples
-#'
 #' @importFrom stats step
 #' @export
-featsel_loss_function_permutations <- function(
-  model,
-  stat = c("median", "mean", "min", "q25", "q75", "max"),
-  B = 10,
-  n_sample = NULL,
-  loss_function = DALEX::loss_one_minus_auc,
-  verbose = TRUE,
-  plot = TRUE,
-  ...) {
-
+featsel_loss_function_permutations <- function(model,
+                                               stat = c("median", "mean", "min", "q25", "q75", "max"),
+                                               B = 10,
+                                               n_sample = NULL,
+                                               loss_function = DALEX::loss_one_minus_auc,
+                                               verbose = TRUE,
+                                               plot = TRUE,
+                                               ...) {
   stat <- stat[[1]]
 
   plots <- list()
@@ -170,14 +158,13 @@ featsel_loss_function_permutations <- function(
 
   r_n_p <- reponse_and_predictors_names(model)
 
-  yvar      <- r_n_p[["response"]]
+  yvar <- r_n_p[["response"]]
   new_xvars <- r_n_p[["predictors"]]
 
-  iteration  <- 1
+  iteration <- 1
   keep_going <- TRUE
 
-  while(keep_going) {
-
+  while (keep_going) {
     explainer <- DALEX::explain(
       new_model,
       data = model$data[, new_xvars],
@@ -187,7 +174,7 @@ featsel_loss_function_permutations <- function(
       ...
     )
 
-    if(verbose) message(stringr::str_glue("Round { t }", t = iteration))
+    if (verbose) message(stringr::str_glue("Round { t }", t = iteration))
 
     feat_imp <- ingredients::feature_importance(
       explainer,
@@ -198,14 +185,14 @@ featsel_loss_function_permutations <- function(
       ...
     )
 
-    if(plot) {
+    if (plot) {
       plot(feat_imp)
       plots <- append(plots, list(plot(feat_imp)))
     }
 
     dsum <- summary_feature_importance_ingredients(feat_imp)
 
-    dsum <- dsum[order(dsum[[paste0("dl_", stat)]], decreasing = TRUE),]
+    dsum <- dsum[order(dsum[[paste0("dl_", stat)]], decreasing = TRUE), ]
 
     # order by metric/stat
     new_xvars <- as.character(dsum[["variable"]])
@@ -215,28 +202,26 @@ featsel_loss_function_permutations <- function(
 
     xvars_rm <- as.character(dsum[["variable"]])
 
-    if(length(xvars_rm) == 0) {
-      if(verbose) message("No more variables removed.")
+    if (length(xvars_rm) == 0) {
+      if (verbose) message("No more variables removed.")
       break
     }
 
-    if(verbose) {
+    if (verbose) {
       message("Removed variables (", length(xvars_rm), ") are: ", paste0(xvars_rm, sep = ", "))
     }
 
     new_xvars <- setdiff(new_xvars, xvars_rm)
 
-    new_f     <- formula_from_reponse_and_predictors_names(yvar, new_xvars)
-    new_model <-  glm(new_f, data = model$data, family = binomial(link = logit))
+    new_f <- formula_from_reponse_and_predictors_names(yvar, new_xvars)
+    new_model <- glm(new_f, data = model$data, family = binomial(link = logit))
 
-    iteration  <- iteration + 1
-
+    iteration <- iteration + 1
   }
 
-  if(plot) attr(new_model, "plots") <- plots
+  if (plot) attr(new_model, "plots") <- plots
 
   new_model
-
 }
 
 summary_feature_importance_ingredients <- function(res) {
@@ -247,10 +232,11 @@ summary_feature_importance_ingredients <- function(res) {
   dl_full_mean <- dplyr::filter(
     res,
     .data$variable == "_full_model_",
-    .data$permutation == 0)[["dropout_loss"]]
+    .data$permutation == 0
+  )[["dropout_loss"]]
 
   # check if B == 1
-  if(!nrow(dplyr::filter(res, .data$permutation != 0)) == 0) {
+  if (!nrow(dplyr::filter(res, .data$permutation != 0)) == 0) {
     res <- dplyr::filter(res, .data$permutation != 0)
   }
 
@@ -264,16 +250,14 @@ summary_feature_importance_ingredients <- function(res) {
     dl_mean   = mean(.data$dropout_loss),
     dl_75     = quantile(.data$dropout_loss, probs = 0.75),
     dl_max    = max(.data$dropout_loss),
-    )
+  )
 
   # dplyr::filter(res, .data$variable %in% c("_full_model_", "_baseline_")) %>%
   #   filter(dl_mean == dl_full)
 
-  res <- dplyr::filter(res,! .data$variable %in% c("_full_model_", "_baseline_"))
+  res <- dplyr::filter(res, !.data$variable %in% c("_full_model_", "_baseline_"))
 
   attr(res, "dropout_loss_full_model_mean") <- dl_full_mean
 
   res
-
 }
-

@@ -16,5 +16,3 @@ hmeq <- rename_with(hmeq, str_to_lower)
 glimpse(hmeq)
 
 usethis::use_data(hmeq, overwrite = TRUE)
-
-

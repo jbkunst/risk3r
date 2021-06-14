@@ -7,7 +7,7 @@
 #'
 #' set.seed(123)
 #'
-#' x <- round(cumsum(rnorm(24))*100, 0)
+#' x <- round(cumsum(rnorm(24)) * 100, 0)
 #' x <- abs(x)
 #' x
 #'
@@ -19,10 +19,8 @@
 #' rsi(rev(x))
 #'
 #' rsi(x) + rsi(rev(x))
-#'
 #' @export
 rsi <- function(x) {
-
   stopifnot(is.numeric(x), all(!is.na(x)))
 
   d <- diff(x)
@@ -30,8 +28,7 @@ rsi <- function(x) {
   up <- ifelse(d < 0, 0, d)
   dn <- ifelse(d > 0, 0, -d)
 
-  100 * mean(up, na.rm = TRUE) / ( mean(up, na.rm = TRUE) + mean(dn, na.rm = TRUE))
-
+  100 * mean(up, na.rm = TRUE) / (mean(up, na.rm = TRUE) + mean(dn, na.rm = TRUE))
 }
 
 #'
@@ -43,7 +40,7 @@ rsi <- function(x) {
 #'
 #' set.seed(123)
 #'
-#' x <- round(cumsum(rnorm(24))*100, 0)
+#' x <- round(cumsum(rnorm(24)) * 100, 0)
 #' x <- abs(x)
 #' x
 #'
@@ -54,15 +51,11 @@ rsi <- function(x) {
 #' n_growths(c(1, 2, 0))
 #'
 #' n_growths(c(0))
-#'
-#'
 #' @export
 n_growths <- function(x) {
-
   stopifnot(is.numeric(x), all(!is.na(x)))
 
-  sum(diff(x)>0)
-
+  sum(diff(x) > 0)
 }
 
 #'
@@ -75,12 +68,9 @@ n_growths <- function(x) {
 #' x <- sample(letters[1:3], prob = 1:3, size = 10000, replace = TRUE)
 #'
 #' count_distr_max(x)
-#'
 #' @export
-count_distr_max  <- function(x) {
-
+count_distr_max <- function(x) {
   sort(prop.table(table(addNA(x))), decreasing = TRUE)[[1]]
-
 }
 
 #'
@@ -100,16 +90,13 @@ count_distr_max  <- function(x) {
 #' hhi(x)
 #'
 #' plot(table(x), main = hhi_label(hhi(x)))
-#'
 #' @export
 hhi <- function(x) {
-
   xout <- prop.table(table(x, useNA = "always"))
 
-  xout <- sum(xout*xout)
+  xout <- sum(xout * xout)
 
   xout
-
 }
 
 #'
@@ -120,7 +107,6 @@ hhi <- function(x) {
 #' @examples
 #'
 #' hhi_label(c(0.2, 2))
-#'
 #' @export
 hhi_label <- function(x) {
   cut(
@@ -128,5 +114,6 @@ hhi_label <- function(x) {
     breaks = c(0, 0.01, 0.15, 0.25, Inf),
     include.lowest = TRUE,
     # c("Altamente no concentrado", "No concentrado", "muy concentrado", "Altamente concentrado"),
-    labels = c("highly diverse","unconcentrated","moderate concentration", "high concentration"))
+    labels = c("highly diverse", "unconcentrated", "moderate concentration", "high concentration")
+  )
 }

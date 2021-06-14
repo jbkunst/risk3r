@@ -26,18 +26,15 @@
 #' sum(p)
 #'
 #' psi_label(sum(p))
-#'
 #' @export
 psi_vector <- function(old, new) {
+  new <- new / sum(new)
 
-  new <- new/sum(new)
+  old <- old / sum(old)
 
-  old <- old/sum(old)
-
-  out <- (new - old) * log( new / old )
+  out <- (new - old) * log(new / old)
 
   out
-
 }
 
 #' Function to calculate the vector table given 2 vector of counts
@@ -51,7 +48,6 @@ psi_vector <- function(old, new) {
 #' n <- factor(sample(letters[1:5], size = 1000, prob = 1:5 + 4, replace = TRUE))
 #'
 #' psi_table(o, n)
-#'
 #' @importFrom dplyr full_join mutate
 #' @importFrom tibble tibble
 #' @importFrom rlang .data
@@ -68,13 +64,12 @@ psi_table <- function(old, new) {
 
   d <- dplyr::mutate(
     d,
-    percent_old = .data$count_old/sum(.data$count_old),
-    percent_new = .data$count_new/sum(.data$count_new),
+    percent_old = .data$count_old / sum(.data$count_old),
+    percent_new = .data$count_new / sum(.data$count_new),
     psi = psi_vector(.data$count_old, .data$count_new)
-    )
+  )
 
   d
-
 }
 
 
@@ -86,7 +81,6 @@ psi_table <- function(old, new) {
 #' @examples
 #'
 #' psi_label(c(0.2, 2))
-#'
 #' @export
 psi_label <- function(x) {
   cut(

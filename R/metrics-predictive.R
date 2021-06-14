@@ -1,10 +1,8 @@
-validate_actual_predicted_num <- function(actual, predicted){
-
+validate_actual_predicted_num <- function(actual, predicted) {
   stopifnot(
     length(predicted) == length(actual),
     is.numeric(predicted)
   )
-
 }
 
 #'
@@ -28,19 +26,17 @@ validate_actual_predicted_num <- function(actual, predicted){
 #' predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
 #'
 #' ks(actual, predicted)
-#'
 #' @importFrom stats ks.test na.omit
 #' @export
-ks <- function(actual, predicted){
-
+ks <- function(actual, predicted) {
   validate_actual_predicted_num(actual, predicted)
 
-  if(length(unique(actual)) != 2) {
+  if (length(unique(actual)) != 2) {
     warning("Not 2 distinct values in 'actual' vector, returning NA")
     return(NA)
   }
 
-  if(any(is.na(predicted))) {
+  if (any(is.na(predicted))) {
     message(sum(is.na(predicted)), " of ", length(predicted), " 'predicted' values are NAs, they will be ignorated")
   }
 
@@ -52,7 +48,7 @@ ks <- function(actual, predicted){
   # print(head(dist1))
   # print(head(dist2))
 
-  if(length(dist1) == 0 | length(dist2) == 0) {
+  if (length(dist1) == 0 | length(dist2) == 0) {
     message("Not enough data for one of the distributions")
     return(NA)
   }
@@ -60,7 +56,6 @@ ks <- function(actual, predicted){
   value <- as.numeric(suppressWarnings(ks.test(dist1, dist2)[["statistic"]]))
 
   return(value)
-
 }
 
 #' Metrics
@@ -84,19 +79,16 @@ ks <- function(actual, predicted){
 #' predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
 #'
 #' metrics(actual, predicted)
-#'
 #' @export
-metrics <- function(actual, predicted){
-
-  if(is.factor(actual)) actual <- as.numeric(actual) - 1
+metrics <- function(actual, predicted) {
+  if (is.factor(actual)) actual <- as.numeric(actual) - 1
 
   tibble::tibble(
     ks = ks(actual, predicted),
-    auc= Metrics::auc(actual, predicted),
+    auc = Metrics::auc(actual, predicted),
     iv = information_value(actual, predicted),
-    gini = 2*.data$auc - 1
+    gini = 2 * .data$auc - 1
   )
-
 }
 
 #'
@@ -117,11 +109,9 @@ metrics <- function(actual, predicted){
 #' gain(actual, predicted)
 #'
 #' gain(actual, predicted, c(0.5, 1))
-#'
 #' @importFrom stats ecdf quantile
 #' @export
-gain <- function(actual, predicted, percents = c(0.10, 0.20, 0.30, 0.40, 0.50)){
-
+gain <- function(actual, predicted, percents = c(0.10, 0.20, 0.30, 0.40, 0.50)) {
   validate_actual_predicted_num(actual, predicted)
 
   g <- ecdf(predicted[actual == 0])(quantile(predicted, percents))
@@ -148,13 +138,13 @@ gain <- function(actual, predicted, percents = c(0.10, 0.20, 0.30, 0.40, 0.50)){
 #' predicted[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
 #'
 #' information_value(actual, predicted)
-#'
 #' @export
 information_value <- function(actual, predicted) {
-
   validate_actual_predicted_num(actual, predicted)
 
-  if(length(unique(actual)) == 1) return(NA_real_)
+  if (length(unique(actual)) == 1) {
+    return(NA_real_)
+  }
 
   df <- data.frame(y = actual, x = predicted)
 
@@ -163,7 +153,6 @@ information_value <- function(actual, predicted) {
   out <- bin[["x"]][["total_iv"]][[1]]
 
   out
-
 }
 
 #'
@@ -184,7 +173,6 @@ information_value <- function(actual, predicted) {
 #' predicted <- runif(N)
 #'
 #' iv_label(information_value(actual, predicted))
-#'
 #' @export
 iv_label <- function(x) {
   cut(
@@ -194,4 +182,3 @@ iv_label <- function(x) {
     labels = c("unpredictive", "weak", "medium", "strong", "suspicious")
   )
 }
-

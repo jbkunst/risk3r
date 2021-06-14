@@ -23,6 +23,7 @@ issues](https://img.shields.io/github/issues-closed-raw/jbkunst/risk3r.svg)](htt
 [![check-linux](https://github.com/jbkunst/risk3r/workflows/check-linux/badge.svg)](https://github.com/jbkunst/risk3r/actions?workflow=check-linux)
 [![Github
 Stars](https://img.shields.io/github/stars/jbkunst/risk3r.svg?style=social&label=Github)](https://github.com/jbkunst/risk3r)
+[![R-CMD-check](https://github.com/jbkunst/risk3r/workflows/R-CMD-check/badge.svg)](https://github.com/jbkunst/risk3r/actions)
 <!-- badges: end -->
 
 This package contains a set of convenient functions for the development
