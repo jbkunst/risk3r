@@ -594,7 +594,7 @@ models %>%
   purrr::map(broom::tidy) %>% 
   purrr::map(head)
 
-model_final <- model_lss_prmt
+model_final <- model_fsglmnet
 
 dfmetrics <- model_partials(model_final, newdata = test_data)
 dfmetrics
