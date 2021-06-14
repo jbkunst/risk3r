@@ -36,7 +36,8 @@ jobs:
         run: |
           remotes::install_deps(dependencies = "Imports")
           remotes::install_deps(dependencies = "Suggests")
-          install.packages("pkgdown", type = "binary")
+          install.packages("cachem", type = "binary")
+          install.packages("pkgdown", type = "binary")          
         shell: Rscript {0}
 
       - name: Install package
