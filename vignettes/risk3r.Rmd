@@ -513,7 +513,7 @@ The `stat = "min"` option give the most simpler model because It'more strict:
 If any iteration the loss increase then the variable is removed. You can choose
 between `c("q25", "mean", "median")`
 
-```{r}
+```{r, eval=FALSE}
 model_lss_prmt <- featsel_loss_function_permutations(
   model_raw, 
   stat ="min",
@@ -540,13 +540,14 @@ model_metrics(model_lss_prmt, newdata = test_data)
 models <- list(
   model_raw, 
   model_fsstep,
-  model_fsglmnet,
-  model_lss_prmt
+  model_fsglmnet
+  # model_lss_prmt
   )
 
 dmodels <- tibble(model = models) %>% 
   mutate(
-    model_name = c("raw", "stepwise", "glmnet", "dropout_loss"),
+    model_name = c("raw", "stepwise", "glmnet"
+    ),
     .before = 1
   ) %>% 
   mutate(
