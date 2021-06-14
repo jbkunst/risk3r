@@ -5,15 +5,11 @@ on:
     branches:
       - main
       - master
-  pull_request:
-    branches:
-      - main
-      - master
 
-name: R-CMD-check
+name: pkgdown
 
 jobs:
-  R-CMD-check:
+  pkgdown:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -26,9 +22,16 @@ jobs:
           install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
 
-      - name: Check
+      - name: Build site pkgdown
         shell: Rscript {0}
         run: |
-          options(crayon.enabled = TRUE)
-          rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
+          install.packages("pkgdown")
+          pkgdown::build_site()
 
+      - name: Commit files
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add --all
+          git commit -am "pkgdown::build_site" --author 'Joshua Kunst <jbkunst@gmail.com>'
+          git push
