@@ -44,8 +44,14 @@ jobs:
       - name: Install package
         run: R CMD INSTALL .
 
-      - name: Deploy package
+      - name: Build site
+        run: pkgdown::build_site()          
+        shell: Rscript {0}
+        
+      - name: Commit files
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+          git add --all
+          git commit -am "build pkgdown" --author 'Joshua Kunst <jbkunst@gmail.com>'
+          git push        
