@@ -1,7 +1,11 @@
-pandoc: 2.11.2
-pkgdown: 1.6.1.9000
-pkgdown_sha: c931fe24c135c6ca704ae9f300470e9c66d8bfe7
+pandoc: 2.7.3
+pkgdown: 1.6.1
+pkgdown_sha: ~
 articles:
   risk3r: risk3r.html
+<<<<<<< HEAD
 last_built: 2021-07-20T04:30Z
+=======
+last_built: 2021-06-15T15:02Z
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 

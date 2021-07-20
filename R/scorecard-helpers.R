@@ -196,7 +196,13 @@ woebin2 <- function(dt, y, x = NULL,
 
     brks_lst <- purrr::map(bins1, purrr::pluck, "breaks")
 
-    bins <- woebin(dt, y, x = x, breaks_list = brks_lst)
+    bins <- woebin(dt, y, x = x, var_skip = var_skip, breaks_list = brks_lst,
+                   special_values = special_values, stop_limit = stop_limit, count_distr_limit = count_distr_limit,
+                   bin_num_limit = bin_num_limit, positive = positive, no_cores = no_cores,
+                   print_step = print_step, method = method, save_breaks_list = save_breaks_list,
+                   ignore_const_cols = ignore_const_cols, ignore_datetime_cols = ignore_datetime_cols,
+                   check_cate_num = check_cate_num, replace_blank_inf = replace_blank_inf
+                   )
 
     if (!identical(bins1, bins)) message("Differences between bins")
   } else if (method == "ctree") {

@@ -39,6 +39,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../articles/risk3r.html">Get started</a>
 </li>
 <li>
@@ -55,7 +61,11 @@
 
       
 
+<<<<<<< HEAD
       </header><script src="risk3r_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+=======
+      </header><script src="risk3r_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Example using risk3r</h1>
@@ -198,7 +208,11 @@
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">rm_reason</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">variable</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 0 x 5
+<<<<<<< HEAD
 ## # ... with 5 variables: variable &lt;chr&gt;, rm_reason &lt;chr&gt;, info_value &lt;dbl&gt;,
+=======
+## # … with 5 variables: variable &lt;chr&gt;, rm_reason &lt;chr&gt;, info_value &lt;dbl&gt;,
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 ## #   missing_rate &lt;dbl&gt;, identical_rate &lt;dbl&gt;</code></pre>
 <div id="anomalies" class="section level3">
 <h3 class="hasAnchor">
@@ -210,7 +224,11 @@
 <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">describe_anomalies</span><span class="op">$</span><span class="va">variables</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 14 x 13
 ##    Variable     q   qNA pNA    qZero pZero  qBlank pBlank  qInf pInf  qDistinct
+<<<<<<< HEAD
 ##    &lt;fct&gt;    &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;     &lt;int&gt;
+=======
+##    &lt;chr&gt;    &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;     &lt;int&gt;
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 ##  1 derog     5960   708 11.88%  4527 75.96%      0 -          0 -            12
 ##  2 delinq    5960   580 9.73%   4179 70.12%      0 -          0 -            15
 ##  3 ninq      5960   510 8.56%   2531 42.47%      0 -          0 -            17
@@ -225,15 +243,25 @@
 ## 12 bad_good  5960     0 -          0 -           0 -          0 -             2
 ## 13 loan      5960     0 -          0 -           0 -          0 -           540
 ## 14 id        5960     0 -          0 -           0 -          0 -          5960
+<<<<<<< HEAD
 ## # ... with 2 more variables: type &lt;chr&gt;, anomalous_percent &lt;chr&gt;</code></pre>
+=======
+## # … with 2 more variables: type &lt;chr&gt;, anomalous_percent &lt;chr&gt;</code></pre>
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">describe_anomalies</span><span class="op">$</span><span class="va">problem_variables</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 14
 ##   Variable     q   qNA pNA    qZero pZero  qBlank pBlank  qInf pInf  qDistinct
+<<<<<<< HEAD
 ##   &lt;fct&gt;    &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;     &lt;int&gt;
 ## 1 derog     5960   708 11.88%  4527 75.96%      0 -          0 -            12
 ## # ... with 3 more variables: type &lt;chr&gt;, anomalous_percent &lt;chr&gt;,
 ## #   problems &lt;chr&gt;</code></pre>
+=======
+##   &lt;chr&gt;    &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;     &lt;int&gt;
+## 1 derog     5960   708 11.88%  4527 75.96%      0 -          0 -            12
+## # … with 3 more variables: type &lt;chr&gt;, anomalous_percent &lt;chr&gt;, problems &lt;chr&gt;</code></pre>
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 <p>Some differences between result due <code><a href="http://shichen.name/scorecard/reference/var_filter.html">scorecard::var_filter</a></code> exclude NAs to caculate de identical limit.</p>
 </div>
 <div id="removing-variables" class="section level3">
@@ -318,13 +346,18 @@
 ## 10 yoj                 6 0.0864  0.116  0.167           0.343          0.0825
 ## 11 mortdue             7 0.0500  0.0813 0.143           0.392          0.0551
 ## 12 reason              3 0.00627 0.0368 0.333           0.652          0.0424
+<<<<<<< HEAD
 ## # ... with 8 more variables: has_missing &lt;lgl&gt;, has_special_values &lt;lgl&gt;,
+=======
+## # … with 8 more variables: has_missing &lt;lgl&gt;, has_special_values &lt;lgl&gt;,
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 ## #   monotone &lt;lgl&gt;, factor &lt;lgl&gt;, breaks &lt;list&gt;, iv_lbl &lt;fct&gt;, hhi_lbl &lt;fct&gt;,
 ## #   distribution &lt;chr&gt;</code></pre>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">dbiv</span><span class="op">)</span></code></pre></div>
 <pre><code>## Rows: 12
 ## Columns: 15
+<<<<<<< HEAD
 ## $ variable           &lt;chr&gt; "debtinc", "delinq", "value", "derog", "clage", "ni~
 ## $ n_categories       &lt;int&gt; 4, 4, 6, 3, 5, 5, 5, 6, 5, 6, 7, 3
 ## $ iv                 &lt;dbl&gt; 1.937625988, 0.587078037, 0.395450463, 0.341107292,~
@@ -340,6 +373,23 @@
 ## $ iv_lbl             &lt;fct&gt; suspicious, suspicious, strong, strong, medium, me~
 ## $ hhi_lbl            &lt;fct&gt; moderate concentration, moderate concentration, mod~
 ## $ distribution       &lt;chr&gt; "&lt;U+2583&gt;&lt;U+2587&gt;&lt;U+2581&gt;&lt;U+2581&gt;", "&lt;U+2581&gt;&lt;U+2587&gt;&lt;U+2581&gt;&lt;U+2581&gt;", "&lt;U+2581&gt;&lt;U+2582&gt;&lt;U+2586&gt;&lt;U+2585&gt;&lt;U+2587&gt;&lt;U+2586&gt;", "&lt;U+2581&gt;&lt;U+2587&gt;&lt;U+2581&gt;", "&lt;U+2581&gt;&lt;U+2581&gt;&lt;U+2587&gt;&lt;U+2587&gt;&lt;U+2585&gt;", "&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2585&gt;&lt;U+2583&gt;&lt;U+2581&gt;", ~</code></pre>
+=======
+## $ variable           &lt;chr&gt; "debtinc", "delinq", "value", "derog", "clage", "ni…
+## $ n_categories       &lt;int&gt; 4, 4, 6, 3, 5, 5, 5, 6, 5, 6, 7, 3
+## $ iv                 &lt;dbl&gt; 1.937625988, 0.587078037, 0.395450463, 0.341107292,…
+## $ ks                 &lt;dbl&gt; 0.61847010, 0.32198219, 0.17082519, 0.21159215, 0.2…
+## $ hhi                &lt;dbl&gt; 0.2500000, 0.2500000, 0.1666667, 0.3333333, 0.20000…
+## $ count_distr_max    &lt;dbl&gt; 0.6344679, 0.6996644, 0.3123202, 0.7583893, 0.34659…
+## $ count_distr_min    &lt;dbl&gt; 0.06255992, 0.08988495, 0.01701822, 0.11984660, 0.0…
+## $ has_missing        &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TR…
+## $ has_special_values &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TR…
+## $ monotone           &lt;lgl&gt; TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, …
+## $ factor             &lt;lgl&gt; FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, TRU…
+## $ breaks             &lt;list&gt; &lt;"missing", "40", "42", "Inf"&gt;, &lt;"missing", "1", "2…
+## $ iv_lbl             &lt;fct&gt; suspicious, suspicious, strong, strong, medium, me…
+## $ hhi_lbl            &lt;fct&gt; moderate concentration, moderate concentration, mod…
+## $ distribution       &lt;chr&gt; "▃▇▁▁", "▁▇▁▁", "▁▂▆▅▇▆", "▁▇▁", "▁▁▇▇▅", "▂▇▅▃▁", …</code></pre>
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 <p>Note that <code>dbiv</code> object have <code>breaks</code> column among other information.</p>
 <p>In some cases, monotonic woes are required in continous variables. With the <code>dbiv</code> object we can check what variables have a high information and no monotonic (excluding the missing category oc).</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
@@ -357,7 +407,11 @@
 ## 3 clno                5 0.107  0.136  0.2             0.543          0.0364
 ## 4 yoj                 6 0.0864 0.116  0.167           0.343          0.0825
 ## 5 mortdue             7 0.0500 0.0813 0.143           0.392          0.0551
+<<<<<<< HEAD
 ## # ... with 8 more variables: has_missing &lt;lgl&gt;, has_special_values &lt;lgl&gt;,
+=======
+## # … with 8 more variables: has_missing &lt;lgl&gt;, has_special_values &lt;lgl&gt;,
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 ## #   monotone &lt;lgl&gt;, factor &lt;lgl&gt;, breaks &lt;list&gt;, iv_lbl &lt;fct&gt;, hhi_lbl &lt;fct&gt;,
 ## #   distribution &lt;chr&gt;</code></pre>
 </div>
@@ -460,13 +514,18 @@
 ## 10 yoj                 6 0.0864  0.116  0.167           0.343          0.0825
 ## 11 mortdue             7 0.0500  0.0813 0.143           0.392          0.0551
 ## 12 reason              3 0.00627 0.0368 0.333           0.652          0.0424
+<<<<<<< HEAD
 ## # ... with 8 more variables: has_missing &lt;lgl&gt;, has_special_values &lt;lgl&gt;,
+=======
+## # … with 8 more variables: has_missing &lt;lgl&gt;, has_special_values &lt;lgl&gt;,
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 ## #   monotone &lt;lgl&gt;, factor &lt;lgl&gt;, breaks &lt;list&gt;, iv_lbl &lt;fct&gt;, hhi_lbl &lt;fct&gt;,
 ## #   distribution &lt;chr&gt;</code></pre>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">dbiv</span><span class="op">)</span></code></pre></div>
 <pre><code>## Rows: 12
 ## Columns: 15
+<<<<<<< HEAD
 ## $ variable           &lt;chr&gt; "debtinc", "delinq", "value", "derog", "clage", "ni~
 ## $ n_categories       &lt;int&gt; 4, 4, 6, 3, 5, 5, 5, 6, 5, 6, 7, 3
 ## $ iv                 &lt;dbl&gt; 1.937625988, 0.587078037, 0.395450463, 0.341107292,~
@@ -482,6 +541,23 @@
 ## $ iv_lbl             &lt;fct&gt; suspicious, suspicious, strong, strong, medium, me~
 ## $ hhi_lbl            &lt;fct&gt; moderate concentration, moderate concentration, mod~
 ## $ distribution       &lt;chr&gt; "&lt;U+2583&gt;&lt;U+2587&gt;&lt;U+2581&gt;&lt;U+2581&gt;", "&lt;U+2581&gt;&lt;U+2587&gt;&lt;U+2581&gt;&lt;U+2581&gt;", "&lt;U+2581&gt;&lt;U+2582&gt;&lt;U+2586&gt;&lt;U+2585&gt;&lt;U+2587&gt;&lt;U+2586&gt;", "&lt;U+2581&gt;&lt;U+2587&gt;&lt;U+2581&gt;", "&lt;U+2581&gt;&lt;U+2581&gt;&lt;U+2587&gt;&lt;U+2587&gt;&lt;U+2585&gt;", "&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2585&gt;&lt;U+2583&gt;&lt;U+2581&gt;", ~</code></pre>
+=======
+## $ variable           &lt;chr&gt; "debtinc", "delinq", "value", "derog", "clage", "ni…
+## $ n_categories       &lt;int&gt; 4, 4, 6, 3, 5, 5, 5, 6, 5, 6, 7, 3
+## $ iv                 &lt;dbl&gt; 1.937625988, 0.587078037, 0.395450463, 0.341107292,…
+## $ ks                 &lt;dbl&gt; 0.61847010, 0.32198219, 0.17082519, 0.21159215, 0.2…
+## $ hhi                &lt;dbl&gt; 0.2500000, 0.2500000, 0.1666667, 0.3333333, 0.20000…
+## $ count_distr_max    &lt;dbl&gt; 0.6344679, 0.6996644, 0.3123202, 0.7583893, 0.34659…
+## $ count_distr_min    &lt;dbl&gt; 0.06255992, 0.08988495, 0.01701822, 0.11984660, 0.0…
+## $ has_missing        &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TR…
+## $ has_special_values &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TR…
+## $ monotone           &lt;lgl&gt; TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, …
+## $ factor             &lt;lgl&gt; FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, TRU…
+## $ breaks             &lt;list&gt; &lt;"missing", "40", "42", "Inf"&gt;, &lt;"missing", "1", "2…
+## $ iv_lbl             &lt;fct&gt; suspicious, suspicious, strong, strong, medium, me…
+## $ hhi_lbl            &lt;fct&gt; moderate concentration, moderate concentration, mod…
+## $ distribution       &lt;chr&gt; "▃▇▁▁", "▁▇▁▁", "▁▂▆▅▇▆", "▁▇▁", "▁▁▇▇▅", "▂▇▅▃▁", …</code></pre>
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 <p>Apply woes to train and test table.</p>
 </div>
 <div id="finding-variables-with-low-iv" class="section level3">
@@ -516,7 +592,11 @@
 ##  8 debtinc job      0.0990    1.94         1  0.115          8
 ##  9 debtinc clno     0.0693    1.94         1  0.107          9
 ## 10 debtinc yoj      0.0476    1.94         1  0.0864        10
+<<<<<<< HEAD
 ## # ... with 134 more rows</code></pre>
+=======
+## # … with 134 more rows</code></pre>
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 <p>Now, we can get the variables which have high correlation</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">bins</span><span class="op">)</span>
@@ -620,7 +700,11 @@
 ## 1 (Intercept)   -1.40     0.0571   -24.4   1.07e-131
 ## 2 mortdue_woe    0.263    0.265      0.990 3.22e-  1</code></pre>
 <div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<<<<<<< HEAD
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters</a></span><span class="op">(</span><span class="va">model_raw</span>, df_method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">THEME</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+=======
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters</a></span><span class="op">(</span><span class="va">model_raw</span>, df_method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">THEME</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 <p><img src="risk3r_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
 <div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_raw</span><span class="op">)</span></code></pre></div>
@@ -1150,7 +1234,11 @@
 <pre><code>## # A tibble: 1 x 4
 ##      ks   auc    iv  gini
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+<<<<<<< HEAD
 ## 1 0.790 0.954  4.94 0.908</code></pre>
+=======
+## 1 0.790 0.954  4.92 0.908</code></pre>
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 </div>
 <div id="feature-selection-via-glmnet" class="section level3">
 <h3 class="hasAnchor">
@@ -2678,7 +2766,11 @@
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
 ## 1 (Intercept)    -1.39    0.0571     -24.4 1.12e-131</code></pre>
 <div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<<<<<<< HEAD
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters</a></span><span class="op">(</span><span class="va">model_fsglmnet</span>, df_method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">THEME</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+=======
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters</a></span><span class="op">(</span><span class="va">model_fsglmnet</span>, df_method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">THEME</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 <p><img src="risk3r_files/figure-html/unnamed-chunk-26-4.png" width="700"></p>
 <div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span></code></pre></div>
@@ -2913,7 +3005,11 @@
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
 ## 1 (Intercept)    -1.39    0.0571     -24.4 1.12e-131</code></pre>
 <div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
+<<<<<<< HEAD
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">THEME</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+=======
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">THEME</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 <p><img src="risk3r_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
 <div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span></code></pre></div>
@@ -2947,7 +3043,11 @@
 
 <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model_lss_prmt</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">p.value</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span>
 
+<<<<<<< HEAD
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters</a></span><span class="op">(</span><span class="va">model_lss_prmt</span>, df_method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">THEME</span><span class="op">(</span><span class="op">)</span>
+=======
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html">parameters</a></span><span class="op">(</span><span class="va">model_lss_prmt</span>, df_method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">THEME</span><span class="op">(</span><span class="op">)</span>
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 
 <span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_lss_prmt</span><span class="op">)</span>
 <span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">model_lss_prmt</span>, newdata <span class="op">=</span> <span class="va">test_data</span><span class="op">)</span></code></pre></div>
@@ -2978,11 +3078,19 @@
 
 <span class="va">dmodels</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 6
+<<<<<<< HEAD
 ##   model_name model  terms           n_variables metrics        metrics_validati~
 ##   &lt;chr&gt;      &lt;list&gt; &lt;list&gt;                &lt;dbl&gt; &lt;list&gt;         &lt;list&gt;           
 ## 1 raw        &lt;glm&gt;  &lt;tibble [12 x ~          12 &lt;tibble [1 x ~ &lt;tibble [1 x 4]&gt; 
 ## 2 stepwise   &lt;glm&gt;  &lt;tibble [11 x ~          11 &lt;tibble [1 x ~ &lt;tibble [1 x 4]&gt; 
 ## 3 glmnet     &lt;glm&gt;  &lt;tibble [11 x ~          11 &lt;tibble [1 x ~ &lt;tibble [1 x 4]&gt;</code></pre>
+=======
+##   model_name model  terms           n_variables metrics        metrics_validati…
+##   &lt;chr&gt;      &lt;list&gt; &lt;list&gt;                &lt;dbl&gt; &lt;list&gt;         &lt;list&gt;           
+## 1 raw        &lt;glm&gt;  &lt;tibble [12 × …          12 &lt;tibble [1 × … &lt;tibble [1 × 4]&gt; 
+## 2 stepwise   &lt;glm&gt;  &lt;tibble [11 × …          11 &lt;tibble [1 × … &lt;tibble [1 × 4]&gt; 
+## 3 glmnet     &lt;glm&gt;  &lt;tibble [11 × …          11 &lt;tibble [1 × … &lt;tibble [1 × 4]&gt;</code></pre>
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
 <div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dmodels</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">model_name</span>, <span class="va">terms</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -3102,7 +3210,11 @@
 <code class="sourceCode R"><span class="va">check</span> <span class="op">&lt;-</span> <span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">model_final</span><span class="op">)</span>
 
 <span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/check_collinearity.html">check_collinearity</a></span><span class="op">(</span><span class="va">model_final</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<<<<<<< HEAD
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+=======
+  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+>>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
   <span class="fu">THEME</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="risk3r_files/figure-html/unnamed-chunk-31-1.png" width="700"></p>
@@ -3183,7 +3295,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
