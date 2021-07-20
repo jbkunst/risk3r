@@ -26,6 +26,7 @@
 #' sum(p)
 #'
 #' psi_label(sum(p))
+#'
 #' @export
 psi_vector <- function(old, new) {
   new <- new / sum(new)

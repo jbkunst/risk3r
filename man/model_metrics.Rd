@@ -17,15 +17,13 @@ Calculate predictive metrics for glm models
 \examples{
 
 N <- 10000
-
 predicted <- runif(N)
-
 actual <- rbinom(N, size = 1, prob = predicted)
 
 daux <- data.frame(actual = actual, predicted = predicted)
-
 m <- glm(actual ~ predicted, family = binomial, data = daux)
 
 model_metrics(m)
+model_metrics(m, newdata = head(daux, 100))
 
 }

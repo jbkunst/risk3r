@@ -32,3 +32,12 @@ featsel_glmnet(
 \description{
 Feature selection via glmnet
 }
+\examples{
+
+data("credit_woe")
+
+m <- glm(bad ~ ., family = binomial, data = credit_woe)
+
+featsel_glmnet(m)
+
+}

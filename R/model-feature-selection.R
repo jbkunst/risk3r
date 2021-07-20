@@ -7,6 +7,15 @@
 #' @param trace.it trace.it
 #' @param type.measue type.measue
 #' @param ... Additional argumentos for glmnet::cv.glmnet
+#'
+#' @examples
+#'
+#' data("credit_woe")
+#'
+#' m <- glm(bad ~ ., family = binomial, data = credit_woe)
+#'
+#' featsel_glmnet(m)
+#'
 #' @importFrom glmnet cv.glmnet
 #' @importFrom stringr str_remove_all
 #' @importFrom stats coef
@@ -101,11 +110,20 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
   model_fs_glmnet
 }
 
-#' Feature selection via iterative
+#' Feature selection
 #'
 #' @param model model
 #' @param ... Additional argumentos for stats::step
 #' @importFrom stats step
+#'
+#' @examples
+#'
+#' data("credit_woe")
+#'
+#' m <- glm(bad ~ ., family = binomial, data = credit_woe)
+#'
+#' featsel_stepforward(m)
+#'
 #' @export
 featsel_stepforward <- function(model, ...) {
   r_n_p <- reponse_and_predictors_names(model)
@@ -140,16 +158,29 @@ featsel_stepforward <- function(model, ...) {
 #' @param verbose verbose
 #' @param plot Save plots
 #' @param ... Additional argumentos for DALEX::explain or ingredients::feature_importance
+#'
+#' @examples
+#'
+#' data("credit_woe")
+#'
+#' m <- glm(bad ~ ., family = binomial, data = credit_woe)
+#'
+#' m_featsel <- featsel_loss_function_permutations(m, stat = "min")
+#'
+#' attr(m_featsel, "plots")#'
+#'
 #' @importFrom stats step
 #' @export
-featsel_loss_function_permutations <- function(model,
-                                               stat = c("median", "mean", "min", "q25", "q75", "max"),
-                                               B = 10,
-                                               n_sample = NULL,
-                                               loss_function = DALEX::loss_one_minus_auc,
-                                               verbose = TRUE,
-                                               plot = TRUE,
-                                               ...) {
+featsel_loss_function_permutations <- function(
+  model,
+  stat = c("median", "mean", "min", "q25", "q75", "max"),
+  B = 10,
+  n_sample = NULL,
+  loss_function = DALEX::loss_one_minus_auc,
+  verbose = TRUE,
+  plot = TRUE,
+  ...) {
+
   stat <- stat[[1]]
 
   plots <- list()

@@ -1,4 +1,4 @@
-#' Plot model_partials output
+#' As list method for skim_df object
 #'
 #' @param x A skim_df object
 #' @param ... Optional arguments (non used yet).

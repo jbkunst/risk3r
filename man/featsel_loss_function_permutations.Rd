@@ -35,3 +35,14 @@ featsel_loss_function_permutations(
 \description{
 Shortcut featsel_loss_function_permutations
 }
+\examples{
+
+data("credit_woe")
+
+m <- glm(bad ~ ., family = binomial, data = credit_woe)
+
+m_featsel <- featsel_loss_function_permutations(m, stat = "min")
+
+attr(m_featsel, "plots")#'
+
+}

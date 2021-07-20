@@ -112,6 +112,7 @@ metrics <- function(actual, predicted) {
 #' @importFrom stats ecdf quantile
 #' @export
 gain <- function(actual, predicted, percents = c(0.10, 0.20, 0.30, 0.40, 0.50)) {
+
   validate_actual_predicted_num(actual, predicted)
 
   g <- ecdf(predicted[actual == 0])(quantile(predicted, percents))

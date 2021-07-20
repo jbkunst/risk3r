@@ -29,7 +29,9 @@ Imports:
     corrr,
     tidyselect,
     DALEX,
-    ingredients
+    ingredients,
+    ROCR,
+    magrittr
 Suggests:
     rmarkdown,
     knitr,

@@ -5,21 +5,21 @@
 #' @examples
 #'
 #' N <- 10000
-#'
 #' predicted <- runif(N)
-#'
 #' actual <- rbinom(N, size = 1, prob = predicted)
 #'
 #' daux <- data.frame(actual = actual, predicted = predicted)
-#'
 #' m <- glm(actual ~ predicted, family = binomial, data = daux)
 #'
 #' model_metrics(m)
+#' model_metrics(m, newdata = head(daux, 100))
 #'
 #' @importFrom stats predict.glm predict
 #' @export
 model_metrics <- function(model, newdata = NULL) {
+
   r_n_p <- reponse_and_predictors_names(model)
+
   yvar <- r_n_p[["response"]]
 
   if (is.null(newdata)) {
@@ -40,9 +40,18 @@ model_metrics <- function(model, newdata = NULL) {
 #'
 #' @param model model
 #' @param newdata Optional data frame
-#' @param verbose verbose#'
+#' @param verbose verbose
 #' @examples
-#' TRUE
+#'
+#' data("credit_woe")
+#'
+#' m <- glm(bad ~ ., family = binomial, data = head(credit_woe, 10000))
+#' m <- featsel_stepforward(m)
+#'
+#' model_partials(m)
+#'
+#' model_partials(m, newdata = tail(credit_woe, 10000))
+#'
 #' @importFrom stats binomial glm
 #' @export
 model_partials <- function(model, newdata = NULL, verbose = TRUE) {
@@ -92,35 +101,10 @@ model_partials <- function(model, newdata = NULL, verbose = TRUE) {
     variable = forcats::fct_inorder(.data$variable)
   )
 
-  class(dfmetrics) <- c("model_partials", class(dfmetrics))
+  # class(dfmetrics) <- c("model_partials", class(dfmetrics))
 
   dfmetrics
 }
 
 
-#' Plot model_partials output
-#'
-#' @param x Result from model_partials function
-#' @param ... Optional arguments for ggplot2::geom_line
-#'
-#' @examples
-#' TRUE
-#' @method plot model_partials
-#' @importFrom utils hasName
-#' @export
-plot.model_partials <- function(x, ...) {
 
-  # stopifnot(attr(dfmetrics, "function") == "model_partials")
-
-  if (hasName(x, "sample")) {
-    dfg <- tidyr::gather(x, "key", "value", -.data$variable, -.data$sample)
-    mapng <- ggplot2::aes(.data$variable, .data$value, group = .data$sample, color = .data$sample)
-  } else {
-    dfg <- tidyr::gather(x, "key", "value", -.data$variable)
-    mapng <- ggplot2::aes(.data$variable, .data$value, group = .data$key)
-  }
-
-  ggplot2::ggplot(dfg) +
-    ggplot2::geom_line(mapping = mapng, ...) +
-    ggplot2::facet_wrap(ggplot2::vars(.data$key), ncol = 1, scales = "free_y")
-}

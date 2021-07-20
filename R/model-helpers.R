@@ -1,3 +1,6 @@
+#' Get response and predictors names from model
+#' @param model model
+#' @export
 reponse_and_predictors_names <- function(model) {
   response <- as.character(as.formula(model))[2]
 
@@ -10,6 +13,11 @@ reponse_and_predictors_names <- function(model) {
   )
 }
 
+
+#' Get formula from reponse and predictors names
+#' @param response response
+#' @param predictors predictors
+#' @export
 formula_from_reponse_and_predictors_names <- function(response, predictors) {
   stopifnot(
     is.character(response),

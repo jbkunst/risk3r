@@ -2,7 +2,7 @@
 % Please edit documentation in R/model-feature-selection.R
 \name{featsel_stepforward}
 \alias{featsel_stepforward}
-\title{Feature selection via iterative}
+\title{Feature selection}
 \usage{
 featsel_stepforward(model, ...)
 }
@@ -12,5 +12,14 @@ featsel_stepforward(model, ...)
 \item{...}{Additional argumentos for stats::step}
 }
 \description{
-Feature selection via iterative
+Feature selection
+}
+\examples{
+
+data("credit_woe")
+
+m <- glm(bad ~ ., family = binomial, data = credit_woe)
+
+featsel_stepforward(m)
+
 }

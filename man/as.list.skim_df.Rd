@@ -2,7 +2,7 @@
 % Please edit documentation in R/skimr-helpers.R
 \name{as.list.skim_df}
 \alias{as.list.skim_df}
-\title{Plot model_partials output}
+\title{As list method for skim_df object}
 \usage{
 \method{as.list}{skim_df}(x, ...)
 }
@@ -12,5 +12,5 @@
 \item{...}{Optional arguments (non used yet).}
 }
 \description{
-Plot model_partials output
+As list method for skim_df object
 }

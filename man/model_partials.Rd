@@ -11,11 +11,20 @@ model_partials(model, newdata = NULL, verbose = TRUE)
 
 \item{newdata}{Optional data frame}
 
-\item{verbose}{verbose#'}
+\item{verbose}{verbose}
 }
 \description{
 Get predictive indicator for partial models given a model
 }
 \examples{
-TRUE
+
+data("credit_woe")
+
+m <- glm(bad ~ ., family = binomial, data = head(credit_woe, 10000))
+m <- featsel_stepforward(m)
+
+model_partials(m)
+
+model_partials(m, newdata = tail(credit_woe, 10000))
+
 }
