@@ -71,6 +71,11 @@ p4 <- p4 + scale_x_discrete(limits = rev) + coord_flip()
   (p4 | p5 | p6)
 
 
+# variables ---------------------------------------------------------------
+data(woes)
+
+gg_woes(woes) %>%
+  reduce(`+`)
 
 
 
