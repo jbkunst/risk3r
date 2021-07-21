@@ -42,7 +42,3 @@ dfmetrics %>%
   dplyr::select(-gini, -iv) %>%
   plot() +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
-
-
-
-
