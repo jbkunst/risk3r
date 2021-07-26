@@ -38,12 +38,9 @@ Suggests:
     partykit,
     patchwork,
     broom,
-    xray,
     moments,
     rsample,
-    randomForest,
-    performance,
-    parameters
+    randomForest
 RoxygenNote: 7.1.1
 Depends: 
     R (>= 2.10)
