@@ -19,7 +19,6 @@ library(risk3r)
 
 ```{r}
 library(ggplot2)
-library(patchwork)
 
 theme_set(theme_minimal(base_size = 7, base_family = ""))
 
@@ -102,7 +101,9 @@ p6
 
 Using patchwork.
 
-```{r}
+```{r, eval=FALSE}
+library(patchwork)
+
 (p1 | p2 | p3) /
   (p4 | p5 | p6)
 ```
@@ -110,7 +111,7 @@ Using patchwork.
 As we can see there some space we can gain
 
 
-```{r}
+```{r, eval=FALSE}
 p12 <- p1 + 
   labs(caption = NULL, x = "Estimate")
 
