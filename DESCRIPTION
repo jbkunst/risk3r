@@ -36,7 +36,6 @@ Suggests:
     rmarkdown,
     knitr,
     partykit,
-    patchwork,
     broom,
     moments,
     rsample,
