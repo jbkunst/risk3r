@@ -16,6 +16,9 @@ knitr::opts_chunk$set(
 library(risk3r)
 library(broom)
 library(dplyr)
+library(ggplot2)
+
+theme_set(theme_minimal(base_size = 7, base_family = ""))
 
 data("credit_woe")
 ```
@@ -35,8 +38,8 @@ broom::tidy(model_raw)
 # some parameter are negative, multicollinearity
 broom::tidy(model_raw) %>% filter(estimate <= 0 | p.value > 0.05)
 
-# Yikes!
-gg_model_coef(model_raw) 
+gg_model_coef(model_raw) +
+  labs(title = "Yikes!")
 ```
 
 ## Satellite Model
@@ -65,11 +68,13 @@ in the same order the coefficient in the glmnet model turn to non zero
 (check the plots when run this funtion).
 
 ```{r, message=FALSE}
-model_fsglmnet <- featsel_glmnet(model_raw, S = "lambda.1se", trace = TRUE)
+model_fsglmnet <- featsel_glmnet(model_raw, S = "lambda.1se", trace.it = FALSE)
 
 broom::tidy(model_fsglmnet)
 
 broom::tidy(model_fsglmnet) %>% filter(estimate <= 0 | p.value > 0.05)
+
+gg_model_coef(model_fsglmnet)
 ```
 
 ## Feature selection via Setpwise forward
@@ -84,6 +89,8 @@ broom::tidy(model_fsstep)
 
 broom::tidy(model_fsstep) %>%
   filter(estimate <= 0 | p.value > 0.05)
+
+gg_model_coef(model_fsstep)
 ```
 
 ## Feature selection via repetitive round of drop out loss
@@ -110,6 +117,8 @@ broom::tidy(model_lss_prmt)
 
 broom::tidy(model_lss_prmt) %>% 
   filter(estimate <= 0 | p.value > 0.05)
+
+gg_model_coef(model_lss_prmt)
 ```
 
 ## Manual

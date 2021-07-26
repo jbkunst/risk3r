@@ -6,6 +6,7 @@
 #' @param seed seed
 #' @param trace.it trace.it
 #' @param type.measue type.measue
+#' @param verbose TRUE
 #' @param ... Additional argumentos for glmnet::cv.glmnet
 #'
 #' @examples
@@ -22,6 +23,7 @@
 #' @export
 featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
                            trace.it = 1, type.measue = "auc", ...) {
+
   r_n_p <- reponse_and_predictors_names(model)
 
   yvar <- r_n_p[["response"]]
