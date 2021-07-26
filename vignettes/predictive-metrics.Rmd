@@ -1,0 +1,58 @@
+---
+title: "Predictive Metrics"
+output: rmarkdown::html_vignette
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(risk3r)
+```
+
+
+```{r}
+N <- 10000
+
+predicted <- runif(N)
+
+actual <- rbinom(N, size = 1, prob = predicted)
+
+metrics(actual, predicted)
+```
+
+Remove `NA` if are present.
+
+
+```{r}
+predicted2 <- predicted
+predicted2[sample(c(TRUE, FALSE), size = N, prob = c(1, 99), replace = TRUE)] <- NA
+
+metrics(actual, predicted2)
+```
+
+## Using a glm model
+
+```{r}
+daux <- data.frame(actual = actual, predicted = predicted)
+
+m <- glm(actual ~ predicted, family = binomial, data = daux)
+
+model_metrics(m)
+```
+
+
+Works with new data.
+
+```{r}
+new_daux <- head(daux, 1000)
+
+model_metrics(m, newdata = new_daux)
+```
+

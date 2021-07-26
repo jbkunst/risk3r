@@ -1,0 +1,136 @@
+---
+title: "Feature Selection"
+output: rmarkdown::html_vignette
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(risk3r)
+library(broom)
+library(dplyr)
+
+data("credit_woe")
+```
+
+## Raw Model
+
+Let fit a very raw model to check:
+
+```{r}
+train_data <- head(credit_woe, 20000)
+test_data  <- tail(credit_woe, 20000)
+
+model_raw <- glm(bad ~ ., family = binomial, data = train_data)
+
+broom::tidy(model_raw)
+
+# some parameter are negative, multicollinearity
+broom::tidy(model_raw) %>% filter(estimate <= 0 | p.value > 0.05)
+
+# Yikes!
+gg_model_coef(model_raw) 
+```
+
+## Satellite Model
+
+```{r, eval=FALSE}
+# rf simple
+model_rf <- randomForest(bad_good ~ ., data = train_data, do.trace = TRUE, ntree = 500)
+
+metrics(
+  train_data$bad_good, 
+  predict(model_rf, type = "prob")[,2]
+  )
+```
+
+## Feature selection via glmnet
+
+From https://glmnet.stanford.edu/articles/glmnet.html
+
+There 2 option for `S`: `lambda.min` and `lambda.1se` , this last option
+you have a more regularized model.
+
+This wrapper around the glmnet package take a model as input, then return the
+model with the variables non zero from the `glmnet::cv.glmnet()` function 
+according with the selected `S` option. This function reorder the variables 
+in the same order the coefficient in the glmnet model turn to non zero 
+(check the plots when run this funtion).
+
+```{r, message=FALSE}
+model_fsglmnet <- featsel_glmnet(model_raw, S = "lambda.1se", trace = TRUE)
+
+broom::tidy(model_fsglmnet)
+
+broom::tidy(model_fsglmnet) %>% filter(estimate <= 0 | p.value > 0.05)
+```
+
+## Feature selection via Setpwise forward
+
+This is a wrapper for `stats::step` but the start point model is the null one
+`response ~ 1`.
+
+```{r}
+model_fsstep <- featsel_stepforward(model_raw, trace = TRUE)
+
+broom::tidy(model_fsstep)
+
+broom::tidy(model_fsstep) %>%
+  filter(estimate <= 0 | p.value > 0.05)
+```
+
+## Feature selection via repetitive round of drop out loss
+
+From https://ema.drwhy.ai/featureImportance.html
+
+The `stat = "min"` option give the most simpler model because It'more strict:
+If any iteration the loss increase then the variable is removed. You can choose
+between `c("q25", "mean", "median")`
+
+```{r, eval=FALSE}
+model_lss_prmt <- featsel_loss_function_permutations(
+  model_raw, 
+  stat ="min",
+  B = 50
+  )
+
+attr(model_lss_prmt, "plots") %>% 
+  purrr::reduce(`+`) &
+  patchwork::plot_layout(ncol = 1) &
+  THEME(base_size = 8)
+
+broom::tidy(model_lss_prmt)
+
+broom::tidy(model_lss_prmt) %>% 
+  filter(estimate <= 0 | p.value > 0.05)
+```
+
+## Manual
+
+Let suppose you have a nice model, but you want to reduce the number of variables.
+
+Maybe you want check:
+
+```{r, message=FALSE}
+model_partials(model_fsstep)
+
+library(ggplot2)
+
+theme_set(theme_minimal(base_size = 7, base_family = ""))
+
+gg_model_partials(model_fsstep) +
+    ggplot2::facet_wrap(
+      ggplot2::vars(.data$key), ncol = 2,
+      scales = "free_y"
+      )
+```
+
+
+

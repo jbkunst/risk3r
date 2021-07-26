@@ -1,11 +1,10 @@
-pandoc: 2.7.3
-pkgdown: 1.6.1
-pkgdown_sha: ~
+pandoc: 2.11.2
+pkgdown: 1.6.1.9000
+pkgdown_sha: c931fe24c135c6ca704ae9f300470e9c66d8bfe7
 articles:
+  feature-selection: feature-selection.html
+  plots: plots.html
+  predictive-metrics: predictive-metrics.html
   risk3r: risk3r.html
-<<<<<<< HEAD
-last_built: 2021-07-20T04:30Z
-=======
-last_built: 2021-06-15T15:02Z
->>>>>>> f16ca6b24ed82b916ab14349da989adc9dc83c9f
+last_built: 2021-07-26T17:30Z
 

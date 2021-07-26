@@ -11,645 +11,544 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 ## Packages 
 
-```{r, echo=FALSE, message=FALSE}
-# general
-library(dplyr)
-library(ggplot2)
-library(patchwork)
-
-# main
-library(risk3r)
-library(scorecard)
-
-# descriptive & premodelling
-library(skimr)
-library(xray)
-library(moments)
-library(rsample)
-
-# modelling
-library(randomForest)
-
-# post modelling
-library(performance)
-library(parameters)
-library(broom)
-
-if(require(kunstomverse)){
-  library(extrafont)
-  extrafont::loadfonts(quiet = TRUE)
-  THEME <- kunstomverse::theme_knst_segoe
-  theme_set(kunstomverse::theme_knst_segoe())
-}
-
-```
-
-## Parameters
-
-```{r}
-PARAMETERS <- list(
-  SEED = 12345,
-  P_TRAIN = 0.7,
-  P_CONCENTRATION = .95,
-  IV_MIN = 0.02, # WEAK >=
-  COUNT_DISTR_LIMIT = 0.05,
-  CORRELATION_LIMIT = 0.5,
-  POINTS0 = 600,
-  PDO     = 20,
-  ODDS0   = 1/50
-)
-```
-
-<details>
-
-```{r}
-custom_skim <- skim_with(
-  numeric = sfl(
-    median = purrr::partial(median, na.rm = TRUE),
-    skewness = purrr::partial(moments::skewness, na.rm = TRUE),
-    kurtosis = purrr::partial(moments::kurtosis, na.rm = TRUE),
-    count_distr_max = risk3r::count_distr_max,
-    n_unique = skimr::n_unique
-    ),
-  factor = sfl(
-    hhi = risk3r::hhi,
-    hhi_lbl = purrr::compose(risk3r::hhi, risk3r::hhi_label, .dir = "forward"),
-    count_distr_max = risk3r::count_distr_max
-    ),
-  append = TRUE
-  )
-
-# custom_skim(data %>% select(1:10))
-
-```
-
-
-</details>
-
-
-## Data
-
-```{r}
-OPTION <- 3
-if(OPTION == 1) {
-data <- readRDS(here::here("data-raw/cd.rds"))
-
-data <- data %>%
-  # select(1:300, where(is.character)) %>%
-  sample_n(100000)
-
-data %>% 
-  select(1:10) %>% 
-  glimpse()
-
-data <- data %>% 
-  mutate(
-    bad_good = ifelse(bad_good == 1, "bad", "good"),
-    bad_good = factor(bad_good, levels = c("good", "bad"))
-    ) %>% 
-  mutate(across(where(is.character), as.factor))
-  
-} else if (OPTION == 2) {
-  
-  data <- scorecard::germancredit %>% 
-    as_tibble() %>% 
-    rename(bad_good = creditability) %>% 
-    select(bad_good, everything()) %>% 
-    mutate(bad_good = forcats::fct_relevel(bad_good, "good", "bad"))  %>% 
-    mutate(across(where(is.character), as.factor)) %>% 
-    mutate(id = row_number(), .before = 1)
-  
-} else if (OPTION == 3) {
-  
-  data <- risk3r::hmeq %>% 
-    rename(bad_good = bad) %>% 
-    select(bad_good, everything()) %>% 
-    mutate(bad_good = ifelse(bad_good == 1, "bad", "good")) %>% 
-    mutate(bad_good = forcats::fct_relevel(bad_good, "good", "bad"))  %>% 
-    mutate(across(where(is.character), as.factor)) %>% 
-    mutate(id = row_number(), .before = 1)
-  
-}
-
-dim(data)
-```
-
-## Univariate analysis
-
-```{r}
-describe <- custom_skim(data)
-
-# use as.list to export skimr (risk3r:::as.list.skim_df)
-# writexl::write_xlsx(as.list(describe), here::here("data-raw/describe.xlsx"))
-```
-
-Remove variables with 0 variance and near 0 variance.
-
-```{r}
-describe_min <- skimr::partition(describe) %>% 
-  purrr::map_df(select, variable = skim_variable, n_unique, count_distr_max) %>% 
-  tibble::as_tibble()
-
-vars_to_remove_unique_value <- describe_min %>% 
-  filter(n_unique == 1) %>% 
-  pull(variable)
-
-vars_to_remove_near_0_var <- describe_min %>% 
-  filter(count_distr_max >= PARAMETERS$P_CONCENTRATION) %>% 
-  pull(variable)
-
-vars_to_remove_unique_value
-vars_to_remove_near_0_var <- setdiff(vars_to_remove_near_0_var, vars_to_remove_unique_value)
-```
-
-Or using scorecard:
-
-```{r}
-scrd_filter <- scorecard::var_filter(
-  data, 
-  # next 2 parameter are needed even we want only due identical_limit
-  y = "bad_good", iv_limit = 0,
-  missing_limit = 1,
-  identical_limit =  PARAMETERS$P_CONCENTRATION,
-  return_rm_reason = TRUE
-  )
-
-scrd_filter$rm %>% 
-  as_tibble() %>% 
-  filter(!is.na(rm_reason)) %>% 
-  arrange(variable)
-```
-
-### Anomalies
-
-From https://github.com/sicarul/xray.
-
-```{r}
-describe_anomalies <- xray::anomalies(data)
-
-as_tibble(describe_anomalies$variables)
-
-as_tibble(describe_anomalies$problem_variables)
-```
-
-
-Some differences between result due `scorecard::var_filter` exclude NAs 
-to caculate de identical limit.
-
-### Removing variables
-
-Surely we want remove other variables like the id operation/customer or
-a temporal/time variables.
-
-```{r}
-vars_to_remove_specials <- c("time", "id")
-
-data <- data %>% 
-  select(-all_of(vars_to_remove_unique_value)) %>% 
-  select(-all_of(vars_to_remove_near_0_var)) %>% 
-  select(-any_of(vars_to_remove_specials))
-```
-
-## Split
-
-From: https://www.tidymodels.org/start/recipes/#data-split
-
-```{r}
-# Fix the random numbers by setting the seed 
-# This enables the analysis to be reproducible when random numbers are used 
-set.seed(PARAMETERS$SEED)
-
-data_split <- rsample::initial_split(data, prop = PARAMETERS$P_TRAIN)
-
-# Create data frames for the two sets:
-train_data <- training(data_split)
-test_data  <- testing(data_split)
-```
-
-We can do check:
-
-```{r}
-train_data %>% count(bad_good) %>% mutate(n/sum(n))
-test_data %>% count(bad_good) %>% mutate(n/sum(n))
-```
-
-## Bivariate analysis
-
-### Getting woes
-
-We'll start with the default `method = "tree"`
-
-```{r}
-bins <- scorecard::woebin(
-  train_data, 
-  y = "bad_good", 
-  method = "tree",
-  count_distr_limit = PARAMETERS$COUNT_DISTR_LIMIT
-  )
-```
-
-Some sanity checks:
-
-```{r}
-# train_data$variable_with_missing %>% is.na() %>% table()
-# bins$variable_with_missing
-```
-
-The risk3r package have `woebin_summary` to get the summary.
-
-```{r}
-dbiv <- woebin_summary(bins)
-
-dbiv
-
-glimpse(dbiv)
-```
-
-Note that `dbiv` object have `breaks` column among other information.
-
-In some cases, monotonic woes are required in continous variables. With the
-`dbiv` object we can check what variables have a high information and no monotonic
-(excluding the missing category oc).
-
-```{r}
-dbiv %>% 
-  filter(
-    iv > 0.02,  # A >= weak iv value
-    !factor,    # is numeric
-    !monotone   # is not monotonic
-    )
-```
-
-### Exploring, finding the best cuts/bin
-
-`risk3r::woebin2` -a wrapper around the main `scorecard::woebin` function-
-implement `method = "ctree"` via the partykit package (we'll try implement monotonic binnings from mob package https://github.com/statcompute/mob).
-
-Having this we can iterate among all available methods:
-
-```{r, message=FALSE}
-binssums <- purrr::map_df(c("tree", "ctree"), function(m = "chimerge"){
-
-    message(m)
-
-  bins <- risk3r::woebin2(
-    train_data,
-    y = "bad_good",
-    count_distr_limit = PARAMETERS$COUNT_DISTR_LIMIT,
-    method = m
-    )
-
-   woebin_summary(bins) %>%
-     mutate(method = m, .before = 1)
-
-})
-```
-
-We can check, for each variable:
-- Every method is generated for every variable
-- The methods give same IV in some variables
-
-```{r}
-binssums %>%
-  count(method)
-
-binssums %>%
-  count(variable, iv) %>%
-  count(n)
-```
-
-Get the best breaks in the sense to maximize the IV, the get the breaks
-and finally uses `scorecard::woebin`.
-
-```{r}
-binbest <- binssums %>%
-  group_by(variable) %>%
-  arrange(desc(iv)) %>%
-  filter(iv == max(iv)) %>%
-  slice(1)
-
-binbest %>% 
-  ungroup() %>% 
-  count(method)
-
-best_breaks <- binbest %>%
-  select(variable, breaks) %>%
-  tibble::deframe()
-
-bin <- scorecard::woebin(
-  train_data,
-  y = "bad_good",
-  count_distr_limit = PARAMETERS$COUNT_DISTR_LIMIT,
-  breaks_list = best_breaks
-  )
-
-dbiv <- woebin_summary(bins)
-
-dbiv
-
-glimpse(dbiv)
-```
-
-Apply woes to train and test table.
-
-### Finding variables with low IV
-
-Just remove variables with low predictive power.
-
-```{r}
-vars_to_remove_low_iv <- dbiv %>% 
-  filter(iv < PARAMETERS$IV_MIN) %>% 
-  pull(variable)
-```
-
-### Finding highly correlated woes variables
-
-In risk3r we can get a data frame with correlations between woes and IVs to
-decide what variables remove.
-
-```{r}
-# FALSE to know check the next steps below
-dcors <- woebin_cor_iv(train_data, bins, upper = FALSE)
-dcors
-```
-
-Now, we can get the variables which have high correlation
-
-```{r}
-n <- length(bins)
-
-vars_to_rm_correlation <- dcors 
-
-nrow(vars_to_rm_correlation) == n * n 
-
-# remove same vars (diagonal)
-vars_to_rm_correlation <- vars_to_rm_correlation %>% 
-  filter(var1 != var2)
-
-nrow(vars_to_rm_correlation) == n * (n-1)
-
-# keep upper matrix
-vars_to_rm_correlation <- vars_to_rm_correlation %>% 
-  filter(var1_rank < var2_rank)
-
-nrow(vars_to_rm_correlation) == n * (n - 1) /2
-
-# remove variables which causes high correlations and have lower IV 
-# respect the other variable
-vars_to_rm_correlation <- vars_to_rm_correlation %>% 
-  filter(abs(r) >= PARAMETERS$CORRELATION_LIMIT) %>% 
-  distinct(var2) %>% 
-  pull() %>% 
-  as.character()
-```
-
-### Removing variables 
-
-```{r}
-vars_to_rm_correlation <- setdiff(vars_to_rm_correlation, vars_to_remove_low_iv)
-
-train_data <- train_data %>% 
-  select(-all_of(vars_to_remove_low_iv)) %>% 
-  select(-all_of(vars_to_rm_correlation))
-```
-
-### Applying woes
-
-Just `scorecard::woebin_ply` :)
-
-```{r}
-# class before woes
-train_data %>% 
-  purrr::map_chr(class) %>% 
-  table()
-
-train_data <- as_tibble(scorecard::woebin_ply(train_data, bins))
-test_data  <- as_tibble(scorecard::woebin_ply(test_data, bins))
-
-# check all is numeric except response variable
-train_data %>% 
-  purrr::map_chr(class) %>% 
-  table()
-```
-
-
-## Modelling
-
-### Raw Model
-
-Let fit a very raw model to check:
-
-```{r}
-model_raw <- glm(bad_good ~ ., data = train_data, family = binomial(link = logit))
-
-broom::tidy(model_raw)
-
-broom::tidy(model_raw) %>% filter(estimate <= 0 | p.value > 0.05)
-
-plot(parameters::parameters(model_raw, df_method = "wald")) + THEME()
-
-model_metrics(model_raw)
-model_metrics(model_raw, newdata = test_data)
-```
-
-### Satellite Model
-
-```{r}
-# rf simple
-model_rf <- randomForest(bad_good ~ ., data = train_data, do.trace = TRUE, ntree = 500)
-
-metrics(
-  train_data$bad_good, 
-  predict(model_rf, type = "prob")[,2]
-  )
-```
-
-### Feature selection via glmnet
-
-From https://glmnet.stanford.edu/articles/glmnet.html
-
-There 2 option for `S`: `lambda.min` and `lambda.1se` , this last option
-you have a more regularized model.
-
-This wrapper around the glmnet package take a model as input, then return the
-model with the variables non zero from the `glmnet::cv.glmnet()` function 
-according with the selected `S` option. This function reorder the variables 
-in the same order the coefficient in the glmnet model turn to non zero 
-(check the plots when run this funtion).
-
-```{r}
-model_fsglmnet <- featsel_glmnet(model_raw, S = "lambda.1se", trace = TRUE)
-
-broom::tidy(model_fsglmnet)
-
-broom::tidy(model_fsglmnet) %>% filter(estimate <= 0 | p.value > 0.05)
-
-plot(parameters::parameters(model_fsglmnet, df_method = "wald")) + THEME()
-
-model_metrics(model_fsglmnet)
-model_metrics(model_fsglmnet, newdata = test_data)
-```
-
-### Feature selection via Setpwise forward
-
-```{r}
-model_fsstep <- featsel_stepforward(model_raw, trace = TRUE)
-
-broom::tidy(model_fsstep)
-
-broom::tidy(model_fsstep) %>% filter(estimate <= 0 | p.value > 0.05)
-
-plot(parameters::parameters(model_fsstep)) + THEME()
-
-model_metrics(model_fsstep)
-model_metrics(model_fsstep, newdata = test_data)
-```
-
-### Feature selection via repetitive round of drop out loss
-
-From https://ema.drwhy.ai/featureImportance.html
-
-The `stat = "min"` option give the most simpler model because It'more strict:
-If any iteration the loss increase then the variable is removed. You can choose
-between `c("q25", "mean", "median")`
-
-```{r, eval=FALSE}
-model_lss_prmt <- featsel_loss_function_permutations(
-  model_raw, 
-  stat ="min",
-  B = 50
-  )
-
-attr(model_lss_prmt, "plots") %>% 
-  purrr::reduce(`+`) &
-  patchwork::plot_layout(ncol = 1) &
-  THEME(base_size = 8)
-
-broom::tidy(model_lss_prmt) %>% filter(estimate <= 0 | p.value > 0.05)
-
-plot(parameters::parameters(model_lss_prmt, df_method = "wald")) + THEME()
-
-model_metrics(model_lss_prmt)
-model_metrics(model_lss_prmt, newdata = test_data)
-```
-
-
-### Comparing models
-
-```{r}
-models <- list(
-  model_raw, 
-  model_fsstep,
-  model_fsglmnet
-  # model_lss_prmt
-  )
-
-dmodels <- tibble(model = models) %>% 
-  mutate(
-    model_name = c("raw", "stepwise", "glmnet"
-    ),
-    .before = 1
-  ) %>% 
-  mutate(
-    terms              = purrr::map(model, broom::tidy),
-    n_variables        = purrr::map_dbl(terms, nrow),
-    metrics            = purrr::map(model, model_metrics),
-    metrics_validation = purrr::map(model, model_metrics, newdata = test_data)
-  )
-
-dmodels
-
-dmodels %>% 
-  select(model_name, terms) %>% 
-  tidyr::unnest(cols = c(terms)) %>% 
-  select(model_name, term, estimate) %>% 
-  filter(term != "(Intercept)") %>% 
-  ggplot() +
-  geom_tile(aes(term, model_name, fill = estimate)) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-dmodels %>% 
-  select(model_name, metrics, metrics_validation) %>% 
-  tidyr::gather(sample, value, -model_name) %>% 
-  tidyr::unnest(cols = c(value)) %>% 
-  tidyr::gather(metric, value, -model_name, -sample) %>% 
-  mutate(sample = ifelse(sample == "metrics", "train", "test")) %>% 
-  ggplot() +
-  geom_point(aes(model_name, value, color = sample), size = 2) +
-  facet_wrap(vars(metric), scales = "free_y") +
-  scale_color_viridis_d(begin = 0.3, end = 0.8) +
-  scale_y_continuous(limits = c(0, NA), labels = scales::percent)
-```
-
-### Partial preditive measures
-
-See if we can remove variables via inspecting predictive measures.
-
-```{r}
-models %>% 
-  purrr::map(broom::tidy) %>% 
-  purrr::map(nrow)
-
-models %>% 
-  purrr::map(broom::tidy) %>% 
-  purrr::map(head)
-
-model_final <- model_fsglmnet
-
-dfmetrics <- model_partials(model_final, newdata = test_data)
-dfmetrics
-
-dfmetrics %>%
-  select(-gini, -iv) %>%
-  risk3r:::plot.model_partials() +
-  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1, size = 5)) +
-  ggplot2::ylim(0, NA)
-```
-
-### `{performance}` package
-
-```{r}
-check <- performance::check_model(model_final)
-
-performance::check_collinearity(model_final) %>% 
-  plot() +
-  THEME() +
-  ggplot2::coord_flip()
-
-car::vif(model_final)
-```
-
-
-## Scorecard
-
-```{r}
-POINTS0   <- 600
-PDO       <- 20
-ODDS0     <- 1/50
-
-scrcrd <- scorecard::scorecard(
-  bins = bins,
-  model = model_final,
-  points0 = POINTS0,
-  pdo = PDO,
-  odds0 = ODDS0,
-  basepoints_eq0 = TRUE
-  )
-
-scrcrd[[2]]
-
-scrcrd2 <- scorecard::scorecard2(
-  dt =  training(data_split),
-  y = "bad_good",
-  bins = bins,
-  x = stringr::str_remove(names(coef(model_final))[-1], "_woe$"),
-  points0 = POINTS0,
-  pdo = PDO,
-  odds0 = ODDS0,
-  basepoints_eq0 = TRUE
-  )
-
-scrcrd2[[2]]
-```
+# ```{r, echo=FALSE, message=FALSE}
+# # general
+# library(dplyr)
+# library(ggplot2)
+# library(patchwork)
+# 
+# # main
+# library(risk3r)
+# library(scorecard)
+# 
+# # descriptive & premodelling
+# library(skimr)
+# library(xray)
+# library(moments)
+# library(rsample)
+# 
+# # modelling
+# library(randomForest)
+# 
+# # post modelling
+# library(performance)
+# library(parameters)
+# library(broom)
+# 
+# if(require(kunstomverse)){
+#   library(extrafont)
+#   extrafont::loadfonts(quiet = TRUE)
+#   THEME <- kunstomverse::theme_knst_segoe
+#   theme_set(kunstomverse::theme_knst_segoe())
+# }
+# 
+# ```
+# 
+# ## Parameters
+# 
+# ```{r}
+# PARAMETERS <- list(
+#   SEED = 12345,
+#   P_TRAIN = 0.7,
+#   P_CONCENTRATION = .95,
+#   IV_MIN = 0.02, # WEAK >=
+#   COUNT_DISTR_LIMIT = 0.05,
+#   CORRELATION_LIMIT = 0.5,
+#   POINTS0 = 600,
+#   PDO     = 20,
+#   ODDS0   = 1/50
+# )
+# ```
+# 
+# <details>
+# 
+# ```{r}
+# custom_skim <- skim_with(
+#   numeric = sfl(
+#     median = purrr::partial(median, na.rm = TRUE),
+#     skewness = purrr::partial(moments::skewness, na.rm = TRUE),
+#     kurtosis = purrr::partial(moments::kurtosis, na.rm = TRUE),
+#     count_distr_max = risk3r::count_distr_max,
+#     n_unique = skimr::n_unique
+#     ),
+#   factor = sfl(
+#     hhi = risk3r::hhi,
+#     hhi_lbl = purrr::compose(risk3r::hhi, risk3r::hhi_label, .dir = "forward"),
+#     count_distr_max = risk3r::count_distr_max
+#     ),
+#   append = TRUE
+#   )
+# 
+# # custom_skim(data %>% select(1:10))
+# 
+# ```
+# 
+# 
+# </details>
+# 
+# 
+# ## Data
+# 
+# ```{r}
+# OPTION <- 3
+# if(OPTION == 1) {
+# data <- readRDS(here::here("data-raw/cd.rds"))
+# 
+# data <- data %>%
+#   # select(1:300, where(is.character)) %>%
+#   sample_n(100000)
+# 
+# data %>% 
+#   select(1:10) %>% 
+#   glimpse()
+# 
+# data <- data %>% 
+#   mutate(
+#     bad_good = ifelse(bad_good == 1, "bad", "good"),
+#     bad_good = factor(bad_good, levels = c("good", "bad"))
+#     ) %>% 
+#   mutate(across(where(is.character), as.factor))
+#   
+# } else if (OPTION == 2) {
+#   
+#   data <- scorecard::germancredit %>% 
+#     as_tibble() %>% 
+#     rename(bad_good = creditability) %>% 
+#     select(bad_good, everything()) %>% 
+#     mutate(bad_good = forcats::fct_relevel(bad_good, "good", "bad"))  %>% 
+#     mutate(across(where(is.character), as.factor)) %>% 
+#     mutate(id = row_number(), .before = 1)
+#   
+# } else if (OPTION == 3) {
+#   
+#   data <- risk3r::hmeq %>% 
+#     rename(bad_good = bad) %>% 
+#     select(bad_good, everything()) %>% 
+#     mutate(bad_good = ifelse(bad_good == 1, "bad", "good")) %>% 
+#     mutate(bad_good = forcats::fct_relevel(bad_good, "good", "bad"))  %>% 
+#     mutate(across(where(is.character), as.factor)) %>% 
+#     mutate(id = row_number(), .before = 1)
+#   
+# }
+# 
+# dim(data)
+# ```
+# 
+# ## Univariate analysis
+# 
+# ```{r}
+# describe <- custom_skim(data)
+# 
+# # use as.list to export skimr (risk3r:::as.list.skim_df)
+# # writexl::write_xlsx(as.list(describe), here::here("data-raw/describe.xlsx"))
+# ```
+# 
+# Remove variables with 0 variance and near 0 variance.
+# 
+# ```{r}
+# describe_min <- skimr::partition(describe) %>% 
+#   purrr::map_df(select, variable = skim_variable, n_unique, count_distr_max) %>% 
+#   tibble::as_tibble()
+# 
+# vars_to_remove_unique_value <- describe_min %>% 
+#   filter(n_unique == 1) %>% 
+#   pull(variable)
+# 
+# vars_to_remove_near_0_var <- describe_min %>% 
+#   filter(count_distr_max >= PARAMETERS$P_CONCENTRATION) %>% 
+#   pull(variable)
+# 
+# vars_to_remove_unique_value
+# vars_to_remove_near_0_var <- setdiff(vars_to_remove_near_0_var, vars_to_remove_unique_value)
+# ```
+# 
+# Or using scorecard:
+# 
+# ```{r}
+# scrd_filter <- scorecard::var_filter(
+#   data, 
+#   # next 2 parameter are needed even we want only due identical_limit
+#   y = "bad_good", iv_limit = 0,
+#   missing_limit = 1,
+#   identical_limit =  PARAMETERS$P_CONCENTRATION,
+#   return_rm_reason = TRUE
+#   )
+# 
+# scrd_filter$rm %>% 
+#   as_tibble() %>% 
+#   filter(!is.na(rm_reason)) %>% 
+#   arrange(variable)
+# ```
+# 
+# ### Anomalies
+# 
+# From https://github.com/sicarul/xray.
+# 
+# ```{r}
+# describe_anomalies <- xray::anomalies(data)
+# 
+# as_tibble(describe_anomalies$variables)
+# 
+# as_tibble(describe_anomalies$problem_variables)
+# ```
+# 
+# 
+# Some differences between result due `scorecard::var_filter` exclude NAs 
+# to caculate de identical limit.
+# 
+# ### Removing variables
+# 
+# Surely we want remove other variables like the id operation/customer or
+# a temporal/time variables.
+# 
+# ```{r}
+# vars_to_remove_specials <- c("time", "id")
+# 
+# data <- data %>% 
+#   select(-all_of(vars_to_remove_unique_value)) %>% 
+#   select(-all_of(vars_to_remove_near_0_var)) %>% 
+#   select(-any_of(vars_to_remove_specials))
+# ```
+# 
+# ## Split
+# 
+# From: https://www.tidymodels.org/start/recipes/#data-split
+# 
+# ```{r}
+# # Fix the random numbers by setting the seed 
+# # This enables the analysis to be reproducible when random numbers are used 
+# set.seed(PARAMETERS$SEED)
+# 
+# data_split <- rsample::initial_split(data, prop = PARAMETERS$P_TRAIN)
+# 
+# # Create data frames for the two sets:
+# train_data <- training(data_split)
+# test_data  <- testing(data_split)
+# ```
+# 
+# We can do check:
+# 
+# ```{r}
+# train_data %>% count(bad_good) %>% mutate(n/sum(n))
+# test_data %>% count(bad_good) %>% mutate(n/sum(n))
+# ```
+# 
+# ## Bivariate analysis
+# 
+# ### Getting woes
+# 
+# We'll start with the default `method = "tree"`
+# 
+# ```{r}
+# bins <- scorecard::woebin(
+#   train_data, 
+#   y = "bad_good", 
+#   method = "tree",
+#   count_distr_limit = PARAMETERS$COUNT_DISTR_LIMIT
+#   )
+# ```
+# 
+# Some sanity checks:
+# 
+# ```{r}
+# # train_data$variable_with_missing %>% is.na() %>% table()
+# # bins$variable_with_missing
+# ```
+# 
+# The risk3r package have `woebin_summary` to get the summary.
+# 
+# ```{r}
+# dbiv <- woebin_summary(bins)
+# 
+# dbiv
+# 
+# glimpse(dbiv)
+# ```
+# 
+# Note that `dbiv` object have `breaks` column among other information.
+# 
+# In some cases, monotonic woes are required in continous variables. With the
+# `dbiv` object we can check what variables have a high information and no monotonic
+# (excluding the missing category oc).
+# 
+# ```{r}
+# dbiv %>% 
+#   filter(
+#     iv > 0.02,  # A >= weak iv value
+#     !factor,    # is numeric
+#     !monotone   # is not monotonic
+#     )
+# ```
+# 
+# ### Exploring, finding the best cuts/bin
+# 
+# `risk3r::woebin2` -a wrapper around the main `scorecard::woebin` function-
+# implement `method = "ctree"` via the partykit package (we'll try implement monotonic binnings from mob package https://github.com/statcompute/mob).
+# 
+# Having this we can iterate among all available methods:
+# 
+# ```{r, message=FALSE}
+# binssums <- purrr::map_df(c("tree", "ctree"), function(m = "chimerge"){
+# 
+#     message(m)
+# 
+#   bins <- risk3r::woebin2(
+#     train_data,
+#     y = "bad_good",
+#     count_distr_limit = PARAMETERS$COUNT_DISTR_LIMIT,
+#     method = m
+#     )
+# 
+#    woebin_summary(bins) %>%
+#      mutate(method = m, .before = 1)
+# 
+# })
+# ```
+# 
+# We can check, for each variable:
+# - Every method is generated for every variable
+# - The methods give same IV in some variables
+# 
+# ```{r}
+# binssums %>%
+#   count(method)
+# 
+# binssums %>%
+#   count(variable, iv) %>%
+#   count(n)
+# ```
+# 
+# Get the best breaks in the sense to maximize the IV, the get the breaks
+# and finally uses `scorecard::woebin`.
+# 
+# ```{r}
+# binbest <- binssums %>%
+#   group_by(variable) %>%
+#   arrange(desc(iv)) %>%
+#   filter(iv == max(iv)) %>%
+#   slice(1)
+# 
+# binbest %>% 
+#   ungroup() %>% 
+#   count(method)
+# 
+# best_breaks <- binbest %>%
+#   select(variable, breaks) %>%
+#   tibble::deframe()
+# 
+# bin <- scorecard::woebin(
+#   train_data,
+#   y = "bad_good",
+#   count_distr_limit = PARAMETERS$COUNT_DISTR_LIMIT,
+#   breaks_list = best_breaks
+#   )
+# 
+# dbiv <- woebin_summary(bins)
+# 
+# dbiv
+# 
+# glimpse(dbiv)
+# ```
+# 
+# Apply woes to train and test table.
+# 
+# ### Finding variables with low IV
+# 
+# Just remove variables with low predictive power.
+# 
+# ```{r}
+# vars_to_remove_low_iv <- dbiv %>% 
+#   filter(iv < PARAMETERS$IV_MIN) %>% 
+#   pull(variable)
+# ```
+# 
+# ### Finding highly correlated woes variables
+# 
+# In risk3r we can get a data frame with correlations between woes and IVs to
+# decide what variables remove.
+# 
+# ```{r}
+# # FALSE to know check the next steps below
+# dcors <- woebin_cor_iv(train_data, bins, upper = FALSE)
+# dcors
+# ```
+# 
+# Now, we can get the variables which have high correlation
+# 
+# ```{r}
+# n <- length(bins)
+# 
+# vars_to_rm_correlation <- dcors 
+# 
+# nrow(vars_to_rm_correlation) == n * n 
+# 
+# # remove same vars (diagonal)
+# vars_to_rm_correlation <- vars_to_rm_correlation %>% 
+#   filter(var1 != var2)
+# 
+# nrow(vars_to_rm_correlation) == n * (n-1)
+# 
+# # keep upper matrix
+# vars_to_rm_correlation <- vars_to_rm_correlation %>% 
+#   filter(var1_rank < var2_rank)
+# 
+# nrow(vars_to_rm_correlation) == n * (n - 1) /2
+# 
+# # remove variables which causes high correlations and have lower IV 
+# # respect the other variable
+# vars_to_rm_correlation <- vars_to_rm_correlation %>% 
+#   filter(abs(r) >= PARAMETERS$CORRELATION_LIMIT) %>% 
+#   distinct(var2) %>% 
+#   pull() %>% 
+#   as.character()
+# ```
+# 
+# ### Removing variables 
+# 
+# ```{r}
+# vars_to_rm_correlation <- setdiff(vars_to_rm_correlation, vars_to_remove_low_iv)
+# 
+# train_data <- train_data %>% 
+#   select(-all_of(vars_to_remove_low_iv)) %>% 
+#   select(-all_of(vars_to_rm_correlation))
+# ```
+# 
+# ### Applying woes
+# 
+# Just `scorecard::woebin_ply` :)
+# 
+# ```{r}
+# # class before woes
+# train_data %>% 
+#   purrr::map_chr(class) %>% 
+#   table()
+# 
+# train_data <- as_tibble(scorecard::woebin_ply(train_data, bins))
+# test_data  <- as_tibble(scorecard::woebin_ply(test_data, bins))
+# 
+# # check all is numeric except response variable
+# train_data %>% 
+#   purrr::map_chr(class) %>% 
+#   table()
+# ```
+# 
+# 
+# ### Comparing models
+# 
+# ```{r}
+# models <- list(
+#   model_raw, 
+#   model_fsstep,
+#   model_fsglmnet
+#   # model_lss_prmt
+#   )
+# 
+# dmodels <- tibble(model = models) %>% 
+#   mutate(
+#     model_name = c("raw", "stepwise", "glmnet"
+#     ),
+#     .before = 1
+#   ) %>% 
+#   mutate(
+#     terms              = purrr::map(model, broom::tidy),
+#     n_variables        = purrr::map_dbl(terms, nrow),
+#     metrics            = purrr::map(model, model_metrics),
+#     metrics_validation = purrr::map(model, model_metrics, newdata = test_data)
+#   )
+# 
+# dmodels
+# 
+# dmodels %>% 
+#   select(model_name, terms) %>% 
+#   tidyr::unnest(cols = c(terms)) %>% 
+#   select(model_name, term, estimate) %>% 
+#   filter(term != "(Intercept)") %>% 
+#   ggplot() +
+#   geom_tile(aes(term, model_name, fill = estimate)) +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# 
+# dmodels %>% 
+#   select(model_name, metrics, metrics_validation) %>% 
+#   tidyr::gather(sample, value, -model_name) %>% 
+#   tidyr::unnest(cols = c(value)) %>% 
+#   tidyr::gather(metric, value, -model_name, -sample) %>% 
+#   mutate(sample = ifelse(sample == "metrics", "train", "test")) %>% 
+#   ggplot() +
+#   geom_point(aes(model_name, value, color = sample), size = 2) +
+#   facet_wrap(vars(metric), scales = "free_y") +
+#   scale_color_viridis_d(begin = 0.3, end = 0.8) +
+#   scale_y_continuous(limits = c(0, NA), labels = scales::percent)
+# ```
+# 
+# ### Partial preditive measures
+# 
+# See if we can remove variables via inspecting predictive measures.
+# 
+# ```{r}
+# models %>% 
+#   purrr::map(broom::tidy) %>% 
+#   purrr::map(nrow)
+# 
+# models %>% 
+#   purrr::map(broom::tidy) %>% 
+#   purrr::map(head)
+# 
+# model_final <- model_fsglmnet
+# 
+# dfmetrics <- model_partials(model_final, newdata = test_data)
+# dfmetrics
+# 
+# dfmetrics %>%
+#   select(-gini, -iv) %>%
+#   risk3r:::plot.model_partials() +
+#   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1, size = 5)) +
+#   ggplot2::ylim(0, NA)
+# ```
+# 
+# ### `{performance}` package
+# 
+# ```{r}
+# check <- performance::check_model(model_final)
+# 
+# performance::check_collinearity(model_final) %>% 
+#   plot() +
+#   THEME() +
+#   ggplot2::coord_flip()
+# 
+# car::vif(model_final)
+# ```
+# 
+# 
+# ## Scorecard
+# 
+# ```{r}
+# POINTS0   <- 600
+# PDO       <- 20
+# ODDS0     <- 1/50
+# 
+# scrcrd <- scorecard::scorecard(
+#   bins = bins,
+#   model = model_final,
+#   points0 = POINTS0,
+#   pdo = PDO,
+#   odds0 = ODDS0,
+#   basepoints_eq0 = TRUE
+#   )
+# 
+# scrcrd[[2]]
+# 
+# scrcrd2 <- scorecard::scorecard2(
+#   dt =  training(data_split),
+#   y = "bad_good",
+#   bins = bins,
+#   x = stringr::str_remove(names(coef(model_final))[-1], "_woe$"),
+#   points0 = POINTS0,
+#   pdo = PDO,
+#   odds0 = ODDS0,
+#   basepoints_eq0 = TRUE
+#   )
+# 
+# scrcrd2[[2]]
+# ```
 
 
