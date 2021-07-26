@@ -47,8 +47,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -83,6 +81,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../articles/risk3r.html">Get started</a>
 </li>
 <li>
@@ -96,10 +100,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/feature-selection.html">Feature Selection</a>
+      <a href="../articles/Plots.html">plots</a>
     </li>
     <li>
-      <a href="../articles/plots.html">plots</a>
+      <a href="../articles/feature-selection.html">Feature Selection</a>
     </li>
     <li>
       <a href="../articles/predictive-metrics.html">Predictive Metrics</a>
@@ -182,37 +186,18 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
+<span class='kw'>if</span><span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>{</span>
+
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"credit_woe"</span><span class='op'>)</span>
 
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>bad</span> <span class='op'>~</span> <span class='va'>.</span>, family <span class='op'>=</span> <span class='va'>binomial</span>, data <span class='op'>=</span> <span class='va'>credit_woe</span><span class='op'>)</span>
 
 <span class='va'>m_featsel</span> <span class='op'>&lt;-</span> <span class='fu'>featsel_loss_function_permutations</span><span class='op'>(</span><span class='va'>m</span>, stat <span class='op'>=</span> <span class='st'>"min"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Preparation of a new explainer is initiated
-#&gt;   -&gt; model label       :  Round 1 
-#&gt;   -&gt; data              :  49694  rows  13  cols 
-#&gt;   -&gt; data              :  tibble converted into a data.frame 
-#&gt;   -&gt; target variable   :  49694  values 
-#&gt;   -&gt; predict function  :  yhat.glm  will be used ( <span style='color: #BBBB00;'> default </span> )
-#&gt;   -&gt; predicted values  :  No value for predict function target column. ( <span style='color: #BBBB00;'> default </span> )
-#&gt;   -&gt; model_info        :  package stats , ver. 3.6.3 , task classification ( <span style='color: #BBBB00;'> default </span> ) 
-#&gt;   -&gt; predicted values  :  numerical, min =  0.02815591 , mean =  0.1974685 , max =  0.5961133  
-#&gt;   -&gt; residual function :  difference between y and yhat ( <span style='color: #BBBB00;'> default </span> )
-#&gt;   -&gt; residuals         :  numerical, min =  -0.5731621 , mean =  -8.488952e-10 , max =  0.9692504  
-#&gt;  <span style='color: #00BB00;'> A new explainer has been created! </span> </div><div class='output co'>#&gt; <span class='message'>Round 1</span></div><div class='output co'>#&gt; <span class='message'>Removed variables (3) are: personal_net_income_woe, residence_type_woe, months_in_residence_woe, </span></div><div class='output co'>#&gt; Preparation of a new explainer is initiated
-#&gt;   -&gt; model label       :  Round 2 
-#&gt;   -&gt; data              :  49694  rows  10  cols 
-#&gt;   -&gt; data              :  tibble converted into a data.frame 
-#&gt;   -&gt; target variable   :  49694  values 
-#&gt;   -&gt; predict function  :  yhat.glm  will be used ( <span style='color: #BBBB00;'> default </span> )
-#&gt;   -&gt; predicted values  :  No value for predict function target column. ( <span style='color: #BBBB00;'> default </span> )
-#&gt;   -&gt; model_info        :  package stats , ver. 3.6.3 , task classification ( <span style='color: #BBBB00;'> default </span> ) 
-#&gt;   -&gt; predicted values  :  numerical, min =  0.0275183 , mean =  0.1974685 , max =  0.5924004  
-#&gt;   -&gt; residual function :  difference between y and yhat ( <span style='color: #BBBB00;'> default </span> )
-#&gt;   -&gt; residuals         :  numerical, min =  -0.572183 , mean =  -8.27472e-10 , max =  0.9694779  
-#&gt;  <span style='color: #00BB00;'> A new explainer has been created! </span> </div><div class='output co'>#&gt; <span class='message'>Round 2</span></div><div class='output co'>#&gt; <span class='message'>No more variables removed.</span></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>m_featsel</span>, <span class='st'>"plots"</span><span class='op'>)</span><span class='co'>#'</span>
-</div><div class='output co'>#&gt; [[1]]</div><div class='img'><img src='featsel_loss_function_permutations-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
-#&gt; [[2]]</div><div class='img'><img src='featsel_loss_function_permutations-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'>
+
+<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>m_featsel</span>, <span class='st'>"plots"</span><span class='op'>)</span>
+
+<span class='op'>}</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -229,7 +214,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
