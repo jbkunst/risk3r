@@ -28,6 +28,8 @@ featsel_glmnet(
 \item{type.measue}{type.measue}
 
 \item{...}{Additional argumentos for glmnet::cv.glmnet}
+
+\item{verbose}{TRUE}
 }
 \description{
 Feature selection via glmnet

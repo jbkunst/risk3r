@@ -101,7 +101,7 @@ p6
 
 Using patchwork.
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 library(patchwork)
 
 (p1 | p2 | p3) /
@@ -111,7 +111,7 @@ library(patchwork)
 As we can see there some space we can gain
 
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 p12 <- p1 + 
   labs(caption = NULL, x = "Estimate")
 
