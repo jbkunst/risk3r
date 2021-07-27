@@ -62,7 +62,7 @@ ecdf_data <- function(actual, predicted){
 #' gg_model_roc(m)
 #' gg_model_roc(m, newdata = dnew, size = 2)
 #'
-#' gg_model_ecdf(m)\
+#' gg_model_ecdf(m)
 #' gg_model_ecdf(m, newdata = dnew, size = 2)
 #'
 #' gg_model_dist(m)
@@ -552,6 +552,12 @@ gg_model_partials <- function(model, newdata = NULL, verbose = TRUE, ...) {
 }
 
 #' @rdname gg_model_roc
+#' @param alpha alpha
+#' @param color color
+#' @param size size
+#' @param alpha_smooth alpha_smooth
+#' @param color_smooth color_smooth
+#' @param size_smooth size_smooth
 #' @export
 gg_model_calibration <- function(model, newdata = NULL,
                                  alpha = 0.01,
@@ -612,8 +618,8 @@ gg_model_calibration <- function(model, newdata = NULL,
       size  = size_smooth,
       ...)  +
 
-    scale_x_continuous(limits = c(0, 1)) +
-    scale_y_continuous(limits = c(0, 1))
+    ggplot2::scale_x_continuous(limits = c(0, 1)) +
+    ggplot2::scale_y_continuous(limits = c(0, 1))
 
   if (!is.null(newdata)) {
 
@@ -650,6 +656,7 @@ gg_model_calibration <- function(model, newdata = NULL,
 #' }
 #'
 #' @export
+#' @importFrom patchwork get_dim
 gg_woes <- function(woes, variable = "posprob",
                     color_bar = "gray75", color_line = "#e22d36",
                     ...) {
@@ -699,6 +706,8 @@ gg_woes <- function(woes, variable = "posprob",
         )
 
     })
+
+  invisible(patchwork::get_dim(ggplot2::ggplot()))
 
   pvars
 

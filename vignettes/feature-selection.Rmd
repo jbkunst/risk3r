@@ -8,17 +8,21 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message=FALSE, 
+  warning=FALSE
 )
 ```
 
-```{r setup, include=FALSE}
+```{r setup, include=TRUE}
 library(risk3r)
 library(broom)
 library(dplyr)
 library(ggplot2)
 
-theme_set(theme_minimal(base_size = 7, base_family = ""))
+theme <- theme_minimal(base_size = 7, base_family = "")
+
+theme_set(theme)
 
 data("credit_woe")
 ```
@@ -67,7 +71,7 @@ according with the selected `S` option. This function reorder the variables
 in the same order the coefficient in the glmnet model turn to non zero 
 (check the plots when run this funtion).
 
-```{r, message=FALSE}
+```{r}
 model_fsglmnet <- featsel_glmnet(model_raw, S = "lambda.1se", trace.it = FALSE)
 
 broom::tidy(model_fsglmnet)
@@ -83,7 +87,7 @@ This is a wrapper for `stats::step` but the start point model is the null one
 `response ~ 1`.
 
 ```{r}
-model_fsstep <- featsel_stepforward(model_raw, trace = TRUE)
+model_fsstep <- featsel_stepforward(model_raw, trace = 0)
 
 broom::tidy(model_fsstep)
 
@@ -101,17 +105,19 @@ The `stat = "min"` option give the most simpler model because It'more strict:
 If any iteration the loss increase then the variable is removed. You can choose
 between `c("q25", "mean", "median")`
 
-```{r, eval=FALSE}
+```{r}
 model_lss_prmt <- featsel_loss_function_permutations(
   model_raw, 
   stat ="min",
   B = 50
   )
 
+library(patchwork)
+
 attr(model_lss_prmt, "plots") %>% 
   purrr::reduce(`+`) &
   patchwork::plot_layout(ncol = 1) &
-  THEME(base_size = 8)
+  theme
 
 broom::tidy(model_lss_prmt)
 
@@ -129,10 +135,6 @@ Maybe you want check:
 
 ```{r, message=FALSE}
 model_partials(model_fsstep)
-
-library(ggplot2)
-
-theme_set(theme_minimal(base_size = 7, base_family = ""))
 
 gg_model_partials(model_fsstep) +
     ggplot2::facet_wrap(

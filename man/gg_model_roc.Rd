@@ -9,6 +9,7 @@
 \alias{gg_model_vif}
 \alias{gg_model_importance}
 \alias{gg_model_partials}
+\alias{gg_model_calibration}
 \title{Plot models}
 \usage{
 gg_model_roc(model, newdata = NULL, ...)
@@ -26,6 +27,18 @@ gg_model_vif(model, colors = c("#3aaf85", "#1b6ca8", "#cd201f"), ...)
 gg_model_importance(model, verbose = TRUE, B = 10, ...)
 
 gg_model_partials(model, newdata = NULL, verbose = TRUE, ...)
+
+gg_model_calibration(
+  model,
+  newdata = NULL,
+  alpha = 0.01,
+  color = "black",
+  size = 1,
+  alpha_smooth = 0.5,
+  color_smooth = "#3366FF",
+  size_smooth = 1,
+  ...
+)
 }
 \arguments{
 \item{model}{model}
@@ -33,6 +46,8 @@ gg_model_partials(model, newdata = NULL, verbose = TRUE, ...)
 \item{newdata}{newdata}
 
 \item{...}{...}
+
+\item{alpha}{alpha}
 
 \item{level}{= 0.95}
 
@@ -45,6 +60,16 @@ gg_model_partials(model, newdata = NULL, verbose = TRUE, ...)
 \item{verbose}{verbose}
 
 \item{B}{B}
+
+\item{color}{color}
+
+\item{size}{size}
+
+\item{alpha_smooth}{alpha_smooth}
+
+\item{color_smooth}{color_smooth}
+
+\item{size_smooth}{size_smooth}
 }
 \description{
 Plot models
@@ -61,11 +86,14 @@ dnew <- tail(credit_woe, 10000)
 gg_model_roc(m)
 gg_model_roc(m, newdata = dnew, size = 2)
 
-gg_model_ecdf(m)\
+gg_model_ecdf(m)
 gg_model_ecdf(m, newdata = dnew, size = 2)
 
 gg_model_dist(m)
 gg_model_dist(m, newdata = dnew, alpha = 0.4, color = "transparent")
+
+gg_model_calibration(m)
+gg_model_calibration(m, newdata = dnew, alpha = 0.05, size = 2)
 
 gg_model_coef(m)
 

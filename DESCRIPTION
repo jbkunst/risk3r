@@ -31,7 +31,8 @@ Imports:
     DALEX,
     ingredients,
     ROCR,
-    magrittr
+    magrittr,
+    patchwork
 Suggests:
     rmarkdown,
     knitr,
@@ -40,7 +41,6 @@ Suggests:
     moments,
     rsample,
     randomForest,
-    pathcwork,
     tweenr
 RoxygenNote: 7.1.1
 Depends: 
