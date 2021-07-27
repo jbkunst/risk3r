@@ -3,6 +3,7 @@
 \name{gg_model_roc}
 \alias{gg_model_roc}
 \alias{gg_model_ecdf}
+\alias{gg_model_dist}
 \alias{gg_model_coef}
 \alias{gg_model_corr}
 \alias{gg_model_vif}
@@ -13,6 +14,8 @@
 gg_model_roc(model, newdata = NULL, ...)
 
 gg_model_ecdf(model, newdata = NULL, ...)
+
+gg_model_dist(model, newdata = NULL, alpha = 0.5, ...)
 
 gg_model_coef(model, level = 0.95, show_intercept = FALSE, ...)
 
@@ -58,8 +61,11 @@ dnew <- tail(credit_woe, 10000)
 gg_model_roc(m)
 gg_model_roc(m, newdata = dnew, size = 2)
 
-gg_model_ecdf(m)
+gg_model_ecdf(m)\
 gg_model_ecdf(m, newdata = dnew, size = 2)
+
+gg_model_dist(m)
+gg_model_dist(m, newdata = dnew, alpha = 0.4, color = "transparent")
 
 gg_model_coef(m)
 

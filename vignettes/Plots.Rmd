@@ -93,6 +93,25 @@ p6 <- p6 +
 p6
 ```
 
+## Distributions
+
+```{r}
+p7 <- gg_model_dist(m, newdata = dtest, color = "transparent", alpha = 0.4)
+
+p7
+
+# Just train and separate distributions
+p7 +
+  scale_fill_viridis_d(begin = 0.2, end = 0.8, direction = -1, option = "B") +
+  ggforce::facet_wrap_paginate(
+    ggplot2::vars(.data$sample, .data$actual),
+    nrow = 2, ncol = 1, page = 2
+    ) +
+  theme(strip.background = element_blank(), strip.text.x = element_blank())
+```
+
+
+
 ## Compose and override some lables/colors
 
 Using patchwork.

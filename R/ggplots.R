@@ -10,7 +10,7 @@
 #' actual <- rbinom(N, size = 1, prob = predicted)
 #'
 #' roc_data(actual, predicted)
-#' ks_data(actual, predicted)
+#' ecdf_data(actual, predicted)
 #'
 #' @export
 roc_data <- function(actual, predicted){
@@ -18,13 +18,15 @@ roc_data <- function(actual, predicted){
   pred <- ROCR::prediction(predicted, actual)
   perf <- ROCR::performance(pred, "tpr", "fpr")
   droc <- tibble(x = unlist(perf@"x.values") , y = unlist(perf@"y.values"))
+
   droc
 
 }
 
 #' @rdname roc_data
 #' @export
-ks_data <- function(actual, predicted){
+ecdf_data <- function(actual, predicted){
+
 
   dks <- tibble(actual, predicted) %>%
     dplyr::group_by(.data$actual) %>%
@@ -60,8 +62,11 @@ ks_data <- function(actual, predicted){
 #' gg_model_roc(m)
 #' gg_model_roc(m, newdata = dnew, size = 2)
 #'
-#' gg_model_ecdf(m)
+#' gg_model_ecdf(m)\
 #' gg_model_ecdf(m, newdata = dnew, size = 2)
+#'
+#' gg_model_dist(m)
+#' gg_model_dist(m, newdata = dnew, alpha = 0.4, color = "transparent")
 #'
 #' gg_model_coef(m)
 #'
@@ -136,13 +141,13 @@ gg_model_ecdf <- function(model, newdata = NULL, ...) {
   r_n_p <- reponse_and_predictors_names(model)
   yvar <- r_n_p[["response"]]
 
-  dfks <- ks_data(model$data[[yvar]], model$fitted.values)
+  dfks <- ecdf_data(model$data[[yvar]], model$fitted.values)
 
   dfks <- dplyr::mutate(dfks, sample = "train")
 
   if (!is.null(newdata)) {
 
-    dfks_test <- ks_data(
+    dfks_test <- ecdf_data(
       dplyr::pull(newdata, yvar),
       predict(model, newdata = newdata, type = "response")
     )
@@ -168,9 +173,62 @@ gg_model_ecdf <- function(model, newdata = NULL, ...) {
     ) +
 
     ggplot2::labs(
-      # x = "False positive rate (FPR)",
-      # y = "True positive rate (TPR)"
+      x = "False positive rate (FPR)",
+      y = "True positive rate (TPR)"
     )
+
+  if (!is.null(newdata)) {
+
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data$sample))
+
+  }
+
+  p
+
+}
+
+#' @rdname gg_model_roc
+#' @export
+gg_model_dist <- function(model, newdata = NULL, alpha = 0.5, ...) {
+
+  r_n_p <- reponse_and_predictors_names(model)
+  yvar <- r_n_p[["response"]]
+
+  ddist <- tibble(
+    actual = model$data[[yvar]],
+    predicted = model$fitted.values
+    )
+
+  ddist <- dplyr::mutate(ddist, sample = "train")
+
+  if (!is.null(newdata)) {
+
+    ddist_test <- tibble(
+      actual = dplyr::pull(newdata, yvar),
+      predicted = predict(model, newdata = newdata, type = "response")
+      )
+
+    ddist_test <- dplyr::mutate(ddist_test, sample = "test")
+
+    ddist <- bind_rows(
+      ddist,
+      ddist_test
+    )
+
+    ddist <- dplyr::mutate(ddist, sample = forcats::fct_inorder(sample))
+
+  }
+
+  ddist <- dplyr::mutate(ddist, actual = as.character(.data$actual))
+
+  p <- ggplot2::ggplot(ddist) +
+
+    ggplot2::geom_density(
+      mapping = ggplot2::aes(x = .data$predicted, fill = .data$actual),
+      alpha = alpha,
+      ...
+    )
+
 
   if (!is.null(newdata)) {
 

@@ -2,12 +2,12 @@
 % Please edit documentation in R/ggplots.R
 \name{roc_data}
 \alias{roc_data}
-\alias{ks_data}
+\alias{ecdf_data}
 \title{Auxiliar functions for data plots}
 \usage{
 roc_data(actual, predicted)
 
-ks_data(actual, predicted)
+ecdf_data(actual, predicted)
 }
 \arguments{
 \item{actual}{actual}
@@ -24,6 +24,6 @@ predicted <- runif(N)
 actual <- rbinom(N, size = 1, prob = predicted)
 
 roc_data(actual, predicted)
-ks_data(actual, predicted)
+ecdf_data(actual, predicted)
 
 }
