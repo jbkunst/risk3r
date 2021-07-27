@@ -1,9 +1,10 @@
-pandoc: 2.7.3
-pkgdown: 1.6.1
-pkgdown_sha: ~
+pandoc: 2.11.2
+pkgdown: 1.6.1.9000
+pkgdown_sha: c931fe24c135c6ca704ae9f300470e9c66d8bfe7
 articles:
-  Plots: Plots.html
   feature-selection: feature-selection.html
+  plots: plots.html
   predictive-metrics: predictive-metrics.html
-last_built: 2021-07-27T03:34Z
+  scorecard: scorecard.html
+last_built: 2021-07-27T05:01Z
 

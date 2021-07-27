@@ -20,8 +20,7 @@ library(dplyr)
 data("germancredit")
 ```
 
-
-## Woebin summary
+## `woebin_summary`
 
 ```{r}
 bins <- woebin(germancredit, y = "creditability")

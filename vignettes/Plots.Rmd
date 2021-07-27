@@ -82,7 +82,7 @@ p5
 ## Empirical Cumulative Distribution Function
 
 ```{r}
-p6 <- gg_model_ks(m, newdata = dtest, size = 2) +
+p6 <- gg_model_ecdf(m, newdata = dtest, size = 2) +
   scale_color_viridis_d(begin = 0.2, end = 0.8, direction = -1, option = "B")
 p6
 
