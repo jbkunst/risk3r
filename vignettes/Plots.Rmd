@@ -113,7 +113,7 @@ p7 +
 ## Calibration
 
 ```{r}
-p8 <- gg_model_calibration(m, newdata = dnew, alpha = 0.01, size = 1, color = "darkred")
+p8 <- gg_model_calibration(m, newdata = dtest, alpha = 0.01, size = 1, color = "darkred")
 
 p8
 
