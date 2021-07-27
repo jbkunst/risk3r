@@ -68,6 +68,9 @@ ecdf_data <- function(actual, predicted){
 #' gg_model_dist(m)
 #' gg_model_dist(m, newdata = dnew, alpha = 0.4, color = "transparent")
 #'
+#' gg_model_calibration(m)
+#' gg_model_calibration(m, newdata = dnew, alpha = 0.05, size = 2)
+#'
 #' gg_model_coef(m)
 #'
 #' gg_model_corr(m)
@@ -545,6 +548,80 @@ gg_model_partials <- function(model, newdata = NULL, verbose = TRUE, ...) {
     ggplot2::geom_line(mapping = mapng, ...) +
     ggplot2::facet_wrap(ggplot2::vars(.data$key), ncol = 1, scales = "free_y") +
     ggplot2::scale_y_continuous(limits = c(0, NA))
+
+}
+
+#' @rdname gg_model_roc
+#' @export
+gg_model_calibration <- function(model, newdata = NULL,
+                                 alpha = 0.01,
+                                 color = "black",
+                                 size  = 1,
+                                 alpha_smooth = 0.50,
+                                 color_smooth = "#3366FF",
+                                 size_smooth = 1,
+                                 ...) {
+
+  r_n_p <- reponse_and_predictors_names(model)
+  yvar <- r_n_p[["response"]]
+
+  dcal <- tibble(
+    actual = model$data[[yvar]],
+    predicted = model$fitted.values
+  )
+
+  dcal <- dplyr::mutate(dcal, sample = "train")
+
+  if (!is.null(newdata)) {
+
+    dcal_test <- tibble(
+      actual = dplyr::pull(newdata, yvar),
+      predicted = predict(model, newdata = newdata, type = "response")
+    )
+
+    dcal_test <- dplyr::mutate(dcal_test, sample = "test")
+
+    dcal <- bind_rows(
+      dcal,
+      dcal_test
+    )
+
+    dcal <- dplyr::mutate(dcal, sample = forcats::fct_inorder(sample))
+
+  }
+
+  dcal <- dplyr::mutate(dcal, actual = as.character(.data$actual))
+
+  p <- ggplot2::ggplot(
+    dcal,
+    mapping = ggplot2::aes(
+      x = .data$predicted,
+      y = as.numeric(as.factor(.data$actual)) - 1
+      ),
+    ...) +
+
+    ggplot2::geom_point(
+      alpha = alpha,
+      color = color,
+      size  = size,
+      ...) +
+
+    ggplot2::geom_smooth(
+      alpha = alpha_smooth,
+      color = color_smooth,
+      size  = size_smooth,
+      ...)  +
+
+    scale_x_continuous(limits = c(0, 1)) +
+    scale_y_continuous(limits = c(0, 1))
+
+  if (!is.null(newdata)) {
+
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data$sample))
+
+  }
+
+  p
 
 }
 

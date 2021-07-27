@@ -110,6 +110,22 @@ p7 +
   theme(strip.background = element_blank(), strip.text.x = element_blank())
 ```
 
+## Calibration
+
+```{r}
+p8 <- gg_model_calibration(m, newdata = dnew, alpha = 0.01, size = 1, color = "darkred")
+
+p8
+
+# only test and x = y
+p8 +
+  ggforce::facet_wrap_paginate(
+    ggplot2::vars(.data$sample),
+    nrow = 1, ncol = 1, page = 2
+    ) +
+  geom_abline(aes(slope = 1, intercept = 0), color = "gray70", size = 2) +
+  theme(strip.background = element_blank(), strip.text.x = element_blank())
+```
 
 
 ## Compose and override some lables/colors
