@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, include=FALSE}
 library(risk3r)
 library(broom)
 library(dplyr)
