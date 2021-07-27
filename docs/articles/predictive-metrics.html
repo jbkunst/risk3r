@@ -55,7 +55,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Plots.html">plots</a>
+      <a href="../articles/Plots.html">Plots</a>
     </li>
     <li>
       <a href="../articles/feature-selection.html">Feature Selection</a>
@@ -102,18 +102,18 @@
 <span class="co">#&gt; # A tibble: 1 × 4</span>
 <span class="co">#&gt;      ks   auc    iv  gini</span>
 <span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 0.513 0.836  1.80 0.672</span></code></pre></div>
+<span class="co">#&gt; 1 0.508 0.835  1.80 0.669</span></code></pre></div>
 <p>Remove <code>NA</code> if are present.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">predicted2</span> <span class="op">&lt;-</span> <span class="va">predicted</span>
 <span class="va">predicted2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, size <span class="op">=</span> <span class="va">N</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">99</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
 
 <span class="fu"><a href="../reference/metrics.html">metrics</a></span><span class="op">(</span><span class="va">actual</span>, <span class="va">predicted2</span><span class="op">)</span>
-<span class="co">#&gt; 105 of 10000 'predicted' values are NAs, they will be ignorated</span>
+<span class="co">#&gt; 101 of 10000 'predicted' values are NAs, they will be ignorated</span>
 <span class="co">#&gt; # A tibble: 1 × 4</span>
 <span class="co">#&gt;      ks   auc    iv  gini</span>
 <span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 0.513 0.829  1.78 0.657</span></code></pre></div>
+<span class="co">#&gt; 1 0.508 0.826  1.77 0.653</span></code></pre></div>
 <div id="using-a-glm-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#using-a-glm-model" class="anchor"></a>Using a glm model</h2>
@@ -126,7 +126,7 @@
 <span class="co">#&gt; # A tibble: 1 × 4</span>
 <span class="co">#&gt;      ks   auc    iv  gini</span>
 <span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 0.513 0.836  1.76 0.672</span></code></pre></div>
+<span class="co">#&gt; 1 0.508 0.835  1.78 0.669</span></code></pre></div>
 <p>Works with new data.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">new_daux</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">daux</span>, <span class="fl">1000</span><span class="op">)</span>
@@ -135,7 +135,7 @@
 <span class="co">#&gt; # A tibble: 1 × 4</span>
 <span class="co">#&gt;      ks   auc    iv  gini</span>
 <span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 0.523 0.835  1.81 0.671</span></code></pre></div>
+<span class="co">#&gt; 1 0.522 0.847  2.22 0.693</span></code></pre></div>
 </div>
   </div>
 
