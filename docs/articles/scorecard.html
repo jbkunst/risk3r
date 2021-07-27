@@ -39,6 +39,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -49,10 +55,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/feature-selection.html">Feature Selection</a>
+      <a href="../articles/Plots.html">Plots</a>
     </li>
     <li>
-      <a href="../articles/plots.html">Plots</a>
+      <a href="../articles/feature-selection.html">Feature Selection</a>
     </li>
     <li>
       <a href="../articles/predictive-metrics.html">Predictive Metrics</a>
@@ -80,7 +86,7 @@
 
       
 
-      </header><script src="scorecard_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><script src="scorecard_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Scorecard package helpers</h1>
@@ -104,58 +110,58 @@
 <span class="va">binssummary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/woebin_summary.html">woebin_summary</a></span><span class="op">(</span><span class="va">bins</span><span class="op">)</span>
 
 <span class="va">binssummary</span>
-<span class="co">#&gt; # A tibble: 20 x 15</span>
+<span class="co">#&gt; # A tibble: 20 × 15</span>
 <span class="co">#&gt;    variable  n_categories      iv       ks   hhi count_distr_max count_distr_min</span>
 <span class="co">#&gt;    &lt;chr&gt;            &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 status.o~            3 6.39e-1 3.67e- 1 0.333           0.543           0.063</span>
-<span class="co">#&gt;  2 credit.h~            4 2.92e-1 1.80e- 1 0.25            0.53            0.088</span>
-<span class="co">#&gt;  3 duration~            5 2.83e-1 1.92e- 1 0.2             0.399           0.07 </span>
-<span class="co">#&gt;  4 savings.~            3 1.91e-1 1.87e- 1 0.333           0.603           0.103</span>
-<span class="co">#&gt;  5 credit.a~            5 1.81e-1 1.58e- 1 0.2             0.382           0.05 </span>
+<span class="co">#&gt;  1 status.o…            3 6.39e-1 3.67e- 1 0.333           0.543           0.063</span>
+<span class="co">#&gt;  2 credit.h…            4 2.92e-1 1.80e- 1 0.25            0.53            0.088</span>
+<span class="co">#&gt;  3 duration…            5 2.83e-1 1.92e- 1 0.2             0.399           0.07 </span>
+<span class="co">#&gt;  4 savings.…            3 1.91e-1 1.87e- 1 0.333           0.603           0.103</span>
+<span class="co">#&gt;  5 credit.a…            5 1.81e-1 1.58e- 1 0.2             0.382           0.05 </span>
 <span class="co">#&gt;  6 purpose              3 1.53e-1 1.79e- 1 0.333           0.608           0.112</span>
-<span class="co">#&gt;  7 age.in.y~            5 1.30e-1 1.47e- 1 0.2             0.373           0.079</span>
+<span class="co">#&gt;  7 age.in.y…            5 1.30e-1 1.47e- 1 0.2             0.373           0.079</span>
 <span class="co">#&gt;  8 property             4 1.13e-1 1.17e- 1 0.25            0.332           0.154</span>
-<span class="co">#&gt;  9 present.~            4 8.53e-2 1.20e- 1 0.25            0.339           0.174</span>
+<span class="co">#&gt;  9 present.…            4 8.53e-2 1.20e- 1 0.25            0.339           0.174</span>
 <span class="co">#&gt; 10 housing              3 8.33e-2 1.33e- 1 0.333           0.713           0.108</span>
-<span class="co">#&gt; 11 other.in~            2 5.76e-2 9.62e- 2 0.5             0.814           0.186</span>
-<span class="co">#&gt; 12 installm~            3 2.56e-2 7.71e- 2 0.333           0.476           0.157</span>
-<span class="co">#&gt; 13 other.de~            2 1.64e-2 2.67e- 2 0.5             0.948           0.052</span>
-<span class="co">#&gt; 14 number.o~            2 1.01e-2 4.81e- 2 0.5             0.633           0.367</span>
-<span class="co">#&gt; 15 personal~            4 8.84e-3 3.33e- 2 0.25            0.548           0.05 </span>
+<span class="co">#&gt; 11 other.in…            2 5.76e-2 9.62e- 2 0.5             0.814           0.186</span>
+<span class="co">#&gt; 12 installm…            3 2.56e-2 7.71e- 2 0.333           0.476           0.157</span>
+<span class="co">#&gt; 13 other.de…            2 1.64e-2 2.67e- 2 0.5             0.948           0.052</span>
+<span class="co">#&gt; 14 number.o…            2 1.01e-2 4.81e- 2 0.5             0.633           0.367</span>
+<span class="co">#&gt; 15 personal…            4 8.84e-3 3.33e- 2 0.25            0.548           0.05 </span>
 <span class="co">#&gt; 16 job                  3 8.10e-3 3.14e- 2 0.333           0.63            0.148</span>
 <span class="co">#&gt; 17 telephone            2 6.38e-3 3.90e- 2 0.5             0.596           0.404</span>
-<span class="co">#&gt; 18 present.~            4 3.59e-3 2.24e- 2 0.25            0.413           0.13 </span>
-<span class="co">#&gt; 19 number.o~            2 4.34e-5 2.38e- 3 0.5             0.845           0.155</span>
-<span class="co">#&gt; 20 foreign.~            1 0       6.51e-17 1               1               1    </span>
-<span class="co">#&gt; # ... with 8 more variables: has_missing &lt;lgl&gt;, has_special_values &lt;lgl&gt;,</span>
+<span class="co">#&gt; 18 present.…            4 3.59e-3 2.24e- 2 0.25            0.413           0.13 </span>
+<span class="co">#&gt; 19 number.o…            2 4.34e-5 2.38e- 3 0.5             0.845           0.155</span>
+<span class="co">#&gt; 20 foreign.…            1 0       6.51e-17 1               1               1    </span>
+<span class="co">#&gt; # … with 8 more variables: has_missing &lt;lgl&gt;, has_special_values &lt;lgl&gt;,</span>
 <span class="co">#&gt; #   monotone &lt;lgl&gt;, factor &lt;lgl&gt;, breaks &lt;list&gt;, iv_lbl &lt;fct&gt;, hhi_lbl &lt;fct&gt;,</span>
 <span class="co">#&gt; #   distribution &lt;chr&gt;</span>
 
 <span class="va">binssummary</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">ks</span>, <span class="va">iv</span>, <span class="va">iv_lbl</span>, <span class="va">hhi</span>, <span class="va">hhi_lbl</span>, <span class="va">distribution</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 20 x 7</span>
+<span class="co">#&gt; # A tibble: 20 × 7</span>
 <span class="co">#&gt;    variable                    ks       iv iv_lbl    hhi hhi_lbl    distribution</span>
 <span class="co">#&gt;    &lt;chr&gt;                    &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt; &lt;fct&gt;      &lt;chr&gt;       </span>
-<span class="co">#&gt;  1 status.of.existing.c~ 3.67e- 1  6.39e-1 suspic~ 0.333 high conc~ "&lt;U+2587&gt;&lt;U+2581&gt;&lt;U+2586&gt;"       </span>
-<span class="co">#&gt;  2 credit.history        1.80e- 1  2.92e-1 medium  0.25  moderate ~ "&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2581&gt;&lt;U+2585&gt;"      </span>
-<span class="co">#&gt;  3 duration.in.month     1.92e- 1  2.83e-1 medium  0.2   moderate ~ "&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2587&gt;&lt;U+2582&gt;&lt;U+2582&gt;"     </span>
-<span class="co">#&gt;  4 savings.account.and.~ 1.87e- 1  1.91e-1 medium  0.333 high conc~ "&lt;U+2587&gt;&lt;U+2582&gt;&lt;U+2583&gt;"       </span>
-<span class="co">#&gt;  5 credit.amount         1.58e- 1  1.81e-1 medium  0.2   moderate ~ "&lt;U+2586&gt;&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2585&gt;&lt;U+2581&gt;"     </span>
-<span class="co">#&gt;  6 purpose               1.79e- 1  1.53e-1 medium  0.333 high conc~ "&lt;U+2582&gt;&lt;U+2583&gt;&lt;U+2587&gt;"       </span>
-<span class="co">#&gt;  7 age.in.years          1.47e- 1  1.30e-1 medium  0.2   moderate ~ "&lt;U+2585&gt;&lt;U+2582&gt;&lt;U+2586&gt;&lt;U+2582&gt;&lt;U+2587&gt;"     </span>
-<span class="co">#&gt;  8 property              1.17e- 1  1.13e-1 medium  0.25  moderate ~ "&lt;U+2587&gt;&lt;U+2586&gt;&lt;U+2587&gt;&lt;U+2583&gt;"      </span>
-<span class="co">#&gt;  9 present.employment.s~ 1.20e- 1  8.53e-2 weak    0.25  moderate ~ "&lt;U+2586&gt;&lt;U+2587&gt;&lt;U+2585&gt;&lt;U+2586&gt;"      </span>
-<span class="co">#&gt; 10 housing               1.33e- 1  8.33e-2 weak    0.333 high conc~ "&lt;U+2582&gt;&lt;U+2587&gt;&lt;U+2581&gt;"       </span>
-<span class="co">#&gt; 11 other.installment.pl~ 9.62e- 2  5.76e-2 weak    0.5   high conc~ "&lt;U+2582&gt;&lt;U+2587&gt;"        </span>
-<span class="co">#&gt; 12 installment.rate.in.~ 7.71e- 2  2.56e-2 weak    0.333 high conc~ "&lt;U+2586&gt;&lt;U+2582&gt;&lt;U+2587&gt;"       </span>
-<span class="co">#&gt; 13 other.debtors.or.gua~ 2.67e- 2  1.64e-2 unpred~ 0.5   high conc~ "&lt;U+2587&gt;&lt;U+2581&gt;"        </span>
-<span class="co">#&gt; 14 number.of.existing.c~ 4.81e- 2  1.01e-2 unpred~ 0.5   high conc~ "&lt;U+2587&gt;&lt;U+2585&gt;"        </span>
-<span class="co">#&gt; 15 personal.status.and.~ 3.33e- 2  8.84e-3 unpred~ 0.25  moderate ~ "&lt;U+2581&gt;&lt;U+2585&gt;&lt;U+2587&gt;&lt;U+2582&gt;"      </span>
-<span class="co">#&gt; 16 job                   3.14e- 2  8.10e-3 unpred~ 0.333 high conc~ "&lt;U+2583&gt;&lt;U+2587&gt;&lt;U+2582&gt;"       </span>
-<span class="co">#&gt; 17 telephone             3.90e- 2  6.38e-3 unpred~ 0.5   high conc~ "&lt;U+2587&gt;&lt;U+2586&gt;"        </span>
-<span class="co">#&gt; 18 present.residence.si~ 2.24e- 2  3.59e-3 unpred~ 0.25  moderate ~ "&lt;U+2582&gt;&lt;U+2586&gt;&lt;U+2583&gt;&lt;U+2587&gt;"      </span>
-<span class="co">#&gt; 19 number.of.people.bei~ 2.38e- 3  4.34e-5 unpred~ 0.5   high conc~ "&lt;U+2587&gt;&lt;U+2582&gt;"        </span>
-<span class="co">#&gt; 20 foreign.worker        6.51e-17  0       unpred~ 1     high conc~ ""</span></code></pre></div>
+<span class="co">#&gt;  1 status.of.existing.c… 3.67e- 1  6.39e-1 suspic… 0.333 high conc… "▇▁▆"       </span>
+<span class="co">#&gt;  2 credit.history        1.80e- 1  2.92e-1 medium  0.25  moderate … "▂▇▁▅"      </span>
+<span class="co">#&gt;  3 duration.in.month     1.92e- 1  2.83e-1 medium  0.2   moderate … "▂▇▇▂▂"     </span>
+<span class="co">#&gt;  4 savings.account.and.… 1.87e- 1  1.91e-1 medium  0.333 high conc… "▇▂▃"       </span>
+<span class="co">#&gt;  5 credit.amount         1.58e- 1  1.81e-1 medium  0.2   moderate … "▆▂▇▅▁"     </span>
+<span class="co">#&gt;  6 purpose               1.79e- 1  1.53e-1 medium  0.333 high conc… "▂▃▇"       </span>
+<span class="co">#&gt;  7 age.in.years          1.47e- 1  1.30e-1 medium  0.2   moderate … "▅▂▆▂▇"     </span>
+<span class="co">#&gt;  8 property              1.17e- 1  1.13e-1 medium  0.25  moderate … "▇▆▇▃"      </span>
+<span class="co">#&gt;  9 present.employment.s… 1.20e- 1  8.53e-2 weak    0.25  moderate … "▆▇▅▆"      </span>
+<span class="co">#&gt; 10 housing               1.33e- 1  8.33e-2 weak    0.333 high conc… "▂▇▁"       </span>
+<span class="co">#&gt; 11 other.installment.pl… 9.62e- 2  5.76e-2 weak    0.5   high conc… "▂▇"        </span>
+<span class="co">#&gt; 12 installment.rate.in.… 7.71e- 2  2.56e-2 weak    0.333 high conc… "▆▂▇"       </span>
+<span class="co">#&gt; 13 other.debtors.or.gua… 2.67e- 2  1.64e-2 unpred… 0.5   high conc… "▇▁"        </span>
+<span class="co">#&gt; 14 number.of.existing.c… 4.81e- 2  1.01e-2 unpred… 0.5   high conc… "▇▅"        </span>
+<span class="co">#&gt; 15 personal.status.and.… 3.33e- 2  8.84e-3 unpred… 0.25  moderate … "▁▅▇▂"      </span>
+<span class="co">#&gt; 16 job                   3.14e- 2  8.10e-3 unpred… 0.333 high conc… "▃▇▂"       </span>
+<span class="co">#&gt; 17 telephone             3.90e- 2  6.38e-3 unpred… 0.5   high conc… "▇▆"        </span>
+<span class="co">#&gt; 18 present.residence.si… 2.24e- 2  3.59e-3 unpred… 0.25  moderate … "▂▆▃▇"      </span>
+<span class="co">#&gt; 19 number.of.people.bei… 2.38e- 3  4.34e-5 unpred… 0.5   high conc… "▇▂"        </span>
+<span class="co">#&gt; 20 foreign.worker        6.51e-17  0       unpred… 1     high conc… ""</span></code></pre></div>
 </div>
 <div id="woebin_ply_min" class="section level2">
 <h2 class="hasAnchor">
@@ -201,20 +207,20 @@
 <span class="co">#&gt; Missing treated using: 'pairwise.complete.obs'</span>
 
 <span class="va">datcor</span>
-<span class="co">#&gt; # A tibble: 400 x 7</span>
+<span class="co">#&gt; # A tibble: 400 × 7</span>
 <span class="co">#&gt;    var1             var2                   r var1_iv var1_rank var2_iv var2_rank</span>
 <span class="co">#&gt;    &lt;fct&gt;            &lt;fct&gt;              &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;</span>
-<span class="co">#&gt;  1 status.of.exist~ status.of.exist~ NA        0.639         1  0.639          1</span>
-<span class="co">#&gt;  2 status.of.exist~ credit.history    0.203    0.639         1  0.292          2</span>
-<span class="co">#&gt;  3 status.of.exist~ duration.in.mon~  0.0985   0.639         1  0.283          3</span>
-<span class="co">#&gt;  4 status.of.exist~ savings.account~  0.219    0.639         1  0.191          4</span>
-<span class="co">#&gt;  5 status.of.exist~ credit.amount     0.0916   0.639         1  0.181          5</span>
-<span class="co">#&gt;  6 status.of.exist~ purpose           0.133    0.639         1  0.153          6</span>
-<span class="co">#&gt;  7 status.of.exist~ age.in.years      0.129    0.639         1  0.130          7</span>
-<span class="co">#&gt;  8 status.of.exist~ property          0.0652   0.639         1  0.113          8</span>
-<span class="co">#&gt;  9 status.of.exist~ present.employm~  0.119    0.639         1  0.0853         9</span>
-<span class="co">#&gt; 10 status.of.exist~ housing           0.112    0.639         1  0.0833        10</span>
-<span class="co">#&gt; # ... with 390 more rows</span>
+<span class="co">#&gt;  1 status.of.exist… status.of.exist… NA        0.639         1  0.639          1</span>
+<span class="co">#&gt;  2 status.of.exist… credit.history    0.203    0.639         1  0.292          2</span>
+<span class="co">#&gt;  3 status.of.exist… duration.in.mon…  0.0985   0.639         1  0.283          3</span>
+<span class="co">#&gt;  4 status.of.exist… savings.account…  0.219    0.639         1  0.191          4</span>
+<span class="co">#&gt;  5 status.of.exist… credit.amount     0.0916   0.639         1  0.181          5</span>
+<span class="co">#&gt;  6 status.of.exist… purpose           0.133    0.639         1  0.153          6</span>
+<span class="co">#&gt;  7 status.of.exist… age.in.years      0.129    0.639         1  0.130          7</span>
+<span class="co">#&gt;  8 status.of.exist… property          0.0652   0.639         1  0.113          8</span>
+<span class="co">#&gt;  9 status.of.exist… present.employm…  0.119    0.639         1  0.0853         9</span>
+<span class="co">#&gt; 10 status.of.exist… housing           0.112    0.639         1  0.0833        10</span>
+<span class="co">#&gt; # … with 390 more rows</span>
 
 <span class="va">cor_limit</span> <span class="op">&lt;-</span> <span class="fl">0.15</span>
 
@@ -229,20 +235,20 @@
     <span class="op">)</span>
   <span class="op">)</span>
 <span class="co">#&gt; Warning in Ops.factor(var1, var2): '&gt;' not meaningful for factors</span>
-<span class="co">#&gt; # A tibble: 380 x 9</span>
+<span class="co">#&gt; # A tibble: 380 × 9</span>
 <span class="co">#&gt;    var1        var2           r var1_iv var1_rank var2_iv var2_rank cor_conflict</span>
 <span class="co">#&gt;    &lt;fct&gt;       &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt; &lt;lgl&gt;       </span>
-<span class="co">#&gt;  1 status.of.~ credit.h~ 0.203    0.639         1  0.292          2 TRUE        </span>
-<span class="co">#&gt;  2 status.of.~ duration~ 0.0985   0.639         1  0.283          3 FALSE       </span>
-<span class="co">#&gt;  3 status.of.~ savings.~ 0.219    0.639         1  0.191          4 TRUE        </span>
-<span class="co">#&gt;  4 status.of.~ credit.a~ 0.0916   0.639         1  0.181          5 FALSE       </span>
-<span class="co">#&gt;  5 status.of.~ purpose   0.133    0.639         1  0.153          6 FALSE       </span>
-<span class="co">#&gt;  6 status.of.~ age.in.y~ 0.129    0.639         1  0.130          7 FALSE       </span>
-<span class="co">#&gt;  7 status.of.~ property  0.0652   0.639         1  0.113          8 FALSE       </span>
-<span class="co">#&gt;  8 status.of.~ present.~ 0.119    0.639         1  0.0853         9 FALSE       </span>
-<span class="co">#&gt;  9 status.of.~ housing   0.112    0.639         1  0.0833        10 FALSE       </span>
-<span class="co">#&gt; 10 status.of.~ other.in~ 0.0489   0.639         1  0.0576        11 FALSE       </span>
-<span class="co">#&gt; # ... with 370 more rows, and 1 more variable: variable_to_remove &lt;lgl&gt;</span></code></pre></div>
+<span class="co">#&gt;  1 status.of.… credit.h… 0.203    0.639         1  0.292          2 TRUE        </span>
+<span class="co">#&gt;  2 status.of.… duration… 0.0985   0.639         1  0.283          3 FALSE       </span>
+<span class="co">#&gt;  3 status.of.… savings.… 0.219    0.639         1  0.191          4 TRUE        </span>
+<span class="co">#&gt;  4 status.of.… credit.a… 0.0916   0.639         1  0.181          5 FALSE       </span>
+<span class="co">#&gt;  5 status.of.… purpose   0.133    0.639         1  0.153          6 FALSE       </span>
+<span class="co">#&gt;  6 status.of.… age.in.y… 0.129    0.639         1  0.130          7 FALSE       </span>
+<span class="co">#&gt;  7 status.of.… property  0.0652   0.639         1  0.113          8 FALSE       </span>
+<span class="co">#&gt;  8 status.of.… present.… 0.119    0.639         1  0.0853         9 FALSE       </span>
+<span class="co">#&gt;  9 status.of.… housing   0.112    0.639         1  0.0833        10 FALSE       </span>
+<span class="co">#&gt; 10 status.of.… other.in… 0.0489   0.639         1  0.0576        11 FALSE       </span>
+<span class="co">#&gt; # … with 370 more rows, and 1 more variable: variable_to_remove &lt;lgl&gt;</span></code></pre></div>
 </div>
   </div>
 
@@ -261,7 +267,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
