@@ -6,7 +6,6 @@
 #' @param seed seed
 #' @param trace.it trace.it
 #' @param type.measue type.measue
-#' @param verbose TRUE
 #' @param ... Additional argumentos for glmnet::cv.glmnet
 #'
 #' @examples
