@@ -47,6 +47,8 @@
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -81,12 +83,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -97,19 +93,27 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Plots.html">Plots</a>
-    </li>
-    <li>
       <a href="../articles/feature-selection.html">Feature Selection</a>
     </li>
     <li>
+      <a href="../articles/plots.html">Plots</a>
+    </li>
+    <li>
       <a href="../articles/predictive-metrics.html">Predictive Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/scorecard.html">Scorecard package helpers</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/jbkunst/risk3r">
+    <span class="fa fa-github-alt"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -134,7 +138,7 @@
 
     <pre class="usage"><span class='fu'>gg_model_roc</span><span class='op'>(</span><span class='va'>model</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>gg_model_ks</span><span class='op'>(</span><span class='va'>model</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>gg_model_ecdf</span><span class='op'>(</span><span class='va'>model</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>gg_model_coef</span><span class='op'>(</span><span class='va'>model</span>, level <span class='op'>=</span> <span class='fl'>0.95</span>, show_intercept <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
 
@@ -200,8 +204,8 @@
 <span class='fu'>gg_model_roc</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 </div><div class='img'><img src='gg_model_roc-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>gg_model_roc</span><span class='op'>(</span><span class='va'>m</span>, newdata <span class='op'>=</span> <span class='va'>dnew</span>, size <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 </div><div class='img'><img src='gg_model_roc-2.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>gg_model_ks</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='img'><img src='gg_model_roc-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>gg_model_ks</span><span class='op'>(</span><span class='va'>m</span>, newdata <span class='op'>=</span> <span class='va'>dnew</span>, size <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='fu'>gg_model_ecdf</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='img'><img src='gg_model_roc-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>gg_model_ecdf</span><span class='op'>(</span><span class='va'>m</span>, newdata <span class='op'>=</span> <span class='va'>dnew</span>, size <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 </div><div class='img'><img src='gg_model_roc-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='fu'>gg_model_coef</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Waiting for profiling to be done...</span></div><div class='img'><img src='gg_model_roc-5.png' alt='' width='700' height='433' /></div><div class='input'>
@@ -219,10 +223,10 @@
 #&gt;   -&gt; target variable   :  10000  values 
 #&gt;   -&gt; predict function  :  yhat.glm  will be used ( <span style='color: #BBBB00;'> default </span> )
 #&gt;   -&gt; predicted values  :  No value for predict function target column. ( <span style='color: #BBBB00;'> default </span> )
-#&gt;   -&gt; model_info        :  package stats , ver. 4.1.0 , task classification ( <span style='color: #BBBB00;'> default </span> ) 
+#&gt;   -&gt; model_info        :  package stats , ver. 3.6.3 , task classification ( <span style='color: #BBBB00;'> default </span> ) 
 #&gt;   -&gt; predicted values  :  numerical, min =  0.03852792 , mean =  0.199 , max =  0.5331556  
 #&gt;   -&gt; residual function :  difference between y and yhat ( <span style='color: #BBBB00;'> default </span> )
-#&gt;   -&gt; residuals         :  numerical, min =  -0.5331556 , mean =  -4.122184e-10 , max =  0.9519349  
+#&gt;   -&gt; residuals         :  numerical, min =  -0.5331556 , mean =  -4.12218e-10 , max =  0.9519349  
 #&gt;  <span style='color: #00BB00;'> A new explainer has been created! </span> </div><div class='img'><img src='gg_model_roc-8.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='fu'>gg_model_partials</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Fitting and evaluating model with 1 variables: ~Fitting and evaluating model with 1 variables: badFitting and evaluating model with 1 variables: age_woe</span></div><div class='output co'>#&gt; <span class='message'>Fitting and evaluating model with 2 variables: ~Fitting and evaluating model with 2 variables: badFitting and evaluating model with 2 variables: age_woe + flag_res_phone_woe</span></div><div class='output co'>#&gt; <span class='message'>Fitting and evaluating model with 3 variables: ~Fitting and evaluating model with 3 variables: badFitting and evaluating model with 3 variables: age_woe + flag_res_phone_woe +...</span></div><div class='output co'>#&gt; <span class='message'>Fitting and evaluating model with 4 variables: ~Fitting and evaluating model with 4 variables: badFitting and evaluating model with 4 variables: age_woe + flag_res_phone_woe +...</span></div><div class='output co'>#&gt; <span class='message'>Fitting and evaluating model with 5 variables: ~Fitting and evaluating model with 5 variables: badFitting and evaluating model with 5 variables: age_woe + flag_res_phone_woe +...</span></div><div class='output co'>#&gt; <span class='message'>Fitting and evaluating model with 6 variables: ~Fitting and evaluating model with 6 variables: badFitting and evaluating model with 6 variables: age_woe + flag_res_phone_woe +...</span></div><div class='img'><img src='gg_model_roc-9.png' alt='' width='700' height='433' /></div><div class='input'>
@@ -250,11 +254,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joshua Kunst.</p>
+  <p>Developed by <a href='http://jkunst.com'>Joshua Kunst</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

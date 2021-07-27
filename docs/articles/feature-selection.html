@@ -39,12 +39,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -55,18 +49,28 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Plots.html">Plots</a>
+      <a href="../articles/feature-selection.html">Feature Selection</a>
     </li>
     <li>
-      <a href="../articles/feature-selection.html">Feature Selection</a>
+      <a href="../articles/plots.html">Plots</a>
     </li>
     <li>
       <a href="../articles/predictive-metrics.html">Predictive Metrics</a>
     </li>
+    <li>
+      <a href="../articles/scorecard.html">Scorecard package helpers</a>
+    </li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/jbkunst/risk3r">
+    <span class="fa fa-github-alt"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -76,7 +80,7 @@
 
       
 
-      </header><script src="feature-selection_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="feature-selection_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Feature Selection</h1>
@@ -100,7 +104,7 @@
 <span class="va">model_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">bad</span> <span class="op">~</span> <span class="va">.</span>, family <span class="op">=</span> <span class="va">binomial</span>, data <span class="op">=</span> <span class="va">train_data</span><span class="op">)</span>
 
 <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model_raw</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 14 × 5</span>
+<span class="co">#&gt; # A tibble: 14 x 5</span>
 <span class="co">#&gt;    term                    estimate std.error statistic  p.value</span>
 <span class="co">#&gt;    &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span>
 <span class="co">#&gt;  1 (Intercept)              -1.39      0.0185   -75.3   0       </span>
@@ -120,7 +124,7 @@
 
 <span class="co"># some parameter are negative, multicollinearity</span>
 <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model_raw</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">p.value</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 5 × 5</span>
+<span class="co">#&gt; # A tibble: 5 x 5</span>
 <span class="co">#&gt;   term                    estimate std.error statistic p.value</span>
 <span class="co">#&gt;   &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 (Intercept)              -1.39      0.0185   -75.3    0     </span>
@@ -161,7 +165,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 9 × 5</span>
+<span class="co">#&gt; # A tibble: 9 x 5</span>
 <span class="co">#&gt;   term                    estimate std.error statistic  p.value</span>
 <span class="co">#&gt;   &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 (Intercept)               -1.39     0.0185    -75.4  0       </span>
@@ -175,7 +179,7 @@
 <span class="co">#&gt; 9 area_code_res_phone_woe    0.312    0.0973      3.20 1.37e- 3</span>
 
 <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">p.value</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 × 5</span>
+<span class="co">#&gt; # A tibble: 1 x 5</span>
 <span class="co">#&gt;   term        estimate std.error statistic p.value</span>
 <span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 (Intercept)    -1.39    0.0185     -75.4       0</span>
@@ -275,7 +279,7 @@
 <span class="co">#&gt; + marital_status_woe       1    18984 18996</span>
 <span class="co">#&gt; + area_code_res_phone_woe  1    19002 19014</span>
 <span class="co">#&gt; + id_client_woe            1    19003 19015</span>
-<span class="co">#&gt; + quant_add_cards_woe      1    19006 19018</span>
+<span class="co">#&gt; + quant_add_cards_woe      1    19007 19019</span>
 <span class="co">#&gt; + personal_net_income_woe  1    19013 19025</span>
 <span class="co">#&gt; &lt;none&gt;                          19017 19027</span>
 <span class="co">#&gt; + months_in_residence_woe  1    19016 19028</span>
@@ -294,7 +298,7 @@
 <span class="co">#&gt; + marital_status_woe       1    18937 18951</span>
 <span class="co">#&gt; + id_client_woe            1    18956 18970</span>
 <span class="co">#&gt; + area_code_res_phone_woe  1    18956 18970</span>
-<span class="co">#&gt; + quant_add_cards_woe      1    18960 18974</span>
+<span class="co">#&gt; + quant_add_cards_woe      1    18961 18975</span>
 <span class="co">#&gt; + personal_net_income_woe  1    18966 18980</span>
 <span class="co">#&gt; &lt;none&gt;                          18970 18982</span>
 <span class="co">#&gt; + months_in_residence_woe  1    18969 18983</span>
@@ -340,7 +344,7 @@
 <span class="co">#&gt; - marital_status_woe       1    18933 18947</span>
 <span class="co">#&gt; - profession_code_woe      1    18937 18951</span>
 <span class="co">#&gt; - payment_day_woe          1    18944 18958</span>
-<span class="co">#&gt; - sex_woe                  1    18952 18966</span>
+<span class="co">#&gt; - sex_woe                  1    18953 18967</span>
 <span class="co">#&gt; - months_in_the_job_woe    1    18958 18972</span>
 <span class="co">#&gt; - age_woe                  1    19043 19057</span>
 <span class="co">#&gt; - flag_res_phone_woe       1    19069 19083</span>
@@ -352,7 +356,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt;                           Df Deviance   AIC</span>
 <span class="co">#&gt; + area_code_res_phone_woe  1    18877 18897</span>
-<span class="co">#&gt; + quant_add_cards_woe      1    18882 18902</span>
+<span class="co">#&gt; + quant_add_cards_woe      1    18883 18903</span>
 <span class="co">#&gt; &lt;none&gt;                          18887 18905</span>
 <span class="co">#&gt; + personal_net_income_woe  1    18885 18905</span>
 <span class="co">#&gt; + residence_type_woe       1    18886 18906</span>
@@ -398,9 +402,9 @@
 <span class="co">#&gt; + personal_net_income_woe  1    18872 18896</span>
 <span class="co">#&gt; + months_in_residence_woe  1    18873 18897</span>
 <span class="co">#&gt; - quant_add_cards_woe      1    18877 18897</span>
-<span class="co">#&gt; - area_code_res_phone_woe  1    18882 18902</span>
+<span class="co">#&gt; - area_code_res_phone_woe  1    18883 18903</span>
 <span class="co">#&gt; - id_client_woe            1    18886 18906</span>
-<span class="co">#&gt; - marital_status_woe       1    18900 18920</span>
+<span class="co">#&gt; - marital_status_woe       1    18901 18921</span>
 <span class="co">#&gt; - profession_code_woe      1    18907 18927</span>
 <span class="co">#&gt; - payment_day_woe          1    18916 18936</span>
 <span class="co">#&gt; - months_in_the_job_woe    1    18929 18949</span>
@@ -409,7 +413,7 @@
 <span class="co">#&gt; - age_woe                  1    19014 19034</span>
 
 <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 11 × 5</span>
+<span class="co">#&gt; # A tibble: 11 x 5</span>
 <span class="co">#&gt;    term                    estimate std.error statistic  p.value</span>
 <span class="co">#&gt;    &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span>
 <span class="co">#&gt;  1 (Intercept)               -1.39     0.0185    -75.3  0       </span>
@@ -426,7 +430,7 @@
 
 <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">p.value</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 × 5</span>
+<span class="co">#&gt; # A tibble: 1 x 5</span>
 <span class="co">#&gt;   term        estimate std.error statistic p.value</span>
 <span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 (Intercept)    -1.39    0.0185     -75.3       0</span>
@@ -466,7 +470,7 @@
 <p>Maybe you want check:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model_partials.html">model_partials</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 10 × 5</span>
+<span class="co">#&gt; # A tibble: 10 x 5</span>
 <span class="co">#&gt;    variable                   ks   auc    iv  gini</span>
 <span class="co">#&gt;    &lt;fct&gt;                   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
 <span class="co">#&gt;  1 age_woe                 0.193 0.620 0.191 0.240</span>
@@ -504,11 +508,11 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Joshua Kunst.</p>
+  <p>Developed by <a href="http://jkunst.com">Joshua Kunst</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

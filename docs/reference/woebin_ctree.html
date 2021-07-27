@@ -47,6 +47,8 @@
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -81,12 +83,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -97,19 +93,27 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Plots.html">Plots</a>
-    </li>
-    <li>
       <a href="../articles/feature-selection.html">Feature Selection</a>
     </li>
     <li>
+      <a href="../articles/plots.html">Plots</a>
+    </li>
+    <li>
       <a href="../articles/predictive-metrics.html">Predictive Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/scorecard.html">Scorecard package helpers</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/jbkunst/risk3r">
+    <span class="fa fa-github-alt"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -175,15 +179,23 @@
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>germancredit</span><span class='op'>$</span><span class='va'>duration.in.month</span>
 
 <span class='fu'>woebin_ctree</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>x</span>, <span class='st'>"duration"</span>, count_distr_limit <span class='op'>=</span> <span class='fl'>0.05</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt;    variable         bin count count_distr neg pos posprob woe bin_iv total_iv
-#&gt; 1: duration [-Inf, Inf)  1000           1 700 300     0.3   0      0        0
-#&gt;    breaks is_special_values
-#&gt; 1:    Inf             FALSE</div><div class='input'>
+</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt;    variable       bin count count_distr neg pos   posprob        woe
+#&gt; 1: duration [-Inf,11)   171       0.171 144  27 0.1578947 -0.8266786
+#&gt; 2: duration   [11,33)   656       0.656 466 190 0.2896341 -0.0498637
+#&gt; 3: duration [33, Inf)   173       0.173  90  83 0.4797688  0.7663288
+#&gt;         bin_iv  total_iv breaks is_special_values
+#&gt; 1: 0.095658521 0.2107628     11             FALSE
+#&gt; 2: 0.001614634 0.2107628     33             FALSE
+#&gt; 3: 0.113489646 0.2107628    Inf             FALSE</div><div class='input'>
 <span class='fu'>woebin_ctree</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>x</span>, <span class='st'>"duration"</span>, count_distr_limit <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt;    variable         bin count count_distr neg pos posprob woe bin_iv total_iv
-#&gt; 1: duration [-Inf, Inf)  1000           1 700 300     0.3   0      0        0
-#&gt;    breaks is_special_values
-#&gt; 1:    Inf             FALSE</div><div class='input'>
+</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt;    variable       bin count count_distr neg pos   posprob        woe
+#&gt; 1: duration [-Inf,15)   367       0.367 290  77 0.2098093 -0.4787776
+#&gt; 2: duration   [15,28)   417       0.417 291 126 0.3021583  0.0102565
+#&gt; 3: duration [28, Inf)   216       0.216 119  97 0.4490741  0.6428853
+#&gt;          bin_iv  total_iv breaks is_special_values
+#&gt; 1: 7.546448e-02 0.1740842     15             FALSE
+#&gt; 2: 4.395643e-05 0.1740842     28             FALSE
+#&gt; 3: 9.857575e-02 0.1740842    Inf             FALSE</div><div class='input'>
 <span class='fu'>woebin_ctree</span><span class='op'>(</span>
   <span class='va'>y</span>,
   <span class='va'>x</span>,
@@ -192,21 +204,35 @@
   control <span class='op'>=</span> <span class='fu'>partykit</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/partykit/man/ctree_control.html'>ctree_control</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
 <span class='op'>)</span>
 </div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt;    variable       bin count count_distr neg pos   posprob         woe
-#&gt; 1: duration [-Inf,42)   919       0.919 662 257 0.2796518 -0.09889161
-#&gt; 2: duration [42, Inf)    81       0.081  38  43 0.5308642  0.97091182
-#&gt;         bin_iv   total_iv breaks is_special_values
-#&gt; 1: 0.008806062 0.09526345     42             FALSE
-#&gt; 2: 0.086457386 0.09526345    Inf             FALSE</div><div class='input'>
+#&gt; 1: duration  [-Inf,8)    87       0.087  78   9 0.1034483 -1.31548096
+#&gt; 2: duration    [8,11)    84       0.084  66  18 0.2142857 -0.45527969
+#&gt; 3: duration   [11,12)     9       0.009   9   0 0.0000000 -1.36327162
+#&gt; 4: duration   [12,15)   187       0.187 137  50 0.2673797 -0.16395463
+#&gt; 5: duration   [15,33)   460       0.460 320 140 0.3043478  0.01732472
+#&gt; 6: duration   [33,42)    92       0.092  52  40 0.4347826  0.58163903
+#&gt; 7: duration [42, Inf)    81       0.081  38  43 0.5308642  0.96761725
+#&gt;         bin_iv  total_iv breaks is_special_values
+#&gt; 1: 0.107247539 0.2607787      8             FALSE
+#&gt; 2: 0.015699438 0.2607787     11             FALSE
+#&gt; 3: 0.013043779 0.2607787     12             FALSE
+#&gt; 4: 0.004852370 0.2607787     15             FALSE
+#&gt; 5: 0.000138405 0.2607787     33             FALSE
+#&gt; 6: 0.034089320 0.2607787     42             FALSE
+#&gt; 7: 0.085707835 0.2607787    Inf             FALSE</div><div class='input'>
 <span class='va'>x</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>, size <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, prob <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>99</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
 <span class='fu'>woebin_ctree</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>x</span>, <span class='st'>"duration"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt;    variable       bin count count_distr neg pos   posprob        woe
-#&gt; 1: duration   missing     9       0.009   6   3 0.3333333  0.1541507
-#&gt; 2: duration [-Inf,42)   910       0.910 656 254 0.2791209 -0.1015287
-#&gt; 3: duration [42, Inf)    81       0.081  38  43 0.5308642  0.9709118
-#&gt;          bin_iv   total_iv  breaks is_special_values
-#&gt; 1: 0.0002202153 0.09586353 missing              TRUE
-#&gt; 2: 0.0091859265 0.09586353      42             FALSE
-#&gt; 3: 0.0864573856 0.09586353     Inf             FALSE</div><div class='input'>
+</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt;    variable       bin count count_distr neg pos    posprob        woe
+#&gt; 1: duration   missing     9       0.009   6   3 0.33333333  0.1541507
+#&gt; 2: duration  [-Inf,8)    85       0.085  77   8 0.09411765 -1.4170660
+#&gt; 3: duration    [8,15)   278       0.278 211  67 0.24100719 -0.2998677
+#&gt; 4: duration   [15,42)   547       0.547 368 179 0.32723949  0.1266007
+#&gt; 5: duration [42, Inf)    81       0.081  38  43 0.53086420  0.9709118
+#&gt;          bin_iv  total_iv  breaks is_special_values
+#&gt; 1: 0.0002202153 0.2371673 missing              TRUE
+#&gt; 2: 0.1180888350 0.2371673       8             FALSE
+#&gt; 3: 0.0234182358 0.2371673      15             FALSE
+#&gt; 4: 0.0089826231 0.2371673      42             FALSE
+#&gt; 5: 0.0864573856 0.2371673     Inf             FALSE</div><div class='input'>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>germancredit</span><span class='op'>$</span><span class='va'>purpose</span>
 <span class='fu'>woebin_ctree</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>x</span>, <span class='st'>"purpose"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt; <span class='warning'>Warning: The categorical values (`radio/television, education, furniture/equipment, car (new), car (used), business, domestic appliances, repairs, others, retraining`) are not specified in `breaks_list` for the column `purpose`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The following columns are removed from binning results due to errors:</span>
@@ -259,11 +285,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joshua Kunst.</p>
+  <p>Developed by <a href='http://jkunst.com'>Joshua Kunst</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

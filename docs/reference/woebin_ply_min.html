@@ -47,6 +47,8 @@
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -81,12 +83,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -97,19 +93,27 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Plots.html">Plots</a>
-    </li>
-    <li>
       <a href="../articles/feature-selection.html">Feature Selection</a>
     </li>
     <li>
+      <a href="../articles/plots.html">Plots</a>
+    </li>
+    <li>
       <a href="../articles/predictive-metrics.html">Predictive Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/scorecard.html">Scorecard package helpers</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/jbkunst/risk3r">
+    <span class="fa fa-github-alt"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -158,15 +162,17 @@
 
 <span class='va'>bins</span> <span class='op'>&lt;-</span> <span class='fu'><a href='woebin2.html'>woebin2</a></span><span class='op'>(</span><span class='va'>germancredit</span>, y <span class='op'>=</span> <span class='st'>"creditability"</span>, x <span class='op'>=</span> <span class='st'>"credit.amount"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [INFO] creating woe binning ... 
-#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt; <span class='message'>Differences between bins</span></div><div class='input'>
+#&gt; [INFO] creating woe binning ... </div><div class='input'>
 <span class='va'>variable</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>germancredit</span><span class='op'>$</span><span class='va'>credit.amount</span>, <span class='fl'>10</span><span class='op'>)</span>
 
 <span class='va'>bin</span> <span class='op'>&lt;-</span> <span class='va'>bins</span><span class='op'>$</span><span class='va'>credit.amount</span>
 
 <span class='fu'>woebin_ply_min</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>bin</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 0 0 0 0 0 0 0 0 0 0</div><div class='input'>
+</div><div class='output co'>#&gt;  [1]  0.03366128  0.39053946 -0.25830746  0.39053946  0.39053946  0.39053946
+#&gt;  [7] -0.25830746  0.39053946 -0.25830746  0.39053946</div><div class='input'>
 <span class='fu'>woebin_ply_min</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>bin</span>, value <span class='op'>=</span> <span class='st'>"posprob"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3</div></pre>
+</div><div class='output co'>#&gt;  [1] 0.3071161 0.3877551 0.2486911 0.3877551 0.3877551 0.3877551 0.2486911
+#&gt;  [8] 0.3877551 0.2486911 0.3877551</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -178,11 +184,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joshua Kunst.</p>
+  <p>Developed by <a href='http://jkunst.com'>Joshua Kunst</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
