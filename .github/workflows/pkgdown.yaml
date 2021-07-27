@@ -8,7 +8,7 @@ name: pkgdown
 
 jobs:
   pkgdown:
-    runs-on: macOS-latest
+    runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -21,6 +21,7 @@ jobs:
       - name: Query dependencies
         run: |
           install.packages('remotes')
+          install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/")
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
@@ -33,7 +34,8 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
       - name: Install dependencies
-        run: |
+        run: | 
+          pak::local_system_requirements(execute = TRUE)
           remotes::install_deps(dependencies = "Imports")
           remotes::install_deps(dependencies = "Suggests")
           remotes::install_github("jbkunst/kunstomverse")
