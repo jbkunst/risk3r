@@ -144,6 +144,8 @@
 
 <span class='fu'>gg_model_ecdf</span><span class='op'>(</span><span class='va'>model</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
+<span class='fu'>gg_model_dist</span><span class='op'>(</span><span class='va'>model</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, alpha <span class='op'>=</span> <span class='fl'>0.5</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='fu'>gg_model_coef</span><span class='op'>(</span><span class='va'>model</span>, level <span class='op'>=</span> <span class='fl'>0.95</span>, show_intercept <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>gg_model_corr</span><span class='op'>(</span><span class='va'>model</span>, upper <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -197,56 +199,7 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"credit_woe"</span><span class='op'>)</span>
-
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>bad</span> <span class='op'>~</span> <span class='va'>.</span>, family <span class='op'>=</span> <span class='va'>binomial</span>, data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>credit_woe</span>, <span class='fl'>10000</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='featsel_stepforward.html'>featsel_stepforward</a></span><span class='op'>(</span><span class='va'>m</span>, scale <span class='op'>=</span> <span class='fl'>5</span>, trace <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
-
-<span class='va'>dnew</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span><span class='op'>(</span><span class='va'>credit_woe</span>, <span class='fl'>10000</span><span class='op'>)</span>
-
-<span class='fu'>gg_model_roc</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='img'><img src='gg_model_roc-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>gg_model_roc</span><span class='op'>(</span><span class='va'>m</span>, newdata <span class='op'>=</span> <span class='va'>dnew</span>, size <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='img'><img src='gg_model_roc-2.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>gg_model_ecdf</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='img'><img src='gg_model_roc-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>gg_model_ecdf</span><span class='op'>(</span><span class='va'>m</span>, newdata <span class='op'>=</span> <span class='va'>dnew</span>, size <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='img'><img src='gg_model_roc-4.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>gg_model_coef</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Waiting for profiling to be done...</span></div><div class='img'><img src='gg_model_roc-5.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>gg_model_corr</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Correlation method: 'pearson'</span>
-#&gt; <span class='message'>Missing treated using: 'pairwise.complete.obs'</span></div><div class='img'><img src='gg_model_roc-6.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>gg_model_vif</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='img'><img src='gg_model_roc-7.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>gg_model_importance</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Preparation of a new explainer is initiated
-#&gt;   -&gt; model label       :  lm  ( <span style='color: #BBBB00;'> default </span> )
-#&gt;   -&gt; data              :  10000  rows  6  cols 
-#&gt;   -&gt; data              :  tibble converted into a data.frame 
-#&gt;   -&gt; target variable   :  10000  values 
-#&gt;   -&gt; predict function  :  yhat.glm  will be used ( <span style='color: #BBBB00;'> default </span> )
-#&gt;   -&gt; predicted values  :  No value for predict function target column. ( <span style='color: #BBBB00;'> default </span> )
-#&gt;   -&gt; model_info        :  package stats , ver. 4.1.0 , task classification ( <span style='color: #BBBB00;'> default </span> ) 
-#&gt;   -&gt; predicted values  :  numerical, min =  0.03852792 , mean =  0.199 , max =  0.5331556  
-#&gt;   -&gt; residual function :  difference between y and yhat ( <span style='color: #BBBB00;'> default </span> )
-#&gt;   -&gt; residuals         :  numerical, min =  -0.5331556 , mean =  -4.122184e-10 , max =  0.9519349  
-#&gt;  <span style='color: #00BB00;'> A new explainer has been created! </span> </div><div class='img'><img src='gg_model_roc-8.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>gg_model_partials</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Fitting and evaluating model with 1 variables: ~Fitting and evaluating model with 1 variables: badFitting and evaluating model with 1 variables: age_woe</span></div><div class='output co'>#&gt; <span class='message'>Fitting and evaluating model with 2 variables: ~Fitting and evaluating model with 2 variables: badFitting and evaluating model with 2 variables: age_woe + flag_res_phone_woe</span></div><div class='output co'>#&gt; <span class='message'>Fitting and evaluating model with 3 variables: ~Fitting and evaluating model with 3 variables: badFitting and evaluating model with 3 variables: age_woe + flag_res_phone_woe +...</span></div><div class='output co'>#&gt; <span class='message'>Fitting and evaluating model with 4 variables: ~Fitting and evaluating model with 4 variables: badFitting and evaluating model with 4 variables: age_woe + flag_res_phone_woe +...</span></div><div class='output co'>#&gt; <span class='message'>Fitting and evaluating model with 5 variables: ~Fitting and evaluating model with 5 variables: badFitting and evaluating model with 5 variables: age_woe + flag_res_phone_woe +...</span></div><div class='output co'>#&gt; <span class='message'>Fitting and evaluating model with 6 variables: ~Fitting and evaluating model with 6 variables: badFitting and evaluating model with 6 variables: age_woe + flag_res_phone_woe +...</span></div><div class='img'><img src='gg_model_roc-9.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>gg_model_coef</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_discrete.html'>scale_y_discrete</a></span><span class='op'>(</span>limits <span class='op'>=</span> <span class='va'>rev</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Waiting for profiling to be done...</span></div><div class='img'><img src='gg_model_roc-10.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>gg_model_vif</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>  <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_discrete.html'>scale_x_discrete</a></span><span class='op'>(</span>limits <span class='op'>=</span> <span class='va'>rev</span><span class='op'>)</span>
-</div><div class='img'><img src='gg_model_roc-11.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>gg_model_corr</span><span class='op'>(</span><span class='va'>m</span>, upper <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Correlation method: 'pearson'</span>
-#&gt; <span class='message'>Missing treated using: 'pairwise.complete.obs'</span></div><div class='img'><img src='gg_model_roc-12.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>gg_model_corr</span><span class='op'>(</span><span class='va'>m</span>, upper <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span>
- <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
- <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_discrete.html'>scale_y_discrete</a></span><span class='op'>(</span>limits <span class='op'>=</span> <span class='va'>rev</span><span class='op'>)</span> <span class='op'>+</span>
- <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_discrete.html'>scale_x_discrete</a></span><span class='op'>(</span>limits <span class='op'>=</span> <span class='va'>rev</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Correlation method: 'pearson'</span>
-#&gt; <span class='message'>Missing treated using: 'pairwise.complete.obs'</span></div><div class='img'><img src='gg_model_roc-13.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
+    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

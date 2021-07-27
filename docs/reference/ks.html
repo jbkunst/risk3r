@@ -168,11 +168,11 @@
 <span class='va'>actual</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>N</span>, size <span class='op'>=</span> <span class='fl'>1</span>, prob <span class='op'>=</span> <span class='va'>predicted</span><span class='op'>)</span>
 
 <span class='fu'>ks</span><span class='op'>(</span><span class='va'>actual</span>, <span class='va'>predicted</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.4917823</div><div class='input'>
+</div><div class='output co'>#&gt; [1] 0.5080903</div><div class='input'>
 <span class='va'>predicted</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>, size <span class='op'>=</span> <span class='va'>N</span>, prob <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>99</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
 
 <span class='fu'>ks</span><span class='op'>(</span><span class='va'>actual</span>, <span class='va'>predicted</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>100 of 10000 'predicted' values are NAs, they will be ignorated</span></div><div class='output co'>#&gt; [1] 0.4924969</div></pre>
+</div><div class='output co'>#&gt; <span class='message'>106 of 10000 'predicted' values are NAs, they will be ignorated</span></div><div class='output co'>#&gt; [1] 0.5082657</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
