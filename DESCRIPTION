@@ -1,5 +1,5 @@
 Package: risk3r
-Title: What the Package Does (One Line, Title Case)
+Title: Tools for credit risk modelling
 Version: 0.3.0.9000
 Authors@R: c(
     person(given = "Joshua", family = "Kunst", role = c("aut", "cre"), email = "jbkunst@gmail.com"),

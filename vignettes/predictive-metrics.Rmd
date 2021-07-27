@@ -14,10 +14,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(risk3r)
-```
 
-
-```{r}
 N <- 10000
 
 predicted <- runif(N)

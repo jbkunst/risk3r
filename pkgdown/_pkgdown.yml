@@ -1,3 +1,10 @@
 template:
   params:
     bootswatch: paper
+authors:
+  Joshua Kunst:
+    href: http://jkunst.com
+navbar:
+  right:
+  - icon: fa-github-alt
+    href: https://github.com/jbkunst/risk3r

@@ -60,8 +60,8 @@ ks_data <- function(actual, predicted){
 #' gg_model_roc(m)
 #' gg_model_roc(m, newdata = dnew, size = 2)
 #'
-#' gg_model_ks(m)
-#' gg_model_ks(m, newdata = dnew, size = 2)
+#' gg_model_ecdf(m)
+#' gg_model_ecdf(m, newdata = dnew, size = 2)
 #'
 #' gg_model_coef(m)
 #'
@@ -131,7 +131,7 @@ gg_model_roc <- function(model, newdata = NULL, ...) {
 
 #' @rdname gg_model_roc
 #' @export
-gg_model_ks <- function(model, newdata = NULL, ...) {
+gg_model_ecdf <- function(model, newdata = NULL, ...) {
 
   r_n_p <- reponse_and_predictors_names(model)
   yvar <- r_n_p[["response"]]

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggplots.R
 \name{gg_model_roc}
 \alias{gg_model_roc}
-\alias{gg_model_ks}
+\alias{gg_model_ecdf}
 \alias{gg_model_coef}
 \alias{gg_model_corr}
 \alias{gg_model_vif}
@@ -12,7 +12,7 @@
 \usage{
 gg_model_roc(model, newdata = NULL, ...)
 
-gg_model_ks(model, newdata = NULL, ...)
+gg_model_ecdf(model, newdata = NULL, ...)
 
 gg_model_coef(model, level = 0.95, show_intercept = FALSE, ...)
 
@@ -58,8 +58,8 @@ dnew <- tail(credit_woe, 10000)
 gg_model_roc(m)
 gg_model_roc(m, newdata = dnew, size = 2)
 
-gg_model_ks(m)
-gg_model_ks(m, newdata = dnew, size = 2)
+gg_model_ecdf(m)
+gg_model_ecdf(m, newdata = dnew, size = 2)
 
 gg_model_coef(m)
 
