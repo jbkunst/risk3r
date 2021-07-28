@@ -513,6 +513,54 @@ gg_model_importance <- function(model, verbose = TRUE, B = 10, ...) {
 
 }
 
+
+#' @rdname gg_model_roc
+#' @param bins bins
+#'
+#' @examples
+#'
+#' data("credit_woe")
+#'
+#' m <- glm(bad ~ ., family = binomial, data = head(credit_woe, 10000))
+#' m <- featsel_stepforward(m, scale = 5, trace = 0)
+#'
+#' bins <- scorecard::woebin(credit, "bad", no_cores = 1)
+#'
+#' gg_model_importance2(m, bins)
+#' gg_model_importance2(m, bins, fill = "gray60", width = 0.5)
+#'
+#' @export
+gg_model_importance2 <- function(model, bins, ...) {
+
+  term_lvls <- broom::tidy(model) %>%
+    dplyr::filter(.data$term != "(Intercept)")  %>%
+    dplyr::pull(.data$term)
+
+  scr <- scorecard::scorecard(bins, model)
+
+  dscr <- scr %>%
+    dplyr::bind_rows() %>%
+    dplyr::filter(.data$variable != "basepoints") %>%
+    dplyr::group_by(.data$variable) %>%
+    dplyr::summarise(w = max(.data$points) - min(.data$points)) %>%
+    dplyr::mutate(w_norm = .data$w/sum(.data$w)) %>%
+    dplyr::mutate(
+      variable = stringr::str_c(.data$variable, "_woe"),
+      variable = factor(.data$variable, levels = term_lvls)
+      )
+
+  ggplot2::ggplot(dscr) +
+
+    ggplot2::geom_col(
+      ggplot2::aes(.data$variable, .data$w_norm),
+      ...
+    ) +
+
+    ggplot2::labs(y = "normalized weight")
+
+
+}
+
 # @method plot model_partials # plot methods
 #' @importFrom utils hasName
 #' @rdname gg_model_roc
@@ -631,6 +679,8 @@ gg_model_calibration <- function(model, newdata = NULL,
 
 }
 
+
+
 #' Plot woes
 #'
 #' @param woes woes
@@ -712,6 +762,9 @@ gg_woes <- function(woes, variable = "posprob",
   pvars
 
 }
+
+
+
 
 # p1 <- gg_model_ks(m) +
 #   ggplot2::labs(subtitle = "No facet")

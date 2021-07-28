@@ -46,6 +46,16 @@ p2 <- gg_model_importance(m)
 p2
 ```
 
+Other version bases on scorecads.
+
+
+```{r}
+bins <- scorecard::woebin(credit, "bad", no_cores = 1)
+
+gg_model_importance2(m, bins)
+gg_model_importance2(m, bins, fill = "gray60", width = 0.5)
+```
+
 
 ## Correlations and VIF
 

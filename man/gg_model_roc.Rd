@@ -8,6 +8,7 @@
 \alias{gg_model_corr}
 \alias{gg_model_vif}
 \alias{gg_model_importance}
+\alias{gg_model_importance2}
 \alias{gg_model_partials}
 \alias{gg_model_calibration}
 \title{Plot models}
@@ -25,6 +26,8 @@ gg_model_corr(model, upper = FALSE, ...)
 gg_model_vif(model, colors = c("#3aaf85", "#1b6ca8", "#cd201f"), ...)
 
 gg_model_importance(model, verbose = TRUE, B = 10, ...)
+
+gg_model_importance2(model, bins, ...)
 
 gg_model_partials(model, newdata = NULL, verbose = TRUE, ...)
 
@@ -60,6 +63,8 @@ gg_model_calibration(
 \item{verbose}{verbose}
 
 \item{B}{B}
+
+\item{bins}{bins}
 
 \item{color}{color}
 
@@ -112,5 +117,16 @@ gg_model_corr(m, upper = TRUE) +
  ggplot2::coord_flip() +
  ggplot2::scale_y_discrete(limits = rev) +
  ggplot2::scale_x_discrete(limits = rev)
+
+
+data("credit_woe")
+
+m <- glm(bad ~ ., family = binomial, data = head(credit_woe, 10000))
+m <- featsel_stepforward(m, scale = 5, trace = 0)
+
+bins <- scorecard::woebin(credit, "bad", no_cores = 1)
+
+gg_model_importance2(m, bins)
+gg_model_importance2(m, bins, fill = "gray60", width = 0.5)
 
 }
