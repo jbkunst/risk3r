@@ -154,6 +154,8 @@
 
 <span class='fu'>gg_model_importance</span><span class='op'>(</span><span class='va'>model</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, B <span class='op'>=</span> <span class='fl'>10</span>, <span class='va'>...</span><span class='op'>)</span>
 
+<span class='fu'>gg_model_importance2</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>bins</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='fu'>gg_model_partials</span><span class='op'>(</span><span class='va'>model</span>, newdata <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>gg_model_calibration</span><span class='op'>(</span>
@@ -210,6 +212,10 @@
     <tr>
       <th>B</th>
       <td><p>B</p></td>
+    </tr>
+    <tr>
+      <th>bins</th>
+      <td><p>bins</p></td>
     </tr>
     <tr>
       <th>color</th>
@@ -290,6 +296,18 @@
 </div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Correlation method: 'pearson'</span>
 #&gt; <span class='message'>Missing treated using: 'pairwise.complete.obs'</span></div><div class='img'><img src='gg_model_roc-17.png' alt='' width='700' height='433' /></div><div class='input'>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"credit_woe"</span><span class='op'>)</span>
+
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>bad</span> <span class='op'>~</span> <span class='va'>.</span>, family <span class='op'>=</span> <span class='va'>binomial</span>, data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>credit_woe</span>, <span class='fl'>10000</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='featsel_stepforward.html'>featsel_stepforward</a></span><span class='op'>(</span><span class='va'>m</span>, scale <span class='op'>=</span> <span class='fl'>5</span>, trace <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+
+<span class='va'>bins</span> <span class='op'>&lt;-</span> <span class='fu'>scorecard</span><span class='fu'>::</span><span class='fu'><a href='http://shichen.name/scorecard/reference/woebin.html'>woebin</a></span><span class='op'>(</span><span class='va'>credit</span>, <span class='st'>"bad"</span>, no_cores <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [INFO] creating woe binning ... </div><div class='output co'>#&gt; <span class='warning'>Warning: There were 3 constant columns removed from input dataset,</span>
+#&gt; <span class='warning'>flag_other_card, flag_mobile_phone, flag_contact_phone</span></div><div class='input'>
+<span class='fu'>gg_model_importance2</span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>bins</span><span class='op'>)</span>
+</div><div class='img'><img src='gg_model_roc-18.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>gg_model_importance2</span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>bins</span>, fill <span class='op'>=</span> <span class='st'>"gray60"</span>, width <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
+</div><div class='img'><img src='gg_model_roc-19.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
