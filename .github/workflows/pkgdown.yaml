@@ -42,7 +42,7 @@ jobs:
           pak::pkg_system_requirements("curl", execute = TRUE)
           pak::local_install_dev_deps(upgrade = TRUE)
           remotes::install_github("jbkunst/kunstomverse")
-          pak::pkg_install(c("cachem", "jquerylib", "rio", "cellranger", "pkgdown"))                    
+          pak::pkg_install(c("pkgdown"))                    
         shell: Rscript {0}
 
       - name: Install package
