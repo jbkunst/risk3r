@@ -105,9 +105,9 @@ The `stat = "min"` option give the most simpler model because It'more strict:
 If any iteration the loss increase then the variable is removed. You can choose
 between `c("q25", "mean", "median")`
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 model_lss_prmt <- featsel_loss_function_permutations(
-  model_raw, 
+  model_fsglmnet, 
   stat ="min",
   B = 50
   )

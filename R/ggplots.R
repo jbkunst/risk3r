@@ -558,7 +558,6 @@ gg_model_importance2 <- function(model, bins, ...) {
 
     ggplot2::labs(y = "normalized weight")
 
-
 }
 
 # @method plot model_partials # plot methods
