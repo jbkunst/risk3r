@@ -704,10 +704,16 @@ gg_model_calibration <- function(model, newdata = NULL,
 #'
 #' }
 #'
+#' gg_woes(woes, variable = "woe")
+#' gg_woes(woes, variable = "bin_iv")
+#'
+#'
 #' @export
 #' @importFrom patchwork get_dim
-gg_woes <- function(woes, variable = "posprob",
-                    color_bar = "gray75", color_line = "#e22d36",
+gg_woes <- function(woes,
+                    variable = "posprob",
+                    color_bar = "gray75",
+                    color_line = "#e22d36",
                     ...) {
 
   pvars <- woes %>%
@@ -716,8 +722,14 @@ gg_woes <- function(woes, variable = "posprob",
       # dwoe <- woes[[2]]
 
       namevar <- dplyr::first(dwoe[["variable"]])
+      iv      <- dplyr::first(dwoe[["total_iv"]])
 
-      message(namevar)
+      ttle <- stringr::str_glue(
+        "{ namevar } ({ ivfmt })",
+        ivfmt  = scales::percent(iv, accuracy = 0.01)
+        )
+
+      message(ttle)
 
       dwoe <- dplyr::mutate(dwoe, bin = forcats::fct_inorder(.data$bin))
 
@@ -746,10 +758,10 @@ gg_woes <- function(woes, variable = "posprob",
           shape = 21
         ) +
 
-        ggplot2::scale_y_continuous(labels = scales::percent, limits = c(0, NA)) +
+        ggplot2::scale_y_continuous(labels = scales::percent, limits = c(NA, NA)) +
 
         ggplot2::labs(
-          subtitle = namevar,
+          subtitle = ttle,
           x = NULL,
           y = NULL
         )
@@ -761,8 +773,6 @@ gg_woes <- function(woes, variable = "posprob",
   pvars
 
 }
-
-
 
 
 # p1 <- gg_model_ks(m) +

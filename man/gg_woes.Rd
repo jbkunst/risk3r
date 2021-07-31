@@ -42,4 +42,8 @@ if(require(patchwork)){
 
 }
 
+gg_woes(woes, variable = "woe")
+gg_woes(woes, variable = "bin_iv")
+
+
 }

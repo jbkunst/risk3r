@@ -58,7 +58,7 @@ metrics(
   )
 ```
 
-## Feature selection via glmnet
+## glmnet
 
 From https://glmnet.stanford.edu/articles/glmnet.html
 
@@ -81,7 +81,7 @@ broom::tidy(model_fsglmnet) %>% filter(estimate <= 0 | p.value > 0.05)
 gg_model_coef(model_fsglmnet)
 ```
 
-## Feature selection via Setpwise forward
+## Setpwise forward
 
 This is a wrapper for `stats::step` but the start point model is the null one
 `response ~ 1`.
@@ -97,7 +97,7 @@ broom::tidy(model_fsstep) %>%
 gg_model_coef(model_fsstep)
 ```
 
-## Feature selection via repetitive round of drop out loss
+## Repetitive round of drop out loss
 
 From https://ema.drwhy.ai/featureImportance.html
 
