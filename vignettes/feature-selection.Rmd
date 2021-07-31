@@ -71,7 +71,7 @@ according with the selected `S` option. This function reorder the variables
 in the same order the coefficient in the glmnet model turn to non zero 
 (check the plots when run this funtion).
 
-```{r, eval=FALSE}
+```{r}
 model_fsglmnet <- featsel_glmnet(model_raw, S = "lambda.1se", trace.it = FALSE)
 
 broom::tidy(model_fsglmnet)
@@ -105,7 +105,7 @@ The `stat = "min"` option give the most simpler model because It'more strict:
 If any iteration the loss increase then the variable is removed. You can choose
 between `c("q25", "mean", "median")`
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 model_lss_prmt <- featsel_loss_function_permutations(
   model_fsglmnet, 
   stat ="min",
