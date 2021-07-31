@@ -71,7 +71,7 @@ according with the selected `S` option. This function reorder the variables
 in the same order the coefficient in the glmnet model turn to non zero 
 (check the plots when run this funtion).
 
-```{r}
+```{r, eval=FALSE}
 model_fsglmnet <- featsel_glmnet(model_raw, S = "lambda.1se", trace.it = FALSE)
 
 broom::tidy(model_fsglmnet)
