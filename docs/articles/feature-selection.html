@@ -166,9 +166,9 @@
   <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model_rf</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>
   <span class="op">)</span></code></pre></div>
 </div>
-<div id="feature-selection-via-glmnet" class="section level2">
+<div id="glmnet" class="section level2">
 <h2 class="hasAnchor">
-<a href="#feature-selection-via-glmnet" class="anchor"></a>Feature selection via glmnet</h2>
+<a href="#glmnet" class="anchor"></a>glmnet</h2>
 <p>From <a href="https://glmnet.stanford.edu/articles/glmnet.html" class="uri">https://glmnet.stanford.edu/articles/glmnet.html</a></p>
 <p>There 2 option for <code>S</code>: <code>lambda.min</code> and <code>lambda.1se</code> , this last option you have a more regularized model.</p>
 <p>This wrapper around the glmnet package take a model as input, then return the model with the variables non zero from the <code><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html">glmnet::cv.glmnet()</a></code> function according with the selected <code>S</code> option. This function reorder the variables in the same order the coefficient in the glmnet model turn to non zero (check the plots when run this funtion).</p>
@@ -200,9 +200,9 @@
 <span class="fu"><a href="../reference/gg_model_roc.html">gg_model_coef</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span></code></pre></div>
 <p><img src="feature-selection_files/figure-html/unnamed-chunk-4-4.png" width="700"></p>
 </div>
-<div id="feature-selection-via-setpwise-forward" class="section level2">
+<div id="setpwise-forward" class="section level2">
 <h2 class="hasAnchor">
-<a href="#feature-selection-via-setpwise-forward" class="anchor"></a>Feature selection via Setpwise forward</h2>
+<a href="#setpwise-forward" class="anchor"></a>Setpwise forward</h2>
 <p>This is a wrapper for <code><a href="https://rdrr.io/r/stats/step.html">stats::step</a></code> but the start point model is the null one <code>response ~ 1</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model_fsstep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/featsel_stepforward.html">featsel_stepforward</a></span><span class="op">(</span><span class="va">model_raw</span>, trace <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
@@ -233,14 +233,14 @@
 <span class="fu"><a href="../reference/gg_model_roc.html">gg_model_coef</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span></code></pre></div>
 <p><img src="feature-selection_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
-<div id="feature-selection-via-repetitive-round-of-drop-out-loss" class="section level2">
+<div id="repetitive-round-of-drop-out-loss" class="section level2">
 <h2 class="hasAnchor">
-<a href="#feature-selection-via-repetitive-round-of-drop-out-loss" class="anchor"></a>Feature selection via repetitive round of drop out loss</h2>
+<a href="#repetitive-round-of-drop-out-loss" class="anchor"></a>Repetitive round of drop out loss</h2>
 <p>From <a href="https://ema.drwhy.ai/featureImportance.html" class="uri">https://ema.drwhy.ai/featureImportance.html</a></p>
 <p>The <code>stat = "min"</code> option give the most simpler model because It’more strict: If any iteration the loss increase then the variable is removed. You can choose between <code><a href="https://rdrr.io/r/base/c.html">c("q25", "mean", "median")</a></code></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model_lss_prmt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/featsel_loss_function_permutations.html">featsel_loss_function_permutations</a></span><span class="op">(</span>
-  <span class="va">model_raw</span>, 
+  <span class="va">model_fsglmnet</span>, 
   stat <span class="op">=</span><span class="st">"min"</span>,
   B <span class="op">=</span> <span class="fl">50</span>
   <span class="op">)</span>
