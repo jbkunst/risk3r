@@ -107,4 +107,161 @@ model_partials <- function(model, newdata = NULL, verbose = TRUE) {
 }
 
 
+#' Get summary of model
+#'
+#' @param model model
+#' @examples
+#'
+#' data("credit_woe")
+#'
+#' m <- glm(bad ~ ., family = binomial, data = head(credit_woe, 10000))
+#' m <- featsel_stepforward(m)
+#'
+#' model_partials(m)
+#'
+#' model_summary_variables(m)
+#'
+#' model_corr_variables(m)
+#'
+#' model_vif_variables(m)
+#'
+#' model_iv_variables(m)
+#'
+#' @param coef_sign Sign to compare estimaes.
+#' @param limit_significance Limit for Significance.
+#' @param limit_iv Limit for Information Value.
+#' @param limit_corr Limit for correlation max between variables.
+#' @param limit_vif Limit for VIF.
+#' @export
+model_summary_variables <- function(model,
+                                    coef_sign  = 1,
+                                    limit_significance = 0.05,
+                                    limit_iv           = 0.02,
+                                    limit_corr         = 0.60,
+                                    limit_vif          = 5.00){
+
+  dmod <- broom::tidy(model)
+
+  dcor <- model_corr_variables(model)
+  dcor <- dcor %>%
+    dplyr::group_by(.data$term) %>%
+    dplyr::summarise(correlation_max = max(.data$cor, na.rm = TRUE))
+
+  dvif <- model_vif_variables(model)
+
+  div <- model_iv_variables(model)
+
+  dmodtot <- list(dmod, dcor, div, dvif) %>%
+    purrr::reduce(full_join, by = "term")
+
+  dmodtot <- dmodtot %>%
+    mutate(
+      dummy_significance = .data$p.value < limit_significance,
+      dummy_sign         = sign(.data$estimate) == sign(coef_sign),
+      dummy_iv           = .data$iv > limit_iv,
+      dummy_correlation  = .data$correlation_max < limit_corr,
+      dummy_vif          = .data$vif < limit_vif,
+
+      dummy_sign = ifelse(.data$term == "(Intercept)", NA, .data$dummy_sign)
+
+    )
+
+  dmodtot
+
+}
+
+#' @rdname model_summary_variables
+#' @export
+model_corr_variables <- function(model){
+
+  varsnms <- reponse_and_predictors_names(model)$predictors
+
+  term_lvls <- broom::tidy(model) %>%
+    dplyr::filter(.data$term != "(Intercept)")  %>%
+    dplyr::pull(.data$term)
+
+  dcor <- model$data %>%
+    dplyr::select(dplyr::all_of(varsnms)) %>%
+    corrr::correlate() %>%
+    tidyr::gather("term2", "cor", -.data$term) %>%
+    dplyr::mutate(
+      term = factor(.data$term, levels = term_lvls),
+      term2 = factor(.data$term2, levels = term_lvls),
+    )
+
+  dcor
+
+}
+
+#' @rdname model_summary_variables
+#' @export
+model_vif_variables <- function(model){
+
+  term_lvls <- broom::tidy(model) %>%
+    dplyr::filter(.data$term != "(Intercept)")  %>%
+    dplyr::pull(.data$term)
+
+  # car::vif(model)
+  # performance::check_collinearity(model)
+  # plot(performance::check_collinearity(model))
+  # car::vif(model) %>% as.data.frame()
+  # performance::check_collinearity(model)
+  # scorecard::vif(model)
+  # performance::check_collinearity(model) %>% class()
+  # performance:::plot.check_collinearity
+  # see:::plot.see_check_collinearity
+  # see:::.plot_diag_vif
+
+  vif_brks <- c(-Inf, 5, 10, Inf)
+  vif_lbls <- c("low (<5)", "moderate (<10)","high (>= 10)")
+
+  dvif <- scorecard::vif(model) %>%
+    # vif(model) %>%
+    as.data.frame() %>%
+    # tibble::rownames_to_column("term") %>%
+    dplyr::as_tibble() %>%
+    purrr::set_names(c("term", "vif")) %>%
+    dplyr::mutate(
+      term = factor(.data$term, levels = term_lvls),
+      vif_label = vif_label(.data$vif)
+    )
+
+  dvif
+
+}
+
+#' @rdname model_summary_variables
+#' @export
+model_iv_variables <- function(model){
+
+  response_var <- reponse_and_predictors_names(model)$response
+
+  term_lvls <- broom::tidy(model) %>%
+    dplyr::filter(.data$term != "(Intercept)")  %>%
+    dplyr::pull(.data$term)
+
+  div <- purrr::map_df(term_lvls, function(variable){
+
+    df <- as_tibble(
+      data.frame(
+        y = model$data[[response_var]],
+        x = as.character(model$data[[variable]])
+        )
+      )
+
+    bin <- quiet(scorecard::woebin(df, "y", "x", breaks_list = list(x = unique(df$x))))
+
+    out <- bin[["x"]][["total_iv"]][[1]]
+
+    tibble(term = variable, iv = out)
+
+  })
+
+  div <- div %>%
+    mutate(iv_label = iv_label(.data$iv))
+
+  div
+
+}
+
 

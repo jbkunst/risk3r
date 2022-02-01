@@ -72,23 +72,3 @@ psi_table <- function(old, new) {
 
   d
 }
-
-
-#'
-#' Get labels for PSIs
-#'
-#' @param x A numeric vector
-#'
-#' @examples
-#'
-#' psi_label(c(0.2, 2))
-#' @export
-psi_label <- function(x) {
-  cut(
-    x,
-    c(0, 0.1, 0.25, Inf),
-    include.lowest = TRUE,
-    # c("Cambio insignificante", "Algún cambio menor", "Gran cambio en población")
-    labels = c("insignificant change", "some minor change", "major shift in population")
-  )
-}

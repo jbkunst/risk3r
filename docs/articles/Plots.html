@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,18 +34,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">risk3r</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -55,10 +51,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Plots.html">Plots</a>
+      <a href="../articles/feature-selection.html">Feature Selection</a>
     </li>
     <li>
-      <a href="../articles/feature-selection.html">Feature Selection</a>
+      <a href="../articles/plots.html">Plots</a>
     </li>
     <li>
       <a href="../articles/predictive-metrics.html">Predictive Metrics</a>
@@ -71,7 +67,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jbkunst/risk3r">
+  <a href="https://github.com/jbkunst/risk3r" class="external-link">
     <span class="fa fa-github-alt"></span>
      
   </a>
@@ -86,231 +82,231 @@
 
       
 
-      </header><script src="Plots_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plots</h1>
             
       
       
-      <div class="hidden name"><code>Plots.Rmd</code></div>
+      <div class="hidden name"><code>plots.Rmd</code></div>
 
     </div>
 
     
     
-<div id="forest-plot" class="section level2">
-<h2 class="hasAnchor">
-<a href="#forest-plot" class="anchor"></a>Forest (?) plot</h2>
+<div class="section level2">
+<h2 id="forest-plot">Forest (?) plot<a class="anchor" aria-label="anchor" href="#forest-plot"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gg_model_roc.html">gg_model_coef</a></span><span class="op">(</span><span class="va">m</span>, color <span class="op">=</span> <span class="st">"darkred"</span><span class="op">)</span>
 <span class="co">#&gt; Waiting for profiling to be done...</span>
 <span class="va">p1</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 </div>
-<div id="variable-importance" class="section level2">
-<h2 class="hasAnchor">
-<a href="#variable-importance" class="anchor"></a>Variable importance</h2>
+<div class="section level2">
+<h2 id="variable-importance">Variable importance<a class="anchor" aria-label="anchor" href="#variable-importance"></a>
+</h2>
 <p>Done via <em>Variable Dropout Plot</em>.</p>
-<p>Details in <code><a href="https://ModelOriented.github.io/ingredients/reference/feature_importance.html">ingredients::feature_importance</a></code>.</p>
+<p>Details in <code><a href="https://ModelOriented.github.io/ingredients/reference/feature_importance.html" class="external-link">ingredients::feature_importance</a></code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gg_model_roc.html">gg_model_importance</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
 <span class="co">#&gt; Preparation of a new explainer is initiated</span>
-<span class="co">#&gt;   -&gt; model label       :  lm  ( [33m default [39m )</span>
+<span class="co">#&gt;   -&gt; model label       :  lm  ( <span style="color: #BBBB00;"> default </span> )</span>
 <span class="co">#&gt;   -&gt; data              :  20000  rows  8  cols </span>
 <span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span>
 <span class="co">#&gt;   -&gt; target variable   :  20000  values </span>
-<span class="co">#&gt;   -&gt; predict function  :  yhat.glm  will be used ( [33m default [39m )</span>
-<span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. ( [33m default [39m )</span>
-<span class="co">#&gt;   -&gt; model_info        :  package stats , ver. 4.1.0 , task classification ( [33m default [39m ) </span>
+<span class="co">#&gt;   -&gt; predict function  :  yhat.glm  will be used ( <span style="color: #BBBB00;"> default </span> )</span>
+<span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. ( <span style="color: #BBBB00;"> default </span> )</span>
+<span class="co">#&gt;   -&gt; model_info        :  package stats , ver. 4.1.1 , task classification ( <span style="color: #BBBB00;"> default </span> ) </span>
 <span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.0349859 , mean =  0.1982 , max =  0.571581  </span>
-<span class="co">#&gt;   -&gt; residual function :  difference between y and yhat ( [33m default [39m )</span>
-<span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.5508273 , mean =  -4.25306e-10 , max =  0.9638447  </span>
-<span class="co">#&gt;  [32m A new explainer has been created! [39m</span>
+<span class="co">#&gt;   -&gt; residual function :  difference between y and yhat ( <span style="color: #BBBB00;"> default </span> )</span>
+<span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.5508273 , mean =  -4.253018e-10 , max =  0.9638447  </span>
+<span class="co">#&gt;  <span style="color: #00BB00;"> A new explainer has been created! </span></span>
 <span class="va">p2</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <p>Other version bases on scorecads.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu">scorecard</span><span class="fu">::</span><span class="fu"><a href="http://shichen.name/scorecard/reference/woebin.html">woebin</a></span><span class="op">(</span><span class="va">credit</span>, <span class="st">"bad"</span>, no_cores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu">scorecard</span><span class="fu">::</span><span class="fu"><a href="http://shichen.name/scorecard/reference/woebin.html" class="external-link">woebin</a></span><span class="op">(</span><span class="va">credit</span>, <span class="st">"bad"</span>, no_cores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 <span class="co">#&gt; [INFO] creating woe binning ...</span>
 <span class="co">#&gt; Warning in check_const_cols(dt): There were 3 constant columns removed from input dataset,</span>
 <span class="co">#&gt; flag_other_card, flag_mobile_phone, flag_contact_phone</span>
 
 <span class="fu"><a href="../reference/gg_model_roc.html">gg_model_importance2</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">bins</span><span class="op">)</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/gg_model_roc.html">gg_model_importance2</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">bins</span>, fill <span class="op">=</span> <span class="st">"gray60"</span>, width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
 </div>
-<div id="correlations-and-vif" class="section level2">
-<h2 class="hasAnchor">
-<a href="#correlations-and-vif" class="anchor"></a>Correlations and VIF</h2>
+<div class="section level2">
+<h2 id="correlations-and-vif">Correlations and VIF<a class="anchor" aria-label="anchor" href="#correlations-and-vif"></a>
+</h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gg_model_roc.html">gg_model_corr</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Correlation method: 'pearson'</span>
 <span class="co">#&gt; Missing treated using: 'pairwise.complete.obs'</span>
 <span class="va">p3</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># override </span>
 <span class="va">p3</span> <span class="op">+</span>  
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span>
+  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span>
     name <span class="op">=</span> <span class="st">"Cors"</span>,
-    label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_percent.html">percent</a></span>,
+    label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_percent.html" class="external-link">percent</a></span>,
     <span class="co"># limits = c(-1, 1),</span>
     na.value <span class="op">=</span> <span class="st">"gray90"</span>,
     <span class="co"># breaks = seq(-1, 1, by = 0.25)</span>
     <span class="op">)</span>
 <span class="co">#&gt; Scale for 'fill' is already present. Adding another scale for 'fill', which</span>
 <span class="co">#&gt; will replace the existing scale.</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
 <p>Vif plot is inspired by <code>see:::plot.see_check_collinearity</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gg_model_roc.html">gg_model_vif</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
 <span class="va">p4</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
-<div id="roc" class="section level2">
-<h2 class="hasAnchor">
-<a href="#roc" class="anchor"></a>ROC</h2>
+<div class="section level2">
+<h2 id="roc">ROC<a class="anchor" aria-label="anchor" href="#roc"></a>
+</h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gg_model_roc.html">gg_model_roc</a></span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dtest</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_color_viridis_d</span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>, end <span class="op">=</span> <span class="fl">0.8</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, option <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>, end <span class="op">=</span> <span class="fl">0.8</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, option <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span>
 <span class="va">p5</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
-<div id="empirical-cumulative-distribution-function" class="section level2">
-<h2 class="hasAnchor">
-<a href="#empirical-cumulative-distribution-function" class="anchor"></a>Empirical Cumulative Distribution Function</h2>
+<div class="section level2">
+<h2 id="empirical-cumulative-distribution-function">Empirical Cumulative Distribution Function<a class="anchor" aria-label="anchor" href="#empirical-cumulative-distribution-function"></a>
+</h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gg_model_roc.html">gg_model_ecdf</a></span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dtest</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_color_viridis_d</span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>, end <span class="op">=</span> <span class="fl">0.8</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, option <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>, end <span class="op">=</span> <span class="fl">0.8</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, option <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span>
 <span class="va">p6</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># just train</span>
 <span class="va">p6</span> <span class="op">&lt;-</span> <span class="va">p6</span> <span class="op">+</span>
-  <span class="fu">ggforce</span><span class="fu">::</span><span class="fu"><a href="https://ggforce.data-imaginist.com/reference/facet_wrap_paginate.html">facet_wrap_paginate</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">sample</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">1</span>, ncol <span class="op">=</span> <span class="fl">1</span>, page <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme</span><span class="op">(</span>strip.background <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>, strip.text.x <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu">ggforce</span><span class="fu">::</span><span class="fu"><a href="https://ggforce.data-imaginist.com/reference/facet_wrap_paginate.html" class="external-link">facet_wrap_paginate</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">sample</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">1</span>, ncol <span class="op">=</span> <span class="fl">1</span>, page <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>strip.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>, strip.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="va">p6</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-8-2.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-8-2.png" width="700"></p>
 </div>
-<div id="distributions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#distributions" class="anchor"></a>Distributions</h2>
+<div class="section level2">
+<h2 id="distributions">Distributions<a class="anchor" aria-label="anchor" href="#distributions"></a>
+</h2>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gg_model_roc.html">gg_model_dist</a></span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dtest</span>, color <span class="op">=</span> <span class="st">"transparent"</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span>
 
 <span class="va">p7</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># Just train and separate distributions</span>
 <span class="va">p7</span> <span class="op">+</span>
-  <span class="fu">scale_fill_viridis_d</span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>, end <span class="op">=</span> <span class="fl">0.8</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, option <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggforce</span><span class="fu">::</span><span class="fu"><a href="https://ggforce.data-imaginist.com/reference/facet_wrap_paginate.html">facet_wrap_paginate</a></span><span class="op">(</span>
-    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">sample</span>, <span class="va">.data</span><span class="op">$</span><span class="va">actual</span><span class="op">)</span>,
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_d</a></span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>, end <span class="op">=</span> <span class="fl">0.8</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, option <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggforce</span><span class="fu">::</span><span class="fu"><a href="https://ggforce.data-imaginist.com/reference/facet_wrap_paginate.html" class="external-link">facet_wrap_paginate</a></span><span class="op">(</span>
+    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">sample</span>, <span class="va">.data</span><span class="op">$</span><span class="va">actual</span><span class="op">)</span>,
     nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">1</span>, page <span class="op">=</span> <span class="fl">2</span>
     <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme</span><span class="op">(</span>strip.background <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>, strip.text.x <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-9-2.png" width="700"></p>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>strip.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>, strip.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="plots_files/figure-html/unnamed-chunk-9-2.png" width="700"></p>
 </div>
-<div id="calibration" class="section level2">
-<h2 class="hasAnchor">
-<a href="#calibration" class="anchor"></a>Calibration</h2>
+<div class="section level2">
+<h2 id="calibration">Calibration<a class="anchor" aria-label="anchor" href="#calibration"></a>
+</h2>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p8</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gg_model_roc.html">gg_model_calibration</a></span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dtest</span>, alpha <span class="op">=</span> <span class="fl">0.01</span>, size <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"darkred"</span><span class="op">)</span>
 
 <span class="va">p8</span>
 <span class="co">#&gt; `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># only test and x = y</span>
 <span class="va">p8</span> <span class="op">+</span>
-  <span class="fu">ggforce</span><span class="fu">::</span><span class="fu"><a href="https://ggforce.data-imaginist.com/reference/facet_wrap_paginate.html">facet_wrap_paginate</a></span><span class="op">(</span>
-    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">sample</span><span class="op">)</span>,
+  <span class="fu">ggforce</span><span class="fu">::</span><span class="fu"><a href="https://ggforce.data-imaginist.com/reference/facet_wrap_paginate.html" class="external-link">facet_wrap_paginate</a></span><span class="op">(</span>
+    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">sample</span><span class="op">)</span>,
     nrow <span class="op">=</span> <span class="fl">1</span>, ncol <span class="op">=</span> <span class="fl">1</span>, page <span class="op">=</span> <span class="fl">2</span>
     <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_abline</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"gray70"</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme</span><span class="op">(</span>strip.background <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>, strip.text.x <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_abline</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"gray70"</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>strip.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>, strip.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-10-2.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-10-2.png" width="700"></p>
 </div>
-<div id="compose-and-override-some-lablescolors" class="section level2">
-<h2 class="hasAnchor">
-<a href="#compose-and-override-some-lablescolors" class="anchor"></a>Compose and override some lables/colors</h2>
+<div class="section level2">
+<h2 id="compose-and-override-some-lablescolors">Compose and override some lables/colors<a class="anchor" aria-label="anchor" href="#compose-and-override-some-lablescolors"></a>
+</h2>
 <p>Using patchwork.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span>
 
 <span class="op">(</span><span class="va">p1</span> <span class="op">|</span> <span class="va">p2</span> <span class="op">|</span> <span class="va">p3</span><span class="op">)</span> <span class="op">/</span>
   <span class="op">(</span><span class="va">p4</span> <span class="op">|</span> <span class="va">p5</span> <span class="op">|</span> <span class="va">p6</span><span class="op">)</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>As we can see there some space we can gain</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p12</span> <span class="op">&lt;-</span> <span class="va">p1</span> <span class="op">+</span> 
-  <span class="fu">labs</span><span class="op">(</span>caption <span class="op">=</span> <span class="cn">NULL</span>, x <span class="op">=</span> <span class="st">"Estimate"</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="cn">NULL</span>, x <span class="op">=</span> <span class="st">"Estimate"</span><span class="op">)</span>
 
 <span class="va">p22</span> <span class="op">&lt;-</span> <span class="va">p2</span> <span class="op">+</span>
-  <span class="fu">scale_x_discrete</span><span class="op">(</span>breaks <span class="op">=</span> <span class="st">""</span>, name <span class="op">=</span> <span class="cn">NULL</span>, limits <span class="op">=</span> <span class="va">rev</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="st">""</span>, name <span class="op">=</span> <span class="cn">NULL</span>, limits <span class="op">=</span> <span class="va">rev</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">p32</span> <span class="op">&lt;-</span> <span class="va">p3</span> <span class="op">+</span>
-  <span class="fu">scale_fill_viridis_c</span><span class="op">(</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span>
     name <span class="op">=</span> <span class="st">"Cors"</span>,
-    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
-    label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_percent.html">percent</a></span>,
+    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
+    label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_percent.html" class="external-link">percent</a></span>,
     na.value <span class="op">=</span> <span class="st">"gray90"</span>,
-    breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,
+    breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,
     option <span class="op">=</span> <span class="st">"B"</span>
   <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">cor</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"white"</span>, size <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_x_discrete</span><span class="op">(</span>breaks <span class="op">=</span> <span class="st">""</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_y_discrete</span><span class="op">(</span>breaks <span class="op">=</span> <span class="st">""</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">cor</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"white"</span>, size <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="st">""</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_y_discrete</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="st">""</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span>
 <span class="co">#&gt; Scale for 'fill' is already present. Adding another scale for 'fill', which</span>
 <span class="co">#&gt; will replace the existing scale.</span>
 
 <span class="va">p42</span> <span class="op">&lt;-</span> <span class="va">p4</span> <span class="op">+</span> 
-  <span class="fu">scale_x_discrete</span><span class="op">(</span>limits <span class="op">=</span> <span class="va">rev</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"VIF"</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="va">rev</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"VIF"</span><span class="op">)</span>
 
 <span class="va">p52</span> <span class="op">&lt;-</span>  <span class="va">p5</span> <span class="op">+</span>
-  <span class="fu">scale_color_viridis_d</span><span class="op">(</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>
     name <span class="op">=</span> <span class="st">"Sample"</span>,
     begin <span class="op">=</span> <span class="fl">0.2</span>,
     end <span class="op">=</span> <span class="fl">0.8</span>,
     option <span class="op">=</span> <span class="st">"A"</span>,
-    labels <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="va"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_title</a></span>,
+    labels <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="va"><a href="https://stringr.tidyverse.org/reference/case.html" class="external-link">str_to_title</a></span>,
     <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> 
 <span class="co">#&gt; Scale for 'colour' is already present. Adding another scale for 'colour',</span>
 <span class="co">#&gt; which will replace the existing scale.</span>
   
 
 <span class="va">p62</span> <span class="op">&lt;-</span> <span class="va">p6</span> <span class="op">+</span>
-  <span class="fu">scale_color_viridis_d</span><span class="op">(</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>
     name <span class="op">=</span> <span class="cn">NULL</span>,
     begin <span class="op">=</span> <span class="fl">0.2</span>,
     end <span class="op">=</span> <span class="fl">0.8</span>,
     option <span class="op">=</span> <span class="st">"D"</span>,
-    labels <span class="op">=</span>  <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">.x</span> <span class="op">==</span> <span class="st">"0"</span>, <span class="st">"Good"</span>, <span class="st">"Bad"</span><span class="op">)</span>
+    labels <span class="op">=</span>  <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">.x</span> <span class="op">==</span> <span class="st">"0"</span>, <span class="st">"Good"</span>, <span class="st">"Bad"</span><span class="op">)</span>
     <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Predicted"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Predicted"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> 
 <span class="co">#&gt; Scale for 'colour' is already present. Adding another scale for 'colour',</span>
 <span class="co">#&gt; which will replace the existing scale.</span>
 
 <span class="op">(</span><span class="va">p12</span> <span class="op">|</span> <span class="va">p22</span> <span class="op">|</span> <span class="va">p32</span><span class="op">)</span> <span class="op">/</span>
   <span class="op">(</span><span class="va">p42</span> <span class="op">|</span> <span class="va">p52</span> <span class="op">|</span> <span class="va">p62</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Removed 8 rows containing missing values (geom_text).</span></code></pre></div>
-<p><img src="Plots_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<p><img src="plots_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 </div>
   </div>
 
@@ -325,11 +321,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="http://jkunst.com">Joshua Kunst</a>.</p>
+  <p></p>
+<p>Developed by <a href="http://jkunst.com" class="external-link">Joshua Kunst</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -337,6 +335,8 @@
 
   
 
+
+  
 
   </body>
 </html>

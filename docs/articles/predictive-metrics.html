@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,18 +34,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">risk3r</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -55,10 +51,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Plots.html">Plots</a>
+      <a href="../articles/feature-selection.html">Feature Selection</a>
     </li>
     <li>
-      <a href="../articles/feature-selection.html">Feature Selection</a>
+      <a href="../articles/plots.html">Plots</a>
     </li>
     <li>
       <a href="../articles/predictive-metrics.html">Predictive Metrics</a>
@@ -71,7 +67,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jbkunst/risk3r">
+  <a href="https://github.com/jbkunst/risk3r" class="external-link">
     <span class="fa fa-github-alt"></span>
      
   </a>
@@ -86,7 +82,7 @@
 
       
 
-      </header><script src="predictive-metrics_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Predictive Metrics</h1>
@@ -100,52 +96,52 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">risk3r</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">risk3r</span><span class="op">)</span>
 
 <span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">10000</span>
 
-<span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>
+<span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>
 
-<span class="va">actual</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="va">N</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="va">predicted</span><span class="op">)</span>
+<span class="va">actual</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">N</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="va">predicted</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/metrics.html">metrics</a></span><span class="op">(</span><span class="va">actual</span>, <span class="va">predicted</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 × 4</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 x 4</span></span>
 <span class="co">#&gt;      ks   auc    iv  gini</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 0.516 0.841  1.84 0.681</span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.514 0.838  1.85 0.677</span></code></pre></div>
 <p>Remove <code>NA</code> if are present.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">predicted2</span> <span class="op">&lt;-</span> <span class="va">predicted</span>
-<span class="va">predicted2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, size <span class="op">=</span> <span class="va">N</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">99</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+<span class="va">predicted2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, size <span class="op">=</span> <span class="va">N</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">99</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
 
 <span class="fu"><a href="../reference/metrics.html">metrics</a></span><span class="op">(</span><span class="va">actual</span>, <span class="va">predicted2</span><span class="op">)</span>
-<span class="co">#&gt; 110 of 10000 'predicted' values are NAs, they will be ignorated</span>
-<span class="co">#&gt; # A tibble: 1 × 4</span>
+<span class="co">#&gt; 94 of 10000 'predicted' values are NAs, they will be ignorated</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 x 4</span></span>
 <span class="co">#&gt;      ks   auc    iv  gini</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 0.516 0.833  1.82 0.666</span></code></pre></div>
-<div id="using-a-glm-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#using-a-glm-model" class="anchor"></a>Using a glm model</h2>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.515 0.832  1.82 0.665</span></code></pre></div>
+<div class="section level2">
+<h2 id="using-a-glm-model">Using a glm model<a class="anchor" aria-label="anchor" href="#using-a-glm-model"></a>
+</h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">daux</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>actual <span class="op">=</span> <span class="va">actual</span>, predicted <span class="op">=</span> <span class="va">predicted</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">daux</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>actual <span class="op">=</span> <span class="va">actual</span>, predicted <span class="op">=</span> <span class="va">predicted</span><span class="op">)</span>
 
-<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">actual</span> <span class="op">~</span> <span class="va">predicted</span>, family <span class="op">=</span> <span class="va">binomial</span>, data <span class="op">=</span> <span class="va">daux</span><span class="op">)</span>
+<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">actual</span> <span class="op">~</span> <span class="va">predicted</span>, family <span class="op">=</span> <span class="va">binomial</span>, data <span class="op">=</span> <span class="va">daux</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 × 4</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 x 4</span></span>
 <span class="co">#&gt;      ks   auc    iv  gini</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 0.516 0.841  1.84 0.681</span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.514 0.838  1.82 0.677</span></code></pre></div>
 <p>Works with new data.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">new_daux</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">daux</span>, <span class="fl">1000</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">new_daux</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">daux</span>, <span class="fl">1000</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/model_metrics.html">model_metrics</a></span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">new_daux</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 × 4</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 x 4</span></span>
 <span class="co">#&gt;      ks   auc    iv  gini</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 0.520 0.843  2.22 0.686</span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.549 0.847  1.99 0.694</span></code></pre></div>
 </div>
   </div>
 
@@ -160,11 +156,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="http://jkunst.com">Joshua Kunst</a>.</p>
+  <p></p>
+<p>Developed by <a href="http://jkunst.com" class="external-link">Joshua Kunst</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -172,6 +170,8 @@
 
   
 
+
+  
 
   </body>
 </html>

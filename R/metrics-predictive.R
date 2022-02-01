@@ -155,31 +155,3 @@ information_value <- function(actual, predicted) {
 
   out
 }
-
-#'
-#' Get labels for Information Values
-#'
-#' @param x A numeric vector
-#'
-#' @examples
-#'
-#' N <- 10000
-#'
-#' predicted <- runif(N)
-#'
-#' actual <- rbinom(N, size = 1, prob = predicted)
-#'
-#' iv_label(information_value(actual, predicted))
-#'
-#' predicted <- runif(N)
-#'
-#' iv_label(information_value(actual, predicted))
-#' @export
-iv_label <- function(x) {
-  cut(
-    x,
-    include.lowest = TRUE,
-    breaks = c(0, 0.02, 0.1, 0.3, 0.5, Inf),
-    labels = c("unpredictive", "weak", "medium", "strong", "suspicious")
-  )
-}

@@ -293,27 +293,11 @@ gg_model_coef <- function(model, level = 0.95, show_intercept = FALSE, ...) {
 #' @export
 gg_model_corr <- function(model, upper = FALSE, ...) {
 
-  varsnms <- reponse_and_predictors_names(model)$predictors
-
-  term_lvls <- broom::tidy(model) %>%
-    dplyr::filter(.data$term != "(Intercept)")  %>%
-    dplyr::pull(.data$term)
-
-  dcor <- model$data %>%
-    dplyr::select(dplyr::all_of(varsnms)) %>%
-    corrr::correlate() %>%
-    tidyr::gather("term2", "cor", -.data$term) %>%
-    dplyr::mutate(
-      term = factor(.data$term, levels = term_lvls),
-      term2 = factor(.data$term2, levels = term_lvls),
-    )
+  dcor <- model_corr_variables(model)
 
   if(upper) {
 
-    dcor <- dplyr::filter(
-      dcor,
-      as.numeric(.data$term) > as.numeric(.data$term2)
-      )
+    dcor <- dplyr::filter(dcor, as.numeric(.data$term) > as.numeric(.data$term2))
   }
 
   dcor
@@ -348,42 +332,12 @@ gg_model_corr <- function(model, upper = FALSE, ...) {
 #' @export
 gg_model_vif <- function(model, colors = c("#3aaf85", "#1b6ca8", "#cd201f"), ...) {
 
-  term_lvls <- broom::tidy(model) %>%
-    dplyr::filter(.data$term != "(Intercept)")  %>%
-    dplyr::pull(.data$term)
-
-  # car::vif(model)
-  # performance::check_collinearity(model)
-  # plot(performance::check_collinearity(model))
-  # car::vif(model) %>% as.data.frame()
-  # performance::check_collinearity(model)
-  # scorecard::vif(model)
-  # performance::check_collinearity(model) %>% class()
-  # performance:::plot.check_collinearity
-  # see:::plot.see_check_collinearity
-  # see:::.plot_diag_vif
+  dvif <- model_vif_variables(model)
 
   vif_brks <- c(-Inf, 5, 10, Inf)
-  vif_lbls <- c("low (<5)", "moderate (<10)","high (>= 10)")
-
-  dvif <- scorecard::vif(model) %>%
-    # vif(model) %>%
-    as.data.frame() %>%
-    # tibble::rownames_to_column("term") %>%
-    as_tibble() %>%
-    purrr::set_names(c("term", "vif")) %>%
-    mutate(
-      term = factor(.data$term, levels = term_lvls),
-      vif_cat = cut(
-        .data$vif,
-        right = FALSE,
-        breaks = vif_brks,
-        labels = vif_lbls
-        )
-      )
 
   drect <- tibble(
-    vif_cat = factor(vif_lbls, levels = vif_lbls),
+    vif_label = factor(levels(dvif$vif_label), levels = levels(dvif$vif_label)),
     ymin = na.omit(dplyr::lag(vif_brks)),
     ymax = na.omit(dplyr::lead(vif_brks)),
   )
@@ -392,18 +346,17 @@ gg_model_vif <- function(model, colors = c("#3aaf85", "#1b6ca8", "#cd201f"), ...
 
     ggplot2::geom_rect(
       data = drect,
-      ggplot2::aes(ymin = .data$ymin, ymax = .data$ymax, fill = .data$vif_cat),
+      ggplot2::aes(ymin = .data$ymin, ymax = .data$ymax, fill = .data$vif_label),
       xmin = -Inf,
       xmax = Inf,
       alpha = 0.25
     ) +
 
     ggplot2::geom_col(
-      ggplot2::aes(x = .data$term, y = .data$vif, fill = .data$vif_cat)
+      ggplot2::aes(x = .data$term, y = .data$vif, fill = .data$vif_label)
     ) +
 
     ggplot2::scale_fill_manual(name = NULL, values = colors)
-
 
 }
 
@@ -725,7 +678,7 @@ gg_woes <- function(woes,
       iv      <- dplyr::first(dwoe[["total_iv"]])
 
       ttle <- stringr::str_glue(
-        "{ namevar } ({ ivfmt })",
+        "{ namevar } (IV = { ivfmt })",
         ivfmt  = scales::percent(iv, accuracy = 0.01)
         )
 
