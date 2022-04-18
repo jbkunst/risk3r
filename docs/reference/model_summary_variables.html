@@ -24,8 +24,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/Plots.html">Plots</a>
     <a class="dropdown-item" href="../articles/feature-selection.html">Feature Selection</a>
-    <a class="dropdown-item" href="../articles/plots.html">Plots</a>
     <a class="dropdown-item" href="../articles/predictive-metrics.html">Predictive Metrics</a>
     <a class="dropdown-item" href="../articles/scorecard.html">Scorecard package helpers</a>
   </div>
@@ -326,7 +326,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting and evaluating model with 8 variables: ~Fitting and evaluating model with 8 variables: badFitting and evaluating model with 8 variables: age_woe + flag_res_phone_woe +...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting and evaluating model with 9 variables: ~Fitting and evaluating model with 9 variables: badFitting and evaluating model with 9 variables: age_woe + flag_res_phone_woe +...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting and evaluating model with 10 variables: ~Fitting and evaluating model with 10 variables: badFitting and evaluating model with 10 variables: age_woe + flag_res_phone_woe ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 x 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    variable                   ks   auc    iv  gini</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> age_woe                 0.204 0.624 0.190 0.248</span>
@@ -344,21 +344,21 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Correlation method: 'pearson'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Missing treated using: 'pairwise.complete.obs'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 11 x 15</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 11 × 15</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    term  estimate std.error statistic  p.value correlation_max       iv iv_label</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> (Int~   -<span style="color: #BB0000;">1.40</span>     0.026<span style="text-decoration: underline;">2</span>    -<span style="color: #BB0000;">53.3</span>  0   <span style="color: #949494;"> </span>            <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> age_~    0.671    0.073<span style="text-decoration: underline;">9</span>      9.08 1.08<span style="color: #949494;">e</span><span style="color: #BB0000;">-19</span>          0.465   0.208   medium  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> flag~    0.707    0.101       6.97 3.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>          0.425   0.074<span style="text-decoration: underline;">9</span>  weak    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> mont~    0.614    0.099<span style="text-decoration: underline;">2</span>      6.19 5.93<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>          0.339   0.094<span style="text-decoration: underline;">8</span>  weak    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> paym~    0.780    0.173       4.52 6.24<span style="color: #949494;">e</span><span style="color: #BB0000;">- 6</span>          0.064<span style="text-decoration: underline;">0</span>  0.018<span style="text-decoration: underline;">5</span>  unpredi~</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> sex_~    0.800    0.162       4.93 8.08<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>          0.107   0.026<span style="text-decoration: underline;">5</span>  weak    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> prof~    0.395    0.120       3.28 1.06<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>          0.354   0.053<span style="text-decoration: underline;">7</span>  weak    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> mari~    0.260    0.096<span style="text-decoration: underline;">7</span>      2.69 7.24<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>          0.465   0.086<span style="text-decoration: underline;">6</span>  weak    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> area~    0.392    0.138       2.85 4.43<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>          0.425   0.035<span style="text-decoration: underline;">0</span>  weak    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> id_c~    0.844    0.323       2.61 8.97<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>          0.025<span style="text-decoration: underline;">9</span>  0.006<span style="text-decoration: underline;">26</span> unpredi~</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> quan~    0.306    0.209       1.46 1.43<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span>          0.201   0.021<span style="text-decoration: underline;">2</span>  weak    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ... with 7 more variables: vif &lt;dbl&gt;, vif_label &lt;fct&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> (Int…   -<span style="color: #BB0000;">1.40</span>     0.026<span style="text-decoration: underline;">2</span>    -<span style="color: #BB0000;">53.3</span>  0   <span style="color: #949494;"> </span>            <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> age_…    0.671    0.073<span style="text-decoration: underline;">9</span>      9.08 1.08<span style="color: #949494;">e</span><span style="color: #BB0000;">-19</span>          0.465   0.208   medium  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> flag…    0.707    0.101       6.97 3.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>          0.425   0.074<span style="text-decoration: underline;">9</span>  weak    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> mont…    0.614    0.099<span style="text-decoration: underline;">2</span>      6.19 5.93<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>          0.339   0.094<span style="text-decoration: underline;">8</span>  weak    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> paym…    0.780    0.173       4.52 6.24<span style="color: #949494;">e</span><span style="color: #BB0000;">- 6</span>          0.064<span style="text-decoration: underline;">0</span>  0.018<span style="text-decoration: underline;">5</span>  unpredi…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> sex_…    0.800    0.162       4.93 8.08<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>          0.107   0.026<span style="text-decoration: underline;">5</span>  weak    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> prof…    0.395    0.120       3.28 1.06<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>          0.354   0.053<span style="text-decoration: underline;">7</span>  weak    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> mari…    0.260    0.096<span style="text-decoration: underline;">7</span>      2.69 7.24<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>          0.465   0.086<span style="text-decoration: underline;">6</span>  weak    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> area…    0.392    0.138       2.85 4.43<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>          0.425   0.035<span style="text-decoration: underline;">0</span>  weak    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> id_c…    0.844    0.323       2.61 8.97<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span>          0.025<span style="text-decoration: underline;">9</span>  0.006<span style="text-decoration: underline;">26</span> unpredi…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> quan…    0.306    0.209       1.46 1.43<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span>          0.201   0.021<span style="text-decoration: underline;">2</span>  weak    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 7 more variables: vif &lt;dbl&gt;, vif_label &lt;fct&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   dummy_significance &lt;lgl&gt;, dummy_sign &lt;lgl&gt;, dummy_iv &lt;lgl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   dummy_correlation &lt;lgl&gt;, dummy_vif &lt;lgl&gt;</span></span>
 <span class="r-in"></span>
@@ -366,7 +366,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Correlation method: 'pearson'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Missing treated using: 'pairwise.complete.obs'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 x 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    term                    term2       cor</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> age_woe                 age_woe <span style="color: #BB0000;">NA</span>     </span>
@@ -379,10 +379,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> area_code_res_phone_woe age_woe  0.015<span style="text-decoration: underline;">1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> id_client_woe           age_woe  0.010<span style="text-decoration: underline;">4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> quant_add_cards_woe     age_woe  0.176 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ... with 90 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 90 more rows</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">model_vif_variables</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 x 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    term                      vif vif_label</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> age_woe                  1.48 low (&lt;5) </span>
@@ -397,7 +397,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> quant_add_cards_woe      1.13 low (&lt;5) </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">model_iv_variables</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 x 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    term                         iv iv_label    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> age_woe                 0.208   medium      </span>
@@ -422,8 +422,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
     </footer></div>
