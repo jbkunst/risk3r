@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 library(risk3r)
 library(ggplot2)
 
-theme_set(theme_minimal(base_size = 7, base_family = ""))
+theme_set(theme_minimal())
 
 data("credit_woe")
 

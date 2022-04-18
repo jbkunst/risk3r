@@ -1,6 +1,8 @@
 template:
-  params:
-    bootswatch: paper
+  bootstrap: 5
+  bootswatch: litera
+  bslib:
+    pkgdown-nav-height: 100px
 authors:
   Joshua Kunst:
     href: http://jkunst.com
