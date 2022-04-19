@@ -4,7 +4,7 @@
 #' @param S S
 #' @param plot plot
 #' @param seed seed
-#' @param trace.it trace.it
+#' @param trace.it trace.it p
 #' @param type.measue type.measue
 #' @param ... Additional argumentos for glmnet::cv.glmnet
 #'
