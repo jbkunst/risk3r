@@ -10,6 +10,8 @@ Description: This package contains a set of convenient functions for the develop
  of risk models. Some of these functions were designed to be in conjunction with the 
  scorecard package.
 License: MIT + file LICENSE
+URL: https://jkunst.com/risk3r/, https://github.com/jbkunst/risk3r
+BugReports: https://github.com/jbkunst/risk3r/issues
 Encoding: UTF-8
 LazyData: true
 Imports: 
