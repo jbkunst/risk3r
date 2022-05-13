@@ -2,15 +2,18 @@
 % Please edit documentation in R/metrics-univariate.R
 \name{rsi}
 \alias{rsi}
-\title{Relative strength index}
+\alias{cmo}
+\title{Relative Strength Index (RSI) and Chande Momentum Oscillator (CMO)}
 \usage{
 rsi(x)
+
+cmo(serie)
 }
 \arguments{
 \item{x}{A numeric vector to calculate the RSI}
 }
 \description{
-Relative strength index
+Relative Strength Index (RSI) and Chande Momentum Oscillator (CMO)
 }
 \examples{
 

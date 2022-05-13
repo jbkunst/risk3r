@@ -23,7 +23,7 @@ featsel_glmnet(
 
 \item{seed}{seed}
 
-\item{trace.it}{trace.it}
+\item{trace.it}{trace.it p}
 
 \item{type.measue}{type.measue}
 

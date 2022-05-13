@@ -34,22 +34,19 @@ rsi <- function(x) {
 
 #' @rdname rsi
 #' @export
-cmo <- function(x){
+cmo <- function(serie){
 
-  stopifnot(is.numeric(x), all(!is.na(x)))
-
-  d <- diff(x)
+  d <- diff(serie)
 
   up <- ifelse(d < 0, 0, d)
   dn <- ifelse(d > 0, 0, -d)
 
-  up <- sum(up)
-  dn <- sum(dn)
+  up <- sum(up, na.rm = TRUE)
+  dn <- sum(dn, na.rm = TRUE)
 
   cmo <- 100 * (up - dn)/(up + dn)
 
   cmo
-
 
 }
 
