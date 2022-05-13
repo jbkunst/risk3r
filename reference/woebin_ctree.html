@@ -91,6 +91,7 @@
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">woebin_ctree</span><span class="op">(</span><span class="va">y</span>, <span class="va">x</span>, <span class="st">"duration"</span>, count_distr_limit <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] creating woe binning ... </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] The option bin_close_right was set to FALSE. Resetting by options(scorecard.bin_close_right = FALSE).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    variable       bin count count_distr neg pos   posprob        woe</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: duration [-Inf,11)   171       0.171 144  27 0.1578947 -0.8266786</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: duration   [11,33)   656       0.656 466 190 0.2896341 -0.0498637</span>
@@ -102,6 +103,7 @@
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">woebin_ctree</span><span class="op">(</span><span class="va">y</span>, <span class="va">x</span>, <span class="st">"duration"</span>, count_distr_limit <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] creating woe binning ... </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] The option bin_close_right was set to FALSE. Resetting by options(scorecard.bin_close_right = FALSE).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    variable       bin count count_distr neg pos   posprob        woe</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: duration [-Inf,15)   367       0.367 290  77 0.2098093 -0.4787776</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: duration   [15,28)   417       0.417 291 126 0.3021583  0.0102565</span>
@@ -119,6 +121,7 @@
 <span class="r-in">  control <span class="op">=</span> <span class="fu">partykit</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/partykit/man/ctree_control.html" class="external-link">ctree_control</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] creating woe binning ... </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] The option bin_close_right was set to FALSE. Resetting by options(scorecard.bin_close_right = FALSE).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    variable       bin count count_distr neg pos   posprob         woe</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: duration  [-Inf,8)    87       0.087  78   9 0.1034483 -1.31548096</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: duration    [8,11)    84       0.084  66  18 0.2142857 -0.45527969</span>
@@ -139,6 +142,7 @@
 <span class="r-in"><span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">99</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
 <span class="r-in"><span class="fu">woebin_ctree</span><span class="op">(</span><span class="va">y</span>, <span class="va">x</span>, <span class="st">"duration"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] creating woe binning ... </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] The option bin_close_right was set to FALSE. Resetting by options(scorecard.bin_close_right = FALSE).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    variable       bin count count_distr neg pos   posprob        woe     bin_iv</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: duration   missing    10       0.010   7   3 0.3000000  0.0000000 0.00000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: duration [-Inf,15)   367       0.367 290  77 0.2098093 -0.4787776 0.07546448</span>
@@ -153,6 +157,7 @@
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">germancredit</span><span class="op">$</span><span class="va">purpose</span></span>
 <span class="r-in"><span class="fu">woebin_ctree</span><span class="op">(</span><span class="va">y</span>, <span class="va">x</span>, <span class="st">"purpose"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] creating woe binning ... </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] The option bin_close_right was set to FALSE. Resetting by options(scorecard.bin_close_right = FALSE).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The categorical values (`radio/television, education, furniture/equipment, car (new), car (used), business, domestic appliances, repairs, others, retraining`) are not specified in `breaks_list` for the column `purpose`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following columns are removed from binning results due to errors:</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> purpose</span>
@@ -175,6 +180,7 @@
 <span class="r-in"><span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">99</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
 <span class="r-in"><span class="fu">woebin_ctree</span><span class="op">(</span><span class="va">y</span>, <span class="va">x</span>, <span class="st">"purpose_with_na"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] creating woe binning ... </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] The option bin_close_right was set to FALSE. Resetting by options(scorecard.bin_close_right = FALSE).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The categorical values (`radio/television, education, furniture/equipment, car (new), car (used), business, domestic appliances, repairs, others, retraining`) are not specified in `breaks_list` for the column `purpose_with_na`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following columns are removed from binning results due to errors:</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> purpose_with_na</span>
