@@ -1,5 +1,5 @@
 #'
-#' Relative strength index
+#' Relative Strength Index (RSI) and Chande Momentum Oscillator (CMO)
 #'
 #' @param x A numeric vector to calculate the RSI
 #'
@@ -29,6 +29,28 @@ rsi <- function(x) {
   dn <- ifelse(d > 0, 0, -d)
 
   100 * mean(up, na.rm = TRUE) / (mean(up, na.rm = TRUE) + mean(dn, na.rm = TRUE))
+}
+
+
+#' @rdname rsi
+#' @export
+cmo <- function(x){
+
+  stopifnot(is.numeric(x), all(!is.na(x)))
+
+  d <- diff(x)
+
+  up <- ifelse(d < 0, 0, d)
+  dn <- ifelse(d > 0, 0, -d)
+
+  up <- sum(up)
+  dn <- sum(dn)
+
+  cmo <- 100 * (up - dn)/(up + dn)
+
+  cmo
+
+
 }
 
 #'
