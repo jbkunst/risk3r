@@ -7,7 +7,7 @@
 \usage{
 rsi(x)
 
-cmo(serie)
+cmo(x)
 }
 \arguments{
 \item{x}{A numeric vector to calculate the RSI}
