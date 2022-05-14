@@ -34,9 +34,9 @@ rsi <- function(x) {
 
 #' @rdname rsi
 #' @export
-cmo <- function(serie){
+cmo <- function(x){
 
-  d <- diff(serie)
+  d <- diff(x)
 
   up <- ifelse(d < 0, 0, d)
   dn <- ifelse(d > 0, 0, -d)
