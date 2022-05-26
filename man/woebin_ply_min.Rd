@@ -18,6 +18,8 @@ Minimalistic version of scorecard::woebin_ply
 }
 \examples{
 
+if(FALSE){
+
 data(germancredit, package = "scorecard")
 
 bins <- woebin2(germancredit, y = "creditability", x = "credit.amount")
@@ -29,4 +31,7 @@ bin <- bins$credit.amount
 woebin_ply_min(variable, bin)
 
 woebin_ply_min(variable, bin, value = "posprob")
+
+}
+
 }

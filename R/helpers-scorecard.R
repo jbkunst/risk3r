@@ -249,6 +249,8 @@ woebin2 <- function(dt, y, x = NULL,
 #'
 #' @examples
 #'
+#' if(FALSE){
+#'
 #' data(germancredit, package = "scorecard")
 #'
 #' y <- germancredit$creditability
@@ -275,6 +277,9 @@ woebin2 <- function(dt, y, x = NULL,
 #'
 #' x[sample(c(TRUE, FALSE), size = length(x), prob = c(1, 99), replace = TRUE)] <- NA
 #' woebin_ctree(y, x, "purpose_with_na")
+#'
+#' }
+#'
 #' @importFrom stats var as.formula complete.cases setNames
 #' @export
 woebin_ctree <- function(y, x, namevar = "variable", count_distr_limit = 0.05,
@@ -469,6 +474,8 @@ woebin_summary <- function(bins, sort = TRUE) {
 #'
 #' @examples
 #'
+#' if(FALSE){
+#'
 #' data(germancredit, package = "scorecard")
 #'
 #' bins <- woebin2(germancredit, y = "creditability", x = "credit.amount")
@@ -480,6 +487,9 @@ woebin_summary <- function(bins, sort = TRUE) {
 #' woebin_ply_min(variable, bin)
 #'
 #' woebin_ply_min(variable, bin, value = "posprob")
+#'
+#' }
+#'
 #' @importFrom scorecard woebin_ply
 #' @importFrom purrr set_names
 #' @export

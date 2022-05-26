@@ -28,6 +28,8 @@ Interface scorecard::woebin for partykiy::ctree
 }
 \examples{
 
+if(FALSE){
+
 data(germancredit, package = "scorecard")
 
 y <- germancredit$creditability
@@ -54,4 +56,7 @@ woebin_ctree(y, x, "purpose")
 
 x[sample(c(TRUE, FALSE), size = length(x), prob = c(1, 99), replace = TRUE)] <- NA
 woebin_ctree(y, x, "purpose_with_na")
+
+}
+
 }
