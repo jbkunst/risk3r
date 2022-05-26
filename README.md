@@ -18,9 +18,6 @@ commit](https://img.shields.io/github/last-commit/jbkunst/risk3r.svg)](https://g
 issues](https://img.shields.io/github/issues-raw/jbkunst/risk3r.svg)](https://github.com/jbkunst/risk3r/issues)
 [![GitHub
 issues](https://img.shields.io/github/issues-closed-raw/jbkunst/risk3r.svg)](https://github.com/jbkunst/risk3r/issues)
-[![check-windows](https://github.com/jbkunst/risk3r/workflows/check-windows/badge.svg)](https://github.com/jbkunst/risk3r/actions?workflow=check-windows)
-[![check-mac](https://github.com/jbkunst/risk3r/workflows/check-mac/badge.svg)](https://github.com/jbkunst/risk3r/actions?workflow=check-mac)
-[![check-linux](https://github.com/jbkunst/risk3r/workflows/check-linux/badge.svg)](https://github.com/jbkunst/risk3r/actions?workflow=check-linux)
 [![Github
 Stars](https://img.shields.io/github/stars/jbkunst/risk3r.svg?style=social&label=Github)](https://github.com/jbkunst/risk3r)
 [![R-CMD-check](https://github.com/jbkunst/risk3r/workflows/R-CMD-check/badge.svg)](https://github.com/jbkunst/risk3r/actions)
