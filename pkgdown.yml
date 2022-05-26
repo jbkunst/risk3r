@@ -6,5 +6,8 @@ articles:
   feature-selection: feature-selection.html
   predictive-metrics: predictive-metrics.html
   scorecard: scorecard.html
-last_built: 2022-05-21T05:02Z
+last_built: 2022-05-26T20:23Z
+urls:
+  reference: http://jkunst.com/risk3r/reference
+  article: http://jkunst.com/risk3r/articles
 
