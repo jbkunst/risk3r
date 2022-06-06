@@ -11,7 +11,6 @@ template:
     base_font:    {google: "IBM Plex Sans"}
     code_font:    {google: "Fira Mono"}
     heading_font: {google: "Josefin Sans"}
-    # https://github.com/rstudio/bslib/blob/a4946a4/inst/lib/bs4/scss/_variables.scss
     headings-color:  "#333333"
     headings-line-height: 5rem
     headings-margin-bottom: -1rem
