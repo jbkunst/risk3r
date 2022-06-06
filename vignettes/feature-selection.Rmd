@@ -14,14 +14,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, include=TRUE}
+```{r setup, include=FALSE}
 library(risk3r)
 library(broom)
 library(dplyr)
 library(ggplot2)
 
 theme_set(
-  theme_minimal(base_size = 21) + 
+  theme_minimal(base_size = 21) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
   )
 
@@ -32,9 +32,7 @@ if(require(showtext)){
    
 }
 
-theme_set(theme)
 
-data("credit_woe")
 ```
 
 ## Raw Model
@@ -42,6 +40,14 @@ data("credit_woe")
 Let fit a very raw model to check:
 
 ```{r}
+library(risk3r)
+library(broom)
+library(dplyr)
+library(ggplot2)
+
+data("credit_woe")
+
+credit_woe <- select(credit_woe, -id_client_woe)
 train_data <- head(credit_woe, 20000)
 test_data  <- tail(credit_woe, 20000)
 
@@ -60,11 +66,11 @@ gg_model_coef(model_raw) +
 
 ```{r, eval=TRUE}
 # rf simple
-model_rf <- randomForest(bad_good ~ ., data = train_data, do.trace = TRUE, ntree = 500)
+model_rf <- randomForest::randomForest(bad ~ ., data = train_data, do.trace = FALSE, ntree = 100)
 
 metrics(
-  train_data$bad_good, 
-  predict(model_rf, type = "prob")[,2]
+  train_data$bad, 
+  predict(model_rf)
   )
 ```
 
