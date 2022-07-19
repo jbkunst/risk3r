@@ -8,7 +8,7 @@
 #'
 #' @examples
 #'
-#' require(rlang) # quo
+#' require(rlang) # summarise, n_distinct, n
 #' require(dplyr) # quo
 #'
 #' data <- mtcars
@@ -28,38 +28,46 @@
 #'     )
 #' }
 #'
-#' apply_filters(data, filters, summary_fun)
+#' results <- apply_filters(data, filters, summary_fun)
+#'
+#' results
 #'
 #' @export
-apply_filters <- function(data, filters, summary_fun, verbose = TRUE){
+apply_filters <- function(data,
+                          filters,
+                          summary_fun = function(data) { dplyr::summarise(data) },
+                          verbose = TRUE){
 
   daux <- data
 
-  filters <- append(list("total" = rlang::quo(TRUE)), filters)
+  filters <- append(list("initial" = rlang::quo(TRUE)), filters)
   filters <- append(filters, list("final" = rlang::quo(TRUE)))
 
   filters_names <- names(filters)
 
-  res <- purrr::map_df(seq_along(filters_names), function(i = 1){
+  res <- purrr::map_df(seq_along(filters_names), function(i = 3){
 
-    fnm <- filters_names[i]
+    fnm  <- filters_names[i]
+    fltr <- filters[[i]]
+
+    as.character(fltr)
+    as_label(fltr)
 
     if(verbose) {
-      cli::cli_alert_info(
-        stringr::str_c(fnm, stringr::str_c(filters[[i]], collapse = " "))
-        )
+      t1 <- stringr::str_c("Step ", i, " `", fnm, "` ==> ", sep = "")
+      t2 <- stringr::str_c(rlang::as_label(fltr), collapse = " ")
+      cli::cli_alert_info(stringr::str_c(t1, t2))
     }
 
-    # if(verbose) message(fnm)
-
-    # txt <- names(f)
-
-    daux <<- dplyr::filter(daux, !!filters[[i]])
+    daux <<- dplyr::filter(daux, !!fltr)
 
     summary_fun(daux) |>
-      mutate(filter = fnm, .before = 1)
+      mutate(filter = fnm, rows = nrow(daux), .before = 1)
 
   })
+
+  res <- res |>
+    mutate(rows_removed = c(NA, -diff(.data[["rows"]])), .after = .data[["rows"]])
 
   list(data = daux, summary = res)
 
