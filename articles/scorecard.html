@@ -6,15 +6,15 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="risk3r">
-<title>Scorecard package helpers • risk3r</title>
+<title>Scorecard helpers and others funcions • risk3r</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="../deps/_IBM%20Plex%20Sans-0.4.1/font.css" rel="stylesheet">
-<link href="../deps/_Fira%20Mono-0.4.1/font.css" rel="stylesheet">
-<link href="../deps/_Josefin%20Sans-0.4.1/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/IBM_Plex_Sans-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/Fira_Mono-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/Josefin_Sans-0.4.2/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Scorecard package helpers">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Scorecard helpers and others funcions">
 <meta property="og:description" content="risk3r">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -47,7 +47,7 @@
     <a class="dropdown-item" href="../articles/Plots.html">Plots</a>
     <a class="dropdown-item" href="../articles/feature-selection.html">Feature Selection</a>
     <a class="dropdown-item" href="../articles/predictive-metrics.html">Predictive Metrics</a>
-    <a class="dropdown-item" href="../articles/scorecard.html">Scorecard package helpers</a>
+    <a class="dropdown-item" href="../articles/scorecard.html">Scorecard helpers and others funcions</a>
   </div>
 </li>
       </ul>
@@ -72,8 +72,8 @@
 
 
 <script src="scorecard_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <main id="main"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Scorecard package helpers</h1>
+  <main id="main" class="col-md-9"><div class="page-header">
+      <img src="" class="logo" alt=""><h1>Scorecard helpers and others funcions</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/jbkunst/risk3r/blob/HEAD/vignettes/scorecard.Rmd" class="external-link"><code>vignettes/scorecard.Rmd</code></a></small>
@@ -87,64 +87,68 @@
 <code>woebin_summary</code><a class="anchor" aria-label="anchor" href="#woebin_summary"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://shichen.name/scorecard/reference/woebin.html" class="external-link">woebin</a></span><span class="op">(</span><span class="va">germancredit</span>, y <span class="op">=</span> <span class="st">"creditability"</span><span class="op">)</span>
-<span class="co">#&gt; [INFO] creating woe binning ...</span>
-
-<span class="va">binssummary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/woebin_summary.html">woebin_summary</a></span><span class="op">(</span><span class="va">bins</span><span class="op">)</span>
-
-<span class="va">binssummary</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 20 × 15</span></span>
-<span class="co">#&gt;    variable  n_categories      iv       ks   hhi count_distr_max count_distr_min</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> status.o…            3 6.39<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 3.67<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.333           0.543           0.063</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> credit.h…            4 2.92<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.80<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.25            0.53            0.088</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> duration…            5 2.83<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.92<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.2             0.399           0.07 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> savings.…            3 1.91<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.87<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.333           0.603           0.103</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> credit.a…            5 1.81<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.58<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.2             0.382           0.05 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> purpose              3 1.53<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.79<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.333           0.608           0.112</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> age.in.y…            5 1.30<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.47<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.2             0.373           0.079</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> property             4 1.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.17<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.25            0.332           0.154</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> present.…            4 8.53<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 1.20<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.25            0.339           0.174</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> housing              3 8.33<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 1.33<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.333           0.713           0.108</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">11</span> other.in…            2 5.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 9.62<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.5             0.814           0.186</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">12</span> installm…            3 2.56<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 7.71<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.333           0.476           0.157</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">13</span> other.de…            2 1.64<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 2.67<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.5             0.948           0.052</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">14</span> number.o…            2 1.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 4.81<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.5             0.633           0.367</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">15</span> personal…            4 8.84<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> 3.33<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.25            0.548           0.05 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">16</span> job                  3 8.10<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> 3.14<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.333           0.63            0.148</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">17</span> telephone            2 6.38<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> 3.90<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.5             0.596           0.404</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">18</span> present.…            4 3.59<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> 2.24<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.25            0.413           0.13 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">19</span> number.o…            2 4.34<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> 2.38<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span> 0.5             0.845           0.155</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">20</span> foreign.…            1 0   <span style="color: #949494;"> </span>   6.51<span style="color: #949494;">e</span><span style="color: #BB0000;">-17</span> 1               1               1    </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 8 more variables: has_missing &lt;lgl&gt;, has_special_values &lt;lgl&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   monotone &lt;lgl&gt;, factor &lt;lgl&gt;, breaks &lt;list&gt;, iv_lbl &lt;fct&gt;, hhi_lbl &lt;fct&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   distribution &lt;chr&gt;</span></span>
-
-<span class="va">binssummary</span> <span class="op"><a href="../reference/risk3r-exports.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">ks</span>, <span class="va">iv</span>, <span class="va">iv_lbl</span>, <span class="va">hhi</span>, <span class="va">hhi_lbl</span>, <span class="va">distribution</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 20 × 7</span></span>
-<span class="co">#&gt;    variable                         ks      iv iv_lbl   hhi hhi_lbl distribution</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> status.of.existing.checki… 3.67<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 6.39<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> suspi… 0.333 high c… <span style="color: #949494;">"</span>▇▁▆<span style="color: #949494;">"</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> credit.history             1.80<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 2.92<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.25  modera… <span style="color: #949494;">"</span>▂▇▁▅<span style="color: #949494;">"</span>      </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> duration.in.month          1.92<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 2.83<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.2   modera… <span style="color: #949494;">"</span>▂▇▇▂▂<span style="color: #949494;">"</span>     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> savings.account.and.bonds  1.87<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 1.91<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.333 high c… <span style="color: #949494;">"</span>▇▂▃<span style="color: #949494;">"</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> credit.amount              1.58<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 1.81<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.2   modera… <span style="color: #949494;">"</span>▆▂▇▅▁<span style="color: #949494;">"</span>     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> purpose                    1.79<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 1.53<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.333 high c… <span style="color: #949494;">"</span>▂▃▇<span style="color: #949494;">"</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> age.in.years               1.47<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 1.30<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.2   modera… <span style="color: #949494;">"</span>▅▂▆▂▇<span style="color: #949494;">"</span>     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> property                   1.17<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 1.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.25  modera… <span style="color: #949494;">"</span>▇▆▇▃<span style="color: #949494;">"</span>      </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> present.employment.since   1.20<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 8.53<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> weak   0.25  modera… <span style="color: #949494;">"</span>▆▇▅▆<span style="color: #949494;">"</span>      </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> housing                    1.33<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 8.33<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> weak   0.333 high c… <span style="color: #949494;">"</span>▂▇▁<span style="color: #949494;">"</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">11</span> other.installment.plans    9.62<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 5.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> weak   0.5   high c… <span style="color: #949494;">"</span>▂▇<span style="color: #949494;">"</span>        </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">12</span> installment.rate.in.perce… 7.71<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 2.56<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> weak   0.333 high c… <span style="color: #949494;">"</span>▆▂▇<span style="color: #949494;">"</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">13</span> other.debtors.or.guaranto… 2.67<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 1.64<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> unpre… 0.5   high c… <span style="color: #949494;">"</span>▇▁<span style="color: #949494;">"</span>        </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">14</span> number.of.existing.credit… 4.81<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 1.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> unpre… 0.5   high c… <span style="color: #949494;">"</span>▇▅<span style="color: #949494;">"</span>        </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">15</span> personal.status.and.sex    3.33<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 8.84<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> unpre… 0.25  modera… <span style="color: #949494;">"</span>▁▅▇▂<span style="color: #949494;">"</span>      </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">16</span> job                        3.14<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 8.10<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> unpre… 0.333 high c… <span style="color: #949494;">"</span>▃▇▂<span style="color: #949494;">"</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">17</span> telephone                  3.90<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 6.38<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> unpre… 0.5   high c… <span style="color: #949494;">"</span>▇▆<span style="color: #949494;">"</span>        </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">18</span> present.residence.since    2.24<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 3.59<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> unpre… 0.25  modera… <span style="color: #949494;">"</span>▂▆▃▇<span style="color: #949494;">"</span>      </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">19</span> number.of.people.being.li… 2.38<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span> 4.34<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> unpre… 0.5   high c… <span style="color: #949494;">"</span>▇▂<span style="color: #949494;">"</span>        </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">20</span> foreign.worker             6.51<span style="color: #949494;">e</span><span style="color: #BB0000;">-17</span> 0   <span style="color: #949494;"> </span>   unpre… 1     high c… <span style="color: #949494;">""</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://shichen.name/scorecard/reference/woebin.html" class="external-link">woebin</a></span><span class="op">(</span><span class="va">germancredit</span>, y <span class="op">=</span> <span class="st">"creditability"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [INFO] creating woe binning ...</span></span>
+<span></span>
+<span><span class="va">binssummary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/woebin_summary.html">woebin_summary</a></span><span class="op">(</span><span class="va">bins</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">binssummary</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 20 × 15</span></span></span>
+<span><span class="co">#&gt;    variable       n_cat…¹      iv       ks   hhi count…² count…³ has_m…⁴ has_s…⁵</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> status.of.exi…       3 6.39<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 3.67<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.333   0.543   0.063 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> credit.history       4 2.92<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.80<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.25    0.53    0.088 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> duration.in.m…       5 2.83<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.92<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.2     0.399   0.07  FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> savings.accou…       3 1.91<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.87<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.333   0.603   0.103 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> credit.amount        5 1.81<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.58<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.2     0.382   0.05  FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> purpose              3 1.53<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.79<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.333   0.608   0.112 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> age.in.years         5 1.30<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.47<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.2     0.373   0.079 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> property             4 1.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.17<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.25    0.332   0.154 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> present.emplo…       4 8.53<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 1.20<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.25    0.339   0.174 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> housing              3 8.33<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 1.33<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 0.333   0.713   0.108 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> other.install…       2 5.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 9.62<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.5     0.814   0.186 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> installment.r…       3 2.56<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 7.71<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.333   0.476   0.157 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> other.debtors…       2 1.64<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 2.67<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.5     0.948   0.052 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> number.of.exi…       2 1.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 4.81<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.5     0.633   0.367 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> personal.stat…       4 8.84<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> 3.33<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.25    0.548   0.05  FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> job                  3 8.10<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> 3.14<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.333   0.63    0.148 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> telephone            2 6.38<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> 3.90<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.5     0.596   0.404 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> present.resid…       4 3.59<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> 2.24<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 0.25    0.413   0.13  FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> number.of.peo…       2 4.34<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> 2.38<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span> 0.5     0.845   0.155 FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span> foreign.worker       1 0   <span style="color: #949494;"> </span>   6.51<span style="color: #949494;">e</span><span style="color: #BB0000;">-17</span> 1       1       1     FALSE   FALSE  </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 6 more variables: monotone &lt;lgl&gt;, factor &lt;lgl&gt;, breaks &lt;list&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   iv_lbl &lt;fct&gt;, hhi_lbl &lt;fct&gt;, distribution &lt;chr&gt;, and abbreviated variable</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   names ¹​n_categories, ²​count_distr_max, ³​count_distr_min, ⁴​has_missing,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   ⁵​has_special_values</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span>
+<span></span>
+<span><span class="va">binssummary</span> <span class="op"><a href="../reference/risk3r-exports.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">ks</span>, <span class="va">iv</span>, <span class="va">iv_lbl</span>,</span>
+<span>         <span class="va">hhi</span>, <span class="va">hhi_lbl</span>, <span class="va">distribution</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 20 × 7</span></span></span>
+<span><span class="co">#&gt;    variable                              ks      iv iv_lbl   hhi hhi_lbl distr…¹</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> status.of.existing.checking.ac… 3.67<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 6.39<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> suspi… 0.333 high c… <span style="color: #949494;">"</span>▇▁▆<span style="color: #949494;">"</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> credit.history                  1.80<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 2.92<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.25  modera… <span style="color: #949494;">"</span>▂▇▁▅<span style="color: #949494;">"</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> duration.in.month               1.92<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 2.83<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.2   modera… <span style="color: #949494;">"</span>▂▇▇▂▂<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> savings.account.and.bonds       1.87<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 1.91<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.333 high c… <span style="color: #949494;">"</span>▇▂▃<span style="color: #949494;">"</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> credit.amount                   1.58<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 1.81<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.2   modera… <span style="color: #949494;">"</span>▆▂▇▅▁<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> purpose                         1.79<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 1.53<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.333 high c… <span style="color: #949494;">"</span>▂▃▇<span style="color: #949494;">"</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> age.in.years                    1.47<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 1.30<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.2   modera… <span style="color: #949494;">"</span>▅▂▆▂▇<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> property                        1.17<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 1.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> medium 0.25  modera… <span style="color: #949494;">"</span>▇▆▇▃<span style="color: #949494;">"</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> present.employment.since        1.20<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 8.53<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> weak   0.25  modera… <span style="color: #949494;">"</span>▆▇▅▆<span style="color: #949494;">"</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> housing                         1.33<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span> 8.33<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> weak   0.333 high c… <span style="color: #949494;">"</span>▂▇▁<span style="color: #949494;">"</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> other.installment.plans         9.62<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 5.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> weak   0.5   high c… <span style="color: #949494;">"</span>▂▇<span style="color: #949494;">"</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> installment.rate.in.percentage… 7.71<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 2.56<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> weak   0.333 high c… <span style="color: #949494;">"</span>▆▂▇<span style="color: #949494;">"</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> other.debtors.or.guarantors     2.67<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 1.64<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> unpre… 0.5   high c… <span style="color: #949494;">"</span>▇▁<span style="color: #949494;">"</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> number.of.existing.credits.at.… 4.81<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 1.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> unpre… 0.5   high c… <span style="color: #949494;">"</span>▇▅<span style="color: #949494;">"</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> personal.status.and.sex         3.33<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 8.84<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> unpre… 0.25  modera… <span style="color: #949494;">"</span>▁▅▇▂<span style="color: #949494;">"</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> job                             3.14<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 8.10<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> unpre… 0.333 high c… <span style="color: #949494;">"</span>▃▇▂<span style="color: #949494;">"</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> telephone                       3.90<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 6.38<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> unpre… 0.5   high c… <span style="color: #949494;">"</span>▇▆<span style="color: #949494;">"</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> present.residence.since         2.24<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> 3.59<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> unpre… 0.25  modera… <span style="color: #949494;">"</span>▂▆▃▇<span style="color: #949494;">"</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> number.of.people.being.liable.… 2.38<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span> 4.34<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> unpre… 0.5   high c… <span style="color: #949494;">"</span>▇▂<span style="color: #949494;">"</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span> foreign.worker                  6.51<span style="color: #949494;">e</span><span style="color: #BB0000;">-17</span> 0   <span style="color: #949494;"> </span>   unpre… 1     high c… <span style="color: #949494;">""</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable name ¹​distribution</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="woebin_ply_min">
@@ -152,86 +156,89 @@
 </h2>
 <p>The <code>woebin_ply_min</code> function don’t need a data frame argument.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">variable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">germancredit</span><span class="op">$</span><span class="va">credit.amount</span>, <span class="fl">6</span><span class="op">)</span>
-
-<span class="va">bin</span> <span class="op">&lt;-</span> <span class="va">bins</span><span class="op">$</span><span class="va">credit.amount</span>
-
-<span class="va">bin</span>
-<span class="co">#&gt;         variable         bin count count_distr neg pos   posprob         woe</span>
-<span class="co">#&gt; 1: credit.amount [-Inf,1400)   267       0.267 185  82 0.3071161  0.03366128</span>
-<span class="co">#&gt; 2: credit.amount [1400,1800)   105       0.105  87  18 0.1714286 -0.72823850</span>
-<span class="co">#&gt; 3: credit.amount [1800,4000)   382       0.382 287  95 0.2486911 -0.25830746</span>
-<span class="co">#&gt; 4: credit.amount [4000,9200)   196       0.196 120  76 0.3877551  0.39053946</span>
-<span class="co">#&gt; 5: credit.amount [9200, Inf)    50       0.050  21  29 0.5800000  1.17007125</span>
-<span class="co">#&gt;          bin_iv  total_iv breaks is_special_values</span>
-<span class="co">#&gt; 1: 0.0003045545 0.1812204   1400             FALSE</span>
-<span class="co">#&gt; 2: 0.0468153322 0.1812204   1800             FALSE</span>
-<span class="co">#&gt; 3: 0.0241086966 0.1812204   4000             FALSE</span>
-<span class="co">#&gt; 4: 0.0319870413 0.1812204   9200             FALSE</span>
-<span class="co">#&gt; 5: 0.0780047502 0.1812204    Inf             FALSE</span>
-
-<span class="fu"><a href="../reference/woebin_ply_min.html">woebin_ply_min</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">bin</span><span class="op">)</span>
-<span class="co">#&gt; [1]  0.03366128  0.39053946 -0.25830746  0.39053946  0.39053946  0.39053946</span>
-
-<span class="fu"><a href="../reference/woebin_ply_min.html">woebin_ply_min</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">bin</span>, value <span class="op">=</span> <span class="st">"posprob"</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.3071161 0.3877551 0.2486911 0.3877551 0.3877551 0.3877551</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">variable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">germancredit</span><span class="op">$</span><span class="va">credit.amount</span>, <span class="fl">6</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bin</span> <span class="op">&lt;-</span> <span class="va">bins</span><span class="op">$</span><span class="va">credit.amount</span></span>
+<span></span>
+<span><span class="va">bin</span></span>
+<span><span class="co">#&gt;         variable         bin count count_distr neg pos   posprob         woe</span></span>
+<span><span class="co">#&gt; 1: credit.amount [-Inf,1400)   267       0.267 185  82 0.3071161  0.03366128</span></span>
+<span><span class="co">#&gt; 2: credit.amount [1400,1800)   105       0.105  87  18 0.1714286 -0.72823850</span></span>
+<span><span class="co">#&gt; 3: credit.amount [1800,4000)   382       0.382 287  95 0.2486911 -0.25830746</span></span>
+<span><span class="co">#&gt; 4: credit.amount [4000,9200)   196       0.196 120  76 0.3877551  0.39053946</span></span>
+<span><span class="co">#&gt; 5: credit.amount [9200, Inf)    50       0.050  21  29 0.5800000  1.17007125</span></span>
+<span><span class="co">#&gt;          bin_iv  total_iv breaks is_special_values</span></span>
+<span><span class="co">#&gt; 1: 0.0003045545 0.1812204   1400             FALSE</span></span>
+<span><span class="co">#&gt; 2: 0.0468153322 0.1812204   1800             FALSE</span></span>
+<span><span class="co">#&gt; 3: 0.0241086966 0.1812204   4000             FALSE</span></span>
+<span><span class="co">#&gt; 4: 0.0319870413 0.1812204   9200             FALSE</span></span>
+<span><span class="co">#&gt; 5: 0.0780047502 0.1812204    Inf             FALSE</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/woebin_ply_min.html">woebin_ply_min</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">bin</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1]  0.03366128  0.39053946 -0.25830746  0.39053946  0.39053946  0.39053946</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/woebin_ply_min.html">woebin_ply_min</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">bin</span>, value <span class="op">=</span> <span class="st">"posprob"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.3071161 0.3877551 0.2486911 0.3877551 0.3877551 0.3877551</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="woebin_cor_iv">
 <code>woebin_cor_iv</code><a class="anchor" aria-label="anchor" href="#woebin_cor_iv"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">datcor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/woebin_cor_iv.html">woebin_cor_iv</a></span><span class="op">(</span><span class="va">germancredit</span>, <span class="va">bins</span><span class="op">)</span>
-<span class="co">#&gt; [INFO] converting into woe values ...</span>
-<span class="co">#&gt; Warning in stats::cor(x = x, y = y, use = use, method = method): the standard</span>
-<span class="co">#&gt; deviation is zero</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Correlation method: 'pearson'</span>
-<span class="co">#&gt; Missing treated using: 'pairwise.complete.obs'</span>
-
-<span class="va">datcor</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 400 × 7</span></span>
-<span class="co">#&gt;    var1                        var2        r var1_iv var1_rank var2_iv var2_rank</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> status.of.existing.checkin… stat… <span style="color: #BB0000;">NA</span>        0.639         1  0.639          1</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> status.of.existing.checkin… cred…  0.203    0.639         1  0.292          2</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> status.of.existing.checkin… dura…  0.098<span style="text-decoration: underline;">5</span>   0.639         1  0.283          3</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> status.of.existing.checkin… savi…  0.219    0.639         1  0.191          4</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> status.of.existing.checkin… cred…  0.091<span style="text-decoration: underline;">6</span>   0.639         1  0.181          5</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> status.of.existing.checkin… purp…  0.133    0.639         1  0.153          6</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> status.of.existing.checkin… age.…  0.129    0.639         1  0.130          7</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> status.of.existing.checkin… prop…  0.065<span style="text-decoration: underline;">2</span>   0.639         1  0.113          8</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> status.of.existing.checkin… pres…  0.119    0.639         1  0.085<span style="text-decoration: underline;">3</span>         9</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> status.of.existing.checkin… hous…  0.112    0.639         1  0.083<span style="text-decoration: underline;">3</span>        10</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 390 more rows</span></span>
-
-<span class="va">cor_limit</span> <span class="op">&lt;-</span> <span class="fl">0.15</span>
-
-<span class="va">datcor</span> <span class="op"><a href="../reference/risk3r-exports.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">var1</span> <span class="op">!=</span> <span class="va">var2</span><span class="op">)</span> <span class="op"><a href="../reference/risk3r-exports.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
-    cor_conflict <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span> <span class="op">&gt;</span> <span class="va">cor_limit</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,
-    variable_to_remove <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span>
-      <span class="va">cor_conflict</span>,
-      <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">var1</span> <span class="op">&gt;</span> <span class="va">var2</span>, <span class="va">var2</span>, <span class="va">var1</span><span class="op">)</span>,
-      <span class="cn">NA</span>
-    <span class="op">)</span>
-  <span class="op">)</span>
-<span class="co">#&gt; Warning in Ops.factor(var1, var2): '&gt;' not meaningful for factors</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 380 × 9</span></span>
-<span class="co">#&gt;    var1            var2       r var1_iv var1_rank var2_iv var2_rank cor_conflict</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> status.of.exis… cred… 0.203    0.639         1  0.292          2 TRUE        </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> status.of.exis… dura… 0.098<span style="text-decoration: underline;">5</span>   0.639         1  0.283          3 FALSE       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> status.of.exis… savi… 0.219    0.639         1  0.191          4 TRUE        </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> status.of.exis… cred… 0.091<span style="text-decoration: underline;">6</span>   0.639         1  0.181          5 FALSE       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> status.of.exis… purp… 0.133    0.639         1  0.153          6 FALSE       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> status.of.exis… age.… 0.129    0.639         1  0.130          7 FALSE       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> status.of.exis… prop… 0.065<span style="text-decoration: underline;">2</span>   0.639         1  0.113          8 FALSE       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> status.of.exis… pres… 0.119    0.639         1  0.085<span style="text-decoration: underline;">3</span>         9 FALSE       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> status.of.exis… hous… 0.112    0.639         1  0.083<span style="text-decoration: underline;">3</span>        10 FALSE       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> status.of.exis… othe… 0.048<span style="text-decoration: underline;">9</span>   0.639         1  0.057<span style="text-decoration: underline;">6</span>        11 FALSE       </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 370 more rows, and 1 more variable: variable_to_remove &lt;lgl&gt;</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">datcor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/woebin_cor_iv.html">woebin_cor_iv</a></span><span class="op">(</span><span class="va">germancredit</span>, <span class="va">bins</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [INFO] converting into woe values ...</span></span>
+<span><span class="co">#&gt; Warning in stats::cor(x = x, y = y, use = use, method = method): the standard</span></span>
+<span><span class="co">#&gt; deviation is zero</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Correlation method: 'pearson'</span></span>
+<span><span class="co">#&gt; Missing treated using: 'pairwise.complete.obs'</span></span>
+<span></span>
+<span><span class="va">datcor</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 400 × 7</span></span></span>
+<span><span class="co">#&gt;    var1                            var2        r var1_iv var1_…¹ var2_iv var2_…²</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                           <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> status.of.existing.checking.ac… stat… <span style="color: #BB0000;">NA</span>        0.639       1  0.639        1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> status.of.existing.checking.ac… cred…  0.203    0.639       1  0.292        2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> status.of.existing.checking.ac… dura…  0.098<span style="text-decoration: underline;">5</span>   0.639       1  0.283        3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> status.of.existing.checking.ac… savi…  0.219    0.639       1  0.191        4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> status.of.existing.checking.ac… cred…  0.091<span style="text-decoration: underline;">6</span>   0.639       1  0.181        5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> status.of.existing.checking.ac… purp…  0.133    0.639       1  0.153        6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> status.of.existing.checking.ac… age.…  0.129    0.639       1  0.130        7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> status.of.existing.checking.ac… prop…  0.065<span style="text-decoration: underline;">2</span>   0.639       1  0.113        8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> status.of.existing.checking.ac… pres…  0.119    0.639       1  0.085<span style="text-decoration: underline;">3</span>       9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> status.of.existing.checking.ac… hous…  0.112    0.639       1  0.083<span style="text-decoration: underline;">3</span>      10</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 390 more rows, and abbreviated variable names ¹​var1_rank, ²​var2_rank</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span>
+<span></span>
+<span><span class="va">cor_limit</span> <span class="op">&lt;-</span> <span class="fl">0.15</span></span>
+<span></span>
+<span><span class="va">datcor</span> <span class="op"><a href="../reference/risk3r-exports.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">var1</span> <span class="op">!=</span> <span class="va">var2</span><span class="op">)</span> <span class="op"><a href="../reference/risk3r-exports.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    cor_conflict <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span> <span class="op">&gt;</span> <span class="va">cor_limit</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>    variable_to_remove <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
+<span>      <span class="va">cor_conflict</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">var1</span> <span class="op">&gt;</span> <span class="va">var2</span>, <span class="va">var2</span>, <span class="va">var1</span><span class="op">)</span>,</span>
+<span>      <span class="cn">NA</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in Ops.factor(var1, var2): '&gt;' not meaningful for factors</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 380 × 9</span></span></span>
+<span><span class="co">#&gt;    var1             var2       r var1_iv var1_…¹ var2_iv var2_…² cor_c…³ varia…⁴</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> status.of.exist… cred… 0.203    0.639       1  0.292        2 TRUE    <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> status.of.exist… dura… 0.098<span style="text-decoration: underline;">5</span>   0.639       1  0.283        3 FALSE   <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> status.of.exist… savi… 0.219    0.639       1  0.191        4 TRUE    <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> status.of.exist… cred… 0.091<span style="text-decoration: underline;">6</span>   0.639       1  0.181        5 FALSE   <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> status.of.exist… purp… 0.133    0.639       1  0.153        6 FALSE   <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> status.of.exist… age.… 0.129    0.639       1  0.130        7 FALSE   <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> status.of.exist… prop… 0.065<span style="text-decoration: underline;">2</span>   0.639       1  0.113        8 FALSE   <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> status.of.exist… pres… 0.119    0.639       1  0.085<span style="text-decoration: underline;">3</span>       9 FALSE   <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> status.of.exist… hous… 0.112    0.639       1  0.083<span style="text-decoration: underline;">3</span>      10 FALSE   <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> status.of.exist… othe… 0.048<span style="text-decoration: underline;">9</span>   0.639       1  0.057<span style="text-decoration: underline;">6</span>      11 FALSE   <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 370 more rows, and abbreviated variable names ¹​var1_rank, ²​var2_rank,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   ³​cor_conflict, ⁴​variable_to_remove</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -246,7 +253,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>
