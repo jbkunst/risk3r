@@ -117,11 +117,11 @@ frame.</p></dd>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Using `as.character()` on a quosure is deprecated as of rlang 0.3.0.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Please use `as_label()` or `as_name()` instead.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> This warning is displayed once per session.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> total~ TRUE</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> am equals to 1~ am == 1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> carb = 1!!~ carb == 1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> hp less than 90~ hp &lt; 90</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> final~ TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Step 1 `initial` ==&gt; TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Step 2 `am equals to 1` ==&gt; am == 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Step 3 `carb = 1!!` ==&gt; carb == 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Step 4 `hp less than 90` ==&gt; hp &lt; 90</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Step 5 `final` ==&gt; TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 mpg cyl disp hp drat    wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fiat 128       32.4   4 78.7 66 4.08 2.200 19.47  1  1    4    1</span>
@@ -129,12 +129,12 @@ frame.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9      27.3   4 79.0 66 4.08 1.935 18.90  1  1    4    1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $summary</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            filter  n cyl_mean n_unique_cyl</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           total 32 6.187500            3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  am equals to 1 13 5.076923            3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      carb = 1!!  4 4.000000            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 hp less than 90  3 4.000000            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           final  3 4.000000            1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            filter rows rows_removed  n cyl_mean n_unique_cyl</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         initial   32           NA 32 6.187500            3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  am equals to 1   13           19 13 5.076923            3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      carb = 1!!    4            9  4 4.000000            1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 hp less than 90    3            1  3 4.000000            1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           final    3            0  3 4.000000            1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
