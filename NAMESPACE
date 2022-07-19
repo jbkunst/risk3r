@@ -2,6 +2,7 @@
 
 S3method(as.list,skim_df)
 export("%>%")
+export(apply_filters)
 export(cmo)
 export(count_distr_max)
 export(ecdf_data)

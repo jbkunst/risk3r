@@ -45,8 +45,10 @@ model_metrics <- function(model, newdata = NULL) {
 #'
 #' data("credit_woe")
 #'
-#' m <- glm(bad ~ ., family = binomial, data = head(credit_woe, 10000))
-#' m <- featsel_stepforward(m)
+#' m <- glm(bad ~ age_woe + flag_res_phone_woe + months_in_the_job_woe +
+#'    payment_day_woe + sex_woe + profession_code_woe + marital_status_woe,
+#'    family = binomial, data = head(credit_woe, 10000)
+#'    )
 #'
 #' model_partials(m)
 #'
@@ -55,23 +57,29 @@ model_metrics <- function(model, newdata = NULL) {
 #' @importFrom stats binomial glm
 #' @export
 model_partials <- function(model, newdata = NULL, verbose = TRUE) {
+
   r_n_p <- reponse_and_predictors_names(model)
 
   yvar <- r_n_p[["response"]]
   xvars <- r_n_p[["predictors"]]
 
   dfmetrics <- purrr::map_df(1:length(xvars), function(nv = 7) {
+
     var <- xvars[nv]
+
     new_xvars <- xvars[1:nv]
 
     new_f <- formula_from_reponse_and_predictors_names(yvar, new_xvars)
 
     if (verbose) {
-      msg <- stringr::str_glue("Fitting and evaluating model with { nv } variables: { new_f }")
+      msg <- stringr::str_glue(
+"Fitting and evaluating model with { nv } variables: { stringr::str_c(new_xvars, collapse = ', ') }"
+        )
 
       msg <- stringr::str_trunc(msg, getOption("width"))
 
-      message(msg)
+      cli::cli_alert_info(msg)
+
     }
 
     fit <- glm(new_f, family = binomial(), data = model$data)
@@ -87,6 +95,9 @@ model_partials <- function(model, newdata = NULL, verbose = TRUE) {
     }
 
     out <- dplyr::mutate(out, variable = var, .before = 1)
+
+    out
+
   })
 
   if (!is.null(newdata)) {
@@ -104,6 +115,7 @@ model_partials <- function(model, newdata = NULL, verbose = TRUE) {
   # class(dfmetrics) <- c("model_partials", class(dfmetrics))
 
   dfmetrics
+
 }
 
 
@@ -114,8 +126,12 @@ model_partials <- function(model, newdata = NULL, verbose = TRUE) {
 #'
 #' data("credit_woe")
 #'
-#' m <- glm(bad ~ ., family = binomial, data = head(credit_woe, 10000))
-#' m <- featsel_stepforward(m)
+#' data("credit_woe")
+#'
+#' m <- glm(bad ~ age_woe + flag_res_phone_woe + months_in_the_job_woe +
+#'    payment_day_woe + sex_woe + profession_code_woe + marital_status_woe,
+#'    family = binomial, data = head(credit_woe, 10000)
+#'    )
 #'
 #' model_partials(m)
 #'
@@ -161,7 +177,6 @@ model_summary_variables <- function(model,
       dummy_iv           = .data$iv > limit_iv,
       dummy_correlation  = .data$correlation_max < limit_corr,
       dummy_vif          = .data$vif < limit_vif,
-
       dummy_sign = ifelse(.data$term == "(Intercept)", NA, .data$dummy_sign)
 
     )

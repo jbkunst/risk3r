@@ -34,7 +34,8 @@ Imports:
     ingredients,
     ROCR,
     magrittr,
-    patchwork
+    patchwork,
+    cli
 Suggests:
     rmarkdown,
     knitr,
@@ -46,7 +47,7 @@ Suggests:
     tweenr,
     ggforce,
     showtext
-RoxygenNote: 7.1.2
 Depends: 
     R (>= 2.10)
 VignetteBuilder: knitr
+RoxygenNote: 7.2.0

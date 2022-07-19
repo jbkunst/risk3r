@@ -1,5 +1,5 @@
 ---
-title: "Scorecard package helpers"
+title: "Scorecard helpers and others funcions"
 output: rmarkdown::html_vignette
 editor_options: 
   chunk_output_type: console
@@ -43,7 +43,8 @@ binssummary <- woebin_summary(bins)
 binssummary
 
 binssummary %>% 
-  select(variable, ks, iv, iv_lbl, hhi, hhi_lbl, distribution)
+  select(variable, ks, iv, iv_lbl,
+         hhi, hhi_lbl, distribution)
 ```
 
 
@@ -83,4 +84,3 @@ datcor %>%
     )
   )
 ```
-

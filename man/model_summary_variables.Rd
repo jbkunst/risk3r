@@ -42,8 +42,12 @@ Get summary of model
 
 data("credit_woe")
 
-m <- glm(bad ~ ., family = binomial, data = head(credit_woe, 10000))
-m <- featsel_stepforward(m)
+data("credit_woe")
+
+m <- glm(bad ~ age_woe + flag_res_phone_woe + months_in_the_job_woe +
+   payment_day_woe + sex_woe + profession_code_woe + marital_status_woe,
+   family = binomial, data = head(credit_woe, 10000)
+   )
 
 model_partials(m)
 
