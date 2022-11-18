@@ -181,20 +181,19 @@
 <span class="r-plt img"><img src="gg_model_roc-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_calibration</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'</span>
 <span class="r-plt img"><img src="gg_model_roc-7.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">gg_model_calibration</span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dnew</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'</span>
 <span class="r-plt img"><img src="gg_model_roc-8.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_coef</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting for profiling to be done...</span>
 <span class="r-plt img"><img src="gg_model_roc-9.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_corr</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Correlation method: 'pearson'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Missing treated using: 'pairwise.complete.obs'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Correlation computed with</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Method: 'pearson'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Missing treated using: 'pairwise.complete.obs'</span>
 <span class="r-plt img"><img src="gg_model_roc-10.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_vif</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
@@ -208,7 +207,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; target variable   :  10000  values </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predict function  :  yhat.glm  will be used ( <span style="color: #BBBB00;"> default </span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  No value for predict function target column. ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  package stats , ver. 4.2.1 , task classification ( <span style="color: #BBBB00;"> default </span> ) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  package stats , ver. 4.2.2 , task classification ( <span style="color: #BBBB00;"> default </span> ) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0.03852792 , mean =  0.199 , max =  0.5331556  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residual function :  difference between y and yhat ( <span style="color: #BBBB00;"> default </span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  -0.5331556 , mean =  -4.122215e-10 , max =  0.9519349  </span>
@@ -217,30 +216,35 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_partials</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting and evaluating model with 1 variables: age_woe</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Creating woe binning ...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting and evaluating model with 2 variables: age_woe, flag_res_phone_woe</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Creating woe binning ...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting and evaluating model with 3 variables: age_woe, flag_res_phone_woe, m...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Creating woe binning ...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting and evaluating model with 4 variables: age_woe, flag_res_phone_woe, m...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Creating woe binning ...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting and evaluating model with 5 variables: age_woe, flag_res_phone_woe, m...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Creating woe binning ...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting and evaluating model with 6 variables: age_woe, flag_res_phone_woe, m...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Creating woe binning ...</span>
 <span class="r-plt img"><img src="gg_model_roc-13.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_coef</span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_y_discrete</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="va">rev</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting for profiling to be done...</span>
 <span class="r-plt img"><img src="gg_model_roc-14.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">gg_model_vif</span><span class="op">(</span><span class="va">m</span><span class="op">)</span>  <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="va">rev</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gg_model_roc-15.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">gg_model_corr</span><span class="op">(</span><span class="va">m</span>, upper <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Correlation method: 'pearson'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Missing treated using: 'pairwise.complete.obs'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Correlation computed with</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Method: 'pearson'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Missing treated using: 'pairwise.complete.obs'</span>
 <span class="r-plt img"><img src="gg_model_roc-16.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">gg_model_corr</span><span class="op">(</span><span class="va">m</span>, upper <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_y_discrete</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="va">rev</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="va">rev</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Correlation method: 'pearson'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Missing treated using: 'pairwise.complete.obs'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Correlation computed with</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Method: 'pearson'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Missing treated using: 'pairwise.complete.obs'</span>
 <span class="r-plt img"><img src="gg_model_roc-17.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -250,9 +254,10 @@
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="featsel_stepforward.html">featsel_stepforward</a></span><span class="op">(</span><span class="va">m</span>, scale <span class="op">=</span> <span class="fl">5</span>, trace <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu">scorecard</span><span class="fu">::</span><span class="fu"><a href="http://shichen.name/scorecard/reference/woebin.html" class="external-link">woebin</a></span><span class="op">(</span><span class="va">credit</span>, <span class="st">"bad"</span>, no_cores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [INFO] creating woe binning ... </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Creating woe binning ...</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 3 constant columns removed from input dataset,</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> flag_other_card, flag_mobile_phone, flag_contact_phone</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">Binning on 49694 rows and 14 columns in 00:00:05</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_importance2</span><span class="op">(</span><span class="va">m</span>, <span class="va">bins</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gg_model_roc-18.png" alt="" width="700" height="433"></span>

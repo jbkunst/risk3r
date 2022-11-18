@@ -82,11 +82,13 @@
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">actual</span> <span class="op">~</span> <span class="va">predicted</span>, family <span class="op">=</span> <span class="va">binomial</span>, data <span class="op">=</span> <span class="va">daux</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">model_metrics</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Creating woe binning ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ks   auc    iv  gini</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 0.497 0.831  1.73 0.662</span>
 <span class="r-in"><span><span class="fu">model_metrics</span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">daux</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Creating woe binning ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ks   auc    iv  gini</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>

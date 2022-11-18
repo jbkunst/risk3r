@@ -88,7 +88,8 @@
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://shichen.name/scorecard/reference/woebin.html" class="external-link">woebin</a></span><span class="op">(</span><span class="va">germancredit</span>, y <span class="op">=</span> <span class="st">"creditability"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [INFO] creating woe binning ...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating woe binning ...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">Binning on 1000 rows and 21 columns in 00:00:03</span></span></span>
 <span></span>
 <span><span class="va">binssummary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/woebin_summary.html">woebin_summary</a></span><span class="op">(</span><span class="va">bins</span><span class="op">)</span></span>
 <span></span>
@@ -120,7 +121,6 @@
 <span><span class="co">#&gt; <span style="color: #949494;">#   iv_lbl &lt;fct&gt;, hhi_lbl &lt;fct&gt;, distribution &lt;chr&gt;, and abbreviated variable</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   names ¹​n_categories, ²​count_distr_max, ³​count_distr_min, ⁴​has_missing,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   ⁵​has_special_values</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span>
 <span></span>
 <span><span class="va">binssummary</span> <span class="op"><a href="../reference/risk3r-exports.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">ks</span>, <span class="va">iv</span>, <span class="va">iv_lbl</span>,</span>
@@ -175,9 +175,11 @@
 <span><span class="co">#&gt; 5: 0.0780047502 0.1812204    Inf             FALSE</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/woebin_ply_min.html">woebin_ply_min</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">bin</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Converting into woe values ...</span></span>
 <span><span class="co">#&gt; [1]  0.03366128  0.39053946 -0.25830746  0.39053946  0.39053946  0.39053946</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/woebin_ply_min.html">woebin_ply_min</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">bin</span>, value <span class="op">=</span> <span class="st">"posprob"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Converting into woe values ...</span></span>
 <span><span class="co">#&gt; [1] 0.3071161 0.3877551 0.2486911 0.3877551 0.3877551 0.3877551</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -186,12 +188,13 @@
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">datcor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/woebin_cor_iv.html">woebin_cor_iv</a></span><span class="op">(</span><span class="va">germancredit</span>, <span class="va">bins</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [INFO] converting into woe values ...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Converting into woe values ...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">Woe transformating on 1000 rows and 20 columns in 00:00:00</span></span></span>
 <span><span class="co">#&gt; Warning in stats::cor(x = x, y = y, use = use, method = method): the standard</span></span>
 <span><span class="co">#&gt; deviation is zero</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Correlation method: 'pearson'</span></span>
-<span><span class="co">#&gt; Missing treated using: 'pairwise.complete.obs'</span></span>
+<span><span class="co">#&gt; Correlation computed with</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Method: 'pearson'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Missing treated using: 'pairwise.complete.obs'</span></span>
 <span></span>
 <span><span class="va">datcor</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 400 × 7</span></span></span>
@@ -208,7 +211,6 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> status.of.existing.checking.ac… pres…  0.119    0.639       1  0.085<span style="text-decoration: underline;">3</span>       9</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> status.of.existing.checking.ac… hous…  0.112    0.639       1  0.083<span style="text-decoration: underline;">3</span>      10</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># … with 390 more rows, and abbreviated variable names ¹​var1_rank, ²​var2_rank</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span>
 <span></span>
 <span><span class="va">cor_limit</span> <span class="op">&lt;-</span> <span class="fl">0.15</span></span>
 <span></span>
@@ -237,8 +239,7 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> status.of.exist… hous… 0.112    0.639       1  0.083<span style="text-decoration: underline;">3</span>      10 FALSE   <span style="color: #BB0000;">NA</span>     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> status.of.exist… othe… 0.048<span style="text-decoration: underline;">9</span>   0.639       1  0.057<span style="text-decoration: underline;">6</span>      11 FALSE   <span style="color: #BB0000;">NA</span>     </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># … with 370 more rows, and abbreviated variable names ¹​var1_rank, ²​var2_rank,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   ³​cor_conflict, ⁴​variable_to_remove</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;">#   ³​cor_conflict, ⁴​variable_to_remove</span></span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
