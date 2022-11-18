@@ -50,8 +50,8 @@ apply_filters <- function(data,
     fnm  <- filters_names[i]
     fltr <- filters[[i]]
 
-    as.character(fltr)
-    as_label(fltr)
+    # as.character(fltr)
+    # as_label(fltr)
 
     if(verbose) {
       t1 <- stringr::str_c("Step ", i, " `", fnm, "` ==> ", sep = "")
