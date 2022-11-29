@@ -40,7 +40,7 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
   dm <- as.matrix(fit$beta)
   dm <- as.data.frame(dm)
   dm <- tibble::rownames_to_column(dm, "variable")
-  dm <- tibble::as.tibble(dm)
+  dm <- tibble::as_tibble(dm)
   dm <- tidyr::gather(dm, "L1_Norm", "coefficient", -.data$variable)
   dm <- dplyr::mutate(
     dm,
