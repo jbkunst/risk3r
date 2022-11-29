@@ -4,7 +4,14 @@
 \alias{apply_filters}
 \title{Apply consecutive filter expressions to a data frame and return results}
 \usage{
-apply_filters(data, filters, summary_fun, verbose = TRUE)
+apply_filters(
+  data,
+  filters,
+  summary_fun = function(data) {
+     dplyr::summarise(data)
+ },
+  verbose = TRUE
+)
 }
 \arguments{
 \item{data}{A data frame.}
@@ -21,7 +28,7 @@ Apply consecutive filter expressions to a data frame and return results
 }
 \examples{
 
-require(rlang) # quo
+require(rlang) # summarise, n_distinct, n
 require(dplyr) # quo
 
 data <- mtcars
@@ -41,6 +48,8 @@ summary_fun <- function(data) {
     )
 }
 
-apply_filters(data, filters, summary_fun)
+results <- apply_filters(data, filters, summary_fun)
+
+results
 
 }
