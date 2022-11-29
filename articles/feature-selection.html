@@ -100,59 +100,34 @@
 <span></span>
 <span><span class="va">model_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">bad</span> <span class="op">~</span> <span class="va">.</span>, family <span class="op">=</span> <span class="va">binomial</span>, data <span class="op">=</span> <span class="va">train_data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">model_raw</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 13 × 5</span></span></span>
-<span><span class="co">#&gt;    term                    estimate std.error statistic  p.value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> (Intercept)              -<span style="color: #BB0000;">1.39</span>      0.018<span style="text-decoration: underline;">5</span>   -<span style="color: #BB0000;">75.4</span>   0   <span style="color: #949494;"> </span>   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> sex_woe                   0.878     0.115      7.65  2.05<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> marital_status_woe        0.363     0.068<span style="text-decoration: underline;">3</span>     5.32  1.06<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> age_woe                   0.612     0.054<span style="text-decoration: underline;">2</span>    11.3   1.47<span style="color: #949494;">e</span><span style="color: #BB0000;">-29</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> flag_res_phone_woe        0.727     0.072<span style="text-decoration: underline;">4</span>    10.0   1.10<span style="color: #949494;">e</span><span style="color: #BB0000;">-23</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> area_code_res_phone_woe   0.310     0.097<span style="text-decoration: underline;">3</span>     3.18  1.46<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> payment_day_woe           0.799     0.122      6.52  6.83<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> residence_type_woe       -<span style="color: #BB0000;">0.212</span>     0.223     -<span style="color: #BB0000;">0.950</span> 3.42<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> months_in_residence_woe  -<span style="color: #BB0000;">0.026</span><span style="color: #BB0000; text-decoration: underline;">5</span>    0.153     -<span style="color: #BB0000;">0.174</span> 8.62<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> months_in_the_job_woe     0.501     0.070<span style="text-decoration: underline;">6</span>     7.09  1.31<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> profession_code_woe       0.483     0.084<span style="text-decoration: underline;">3</span>     5.74  9.72<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> personal_net_income_woe   0.061<span style="text-decoration: underline;">0</span>    0.105      0.579 5.63<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> quant_add_cards_woe       0.273     0.154      1.77  7.61<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span></span></span>
-<span></span>
-<span><span class="co"># some parameter are negative, multicollinearity</span></span>
-<span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">model_raw</span><span class="op">)</span> <span class="op"><a href="../reference/risk3r-exports.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">p.value</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 5</span></span></span>
-<span><span class="co">#&gt;   term                    estimate std.error statistic p.value</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> (Intercept)              -<span style="color: #BB0000;">1.39</span>      0.018<span style="text-decoration: underline;">5</span>   -<span style="color: #BB0000;">75.4</span>    0     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> residence_type_woe       -<span style="color: #BB0000;">0.212</span>     0.223     -<span style="color: #BB0000;">0.950</span>  0.342 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> months_in_residence_woe  -<span style="color: #BB0000;">0.026</span><span style="color: #BB0000; text-decoration: underline;">5</span>    0.153     -<span style="color: #BB0000;">0.174</span>  0.862 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> personal_net_income_woe   0.061<span style="text-decoration: underline;">0</span>    0.105      0.579  0.563 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> quant_add_cards_woe       0.273     0.154      1.77   0.076<span style="text-decoration: underline;">1</span></span></span>
-<span></span>
 <span><span class="fu"><a href="../reference/gg_model_roc.html">gg_model_coef</a></span><span class="op">(</span><span class="va">model_raw</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Yikes!"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Yikes!"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Some parameter are negative, multicollinearity"</span></span>
+<span>    <span class="op">)</span></span></code></pre></div>
 <p><img src="feature-selection_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="satellite-model">Satellite Model<a class="anchor" aria-label="anchor" href="#satellite-model"></a>
 </h2>
+<p>We’ll use a simple random forest to have a benchmark.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># rf simple</span></span>
-<span><span class="va">model_rf</span> <span class="op">&lt;-</span> <span class="fu">randomForest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html" class="external-link">randomForest</a></span><span class="op">(</span><span class="va">bad</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train_data</span>, do.trace <span class="op">=</span> <span class="cn">FALSE</span>, ntree <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">model_rf</span> <span class="op">&lt;-</span> <span class="fu">randomForest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html" class="external-link">randomForest</a></span><span class="op">(</span><span class="va">bad</span> <span class="op">~</span> <span class="va">.</span>,</span>
+<span>                                       data <span class="op">=</span> <span class="va">train_data</span>,</span>
+<span>                                       do.trace <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                                       ntree <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/metrics.html">metrics</a></span><span class="op">(</span></span>
-<span>  <span class="va">train_data</span><span class="op">$</span><span class="va">bad</span>, </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model_rf</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/metrics.html">metrics</a></span><span class="op">(</span><span class="va">train_data</span><span class="op">$</span><span class="va">bad</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model_rf</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
 <span><span class="co">#&gt;      ks   auc    iv  gini</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.190 0.629 0.215 0.257</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.186 0.628 0.213 0.256</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="glmnet">glmnet<a class="anchor" aria-label="anchor" href="#glmnet"></a>
+<h2 id="lasso-or-elasticnet-regularization">Lasso or Elasticnet Regularization<a class="anchor" aria-label="anchor" href="#lasso-or-elasticnet-regularization"></a>
 </h2>
-<p>From <a href="https://glmnet.stanford.edu/articles/glmnet.html" class="external-link uri">https://glmnet.stanford.edu/articles/glmnet.html</a></p>
+<p>This is a wrapper of `<code><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">glmnet::cv.glmnet</a></code>.</p>
+<p>From <a href="https://glmnet.stanford.edu/articles/glmnet.html" class="external-link uri">https://glmnet.stanford.edu/articles/glmnet.html</a>:</p>
 <p>There 2 option for <code>S</code>: <code>lambda.min</code> and <code>lambda.1se</code> , this last option you have a more regularized model.</p>
 <p>This wrapper around the glmnet package take a model as input, then return the model with the variables non zero from the <code><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">glmnet::cv.glmnet()</a></code> function according with the selected <code>S</code> option. This function reorder the variables in the same order the coefficient in the glmnet model turn to non zero (check the plots when run this funtion).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -160,57 +135,15 @@
 <p><img src="feature-selection_files/figure-html/unnamed-chunk-4-1.png" width="700"><img src="feature-selection_files/figure-html/unnamed-chunk-4-2.png" width="700"><img src="feature-selection_files/figure-html/unnamed-chunk-4-3.png" width="700"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 5</span></span></span>
-<span><span class="co">#&gt;   term                    estimate std.error statistic  p.value</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> (Intercept)               -<span style="color: #BB0000;">1.39</span>     0.018<span style="text-decoration: underline;">5</span>    -<span style="color: #BB0000;">75.4</span>  0   <span style="color: #949494;"> </span>   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> age_woe                    0.616    0.052<span style="text-decoration: underline;">0</span>     11.9  1.88<span style="color: #949494;">e</span><span style="color: #BB0000;">-32</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> flag_res_phone_woe         0.743    0.071<span style="text-decoration: underline;">6</span>     10.4  3.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-25</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> marital_status_woe         0.376    0.067<span style="text-decoration: underline;">4</span>      5.58 2.41<span style="color: #949494;">e</span><span style="color: #BB0000;">- 8</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> months_in_the_job_woe      0.521    0.068<span style="text-decoration: underline;">7</span>      7.59 3.12<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> sex_woe                    0.822    0.112       7.35 2.04<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> profession_code_woe        0.493    0.084<span style="text-decoration: underline;">0</span>      5.87 4.32<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> payment_day_woe            0.805    0.122       6.57 4.87<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> area_code_res_phone_woe    0.312    0.097<span style="text-decoration: underline;">3</span>      3.20 1.37<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span></span></span>
-<span></span>
-<span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span> <span class="op"><a href="../reference/risk3r-exports.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">p.value</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
-<span><span class="co">#&gt;   term        estimate std.error statistic p.value</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> (Intercept)    -<span style="color: #BB0000;">1.39</span>    0.018<span style="text-decoration: underline;">5</span>     -<span style="color: #BB0000;">75.4</span>       0</span></span>
-<span></span>
 <span><span class="fu"><a href="../reference/gg_model_roc.html">gg_model_coef</a></span><span class="op">(</span><span class="va">model_fsglmnet</span><span class="op">)</span></span></code></pre></div>
 <p><img src="feature-selection_files/figure-html/unnamed-chunk-4-4.png" width="700"></p>
 </div>
 <div class="section level2">
-<h2 id="setpwise-forward">Setpwise forward<a class="anchor" aria-label="anchor" href="#setpwise-forward"></a>
+<h2 id="setpwise-forward">Setpwise Forward<a class="anchor" aria-label="anchor" href="#setpwise-forward"></a>
 </h2>
-<p>This is a wrapper for <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">stats::step</a></code> but the start point model is the null one <code>response ~ 1</code>.</p>
+<p>This is a wrapper for <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">stats::step</a></code> but the start point model is the null one: <code>response ~ 1</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_fsstep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/featsel_stepforward.html">featsel_stepforward</a></span><span class="op">(</span><span class="va">model_raw</span>, trace <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 5</span></span></span>
-<span><span class="co">#&gt;    term                    estimate std.error statistic  p.value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> (Intercept)               -<span style="color: #BB0000;">1.39</span>     0.018<span style="text-decoration: underline;">5</span>    -<span style="color: #BB0000;">75.4</span>  0   <span style="color: #949494;"> </span>   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> age_woe                    0.609    0.052<span style="text-decoration: underline;">1</span>     11.7  1.49<span style="color: #949494;">e</span><span style="color: #BB0000;">-31</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> flag_res_phone_woe         0.731    0.071<span style="text-decoration: underline;">8</span>     10.2  2.46<span style="color: #949494;">e</span><span style="color: #BB0000;">-24</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> months_in_the_job_woe      0.509    0.068<span style="text-decoration: underline;">9</span>      7.38 1.55<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> sex_woe                    0.870    0.114       7.61 2.83<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> payment_day_woe            0.800    0.122       6.54 6.18<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> profession_code_woe        0.484    0.084<span style="text-decoration: underline;">2</span>      5.75 8.95<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> marital_status_woe         0.359    0.067<span style="text-decoration: underline;">9</span>      5.29 1.20<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> area_code_res_phone_woe    0.312    0.097<span style="text-decoration: underline;">3</span>      3.20 1.36<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> quant_add_cards_woe        0.298    0.148       2.01 4.46<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span></span></span>
-<span></span>
-<span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span> <span class="op"><a href="../reference/risk3r-exports.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">p.value</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
-<span><span class="co">#&gt;   term        estimate std.error statistic p.value</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> (Intercept)    -<span style="color: #BB0000;">1.39</span>    0.018<span style="text-decoration: underline;">5</span>     -<span style="color: #BB0000;">75.4</span>       0</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/gg_model_roc.html">gg_model_coef</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span></span></code></pre></div>
 <p><img src="feature-selection_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
@@ -219,34 +152,66 @@
 <h2 id="repetitive-round-of-drop-out-loss">Repetitive round of drop out loss<a class="anchor" aria-label="anchor" href="#repetitive-round-of-drop-out-loss"></a>
 </h2>
 <p>From <a href="https://ema.drwhy.ai/featureImportance.html" class="external-link uri">https://ema.drwhy.ai/featureImportance.html</a></p>
-<p>The <code>stat = "min"</code> option give the most simpler model because It’more strict: If any iteration the loss increase then the variable is removed. You can choose between <code>c("q25", "mean", "median")</code></p>
+<p>This is a wrapper of <code><a href="https://jkunst.com/celavi/reference/feature_selection.html" class="external-link">celavi::feature_selection</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model_lss_prmt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/featsel_loss_function_permutations.html">featsel_loss_function_permutations</a></span><span class="op">(</span></span>
-<span>  <span class="va">model_fsglmnet</span>, </span>
-<span>  stat <span class="op">=</span><span class="st">"min"</span>,</span>
-<span>  B <span class="op">=</span> <span class="fl">50</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">model_lss_prmt</span>, <span class="st">"plots"</span><span class="op">)</span> <span class="op"><a href="../reference/risk3r-exports.html">%&gt;%</a></span> </span>
-<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/reduce.html" class="external-link">reduce</a></span><span class="op">(</span><span class="va">`+`</span><span class="op">)</span> <span class="op">&amp;</span></span>
-<span>  <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">&amp;</span></span>
-<span>  <span class="va">theme</span></span>
-<span></span>
-<span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">model_lss_prmt</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">model_lss_prmt</span><span class="op">)</span> <span class="op"><a href="../reference/risk3r-exports.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">&lt;=</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">p.value</span> <span class="op">&gt;</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">model_lss_prmt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/featsel_loss_function_permutations.html">featsel_loss_function_permutations</a></span><span class="op">(</span><span class="va">model_raw</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/gg_model_roc.html">gg_model_coef</a></span><span class="op">(</span><span class="va">model_lss_prmt</span><span class="op">)</span></span></code></pre></div>
+<p><img src="feature-selection_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="comparison">Comparison<a class="anchor" aria-label="anchor" href="#comparison"></a>
+</h2>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  `raw`      <span class="op">=</span> <span class="va">model_raw</span>,</span>
+<span>  `glmnet`   <span class="op">=</span> <span class="va">model_fsglmnet</span>,</span>
+<span>  `stepwise` <span class="op">=</span> <span class="va">model_fsstep</span>,</span>
+<span>  `loss`     <span class="op">=</span> <span class="va">model_lss_prmt</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">models</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_df</a></span><span class="op">(</span><span class="fu">broom</span><span class="fu">::</span><span class="va"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span>, .id <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">term</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html" class="external-link">spread</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="fu">tidyr</span><span class="fu">::</span><span class="va"><a href="https://tidyr.tidyverse.org/reference/replace_na.html" class="external-link">replace_na</a></span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">raw</span>, <span class="va">stepwise</span>, <span class="va">glmnet</span>, <span class="va">loss</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">raw</span><span class="op">)</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">stepwise</span><span class="op">)</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">glmnet</span><span class="op">)</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">loss</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 13 × 5</span></span></span>
+<span><span class="co">#&gt;    term                      raw stepwise glmnet  loss</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> (Intercept)                 1        1      1     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> age_woe                     1        1      1     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> area_code_res_phone_woe     1        1      1     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> flag_res_phone_woe          1        1      1     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> marital_status_woe          1        1      1     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> months_in_the_job_woe       1        1      1     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> payment_day_woe             1        1      1     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> profession_code_woe         1        1      1     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> sex_woe                     1        1      1     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> quant_add_cards_woe         1        1      0     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> months_in_residence_woe     1        0      0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> personal_net_income_woe     1        0      0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> residence_type_woe          1        0      0     0</span></span>
+<span></span>
+<span></span>
+<span><span class="va">models</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_df</a></span><span class="op">(</span><span class="va">model_metrics</span>, newdata <span class="op">=</span> <span class="va">test_data</span>, .id <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 5</span></span></span>
+<span><span class="co">#&gt;   model       ks   auc    iv  gini</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> raw      0.248 0.667 0.350 0.334</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> glmnet   0.249 0.667 0.348 0.333</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> stepwise 0.248 0.667 0.349 0.334</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> loss     0.248 0.667 0.349 0.334</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="manual">Manual<a class="anchor" aria-label="anchor" href="#manual"></a>
 </h2>
 <p>Let suppose you have a nice model, but you want to reduce the number of variables.</p>
 <p>Maybe you want check:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/model_partials.html">model_partials</a></span><span class="op">(</span><span class="va">model_fsstep</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 5</span></span></span>
 <span><span class="co">#&gt;   variable                   ks   auc    iv  gini</span></span>
@@ -266,7 +231,7 @@
 <span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">key</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>      scales <span class="op">=</span> <span class="st">"free_y"</span></span>
 <span>      <span class="op">)</span></span></code></pre></div>
-<p><img src="feature-selection_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="feature-selection_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
