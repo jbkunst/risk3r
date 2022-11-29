@@ -257,7 +257,7 @@ gg_model_coef <- function(model, level = 0.95, show_intercept = FALSE, ...) {
   # stats::confint(model, level = level)
   # https://stackoverflow.com/questions/35629374/confint-with-glm-stats-very-very-slow
 
-  dconf <- log(exp(stats::confint.default(model, level = level))) %>%
+  dconf <- stats::confint.default(model, level = level) %>%
     as.data.frame() %>%
     tibble::rownames_to_column("term") %>%
     tibble::as_tibble() %>%
