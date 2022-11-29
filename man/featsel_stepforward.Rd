@@ -2,17 +2,17 @@
 % Please edit documentation in R/model-feature-selection.R
 \name{featsel_stepforward}
 \alias{featsel_stepforward}
-\title{Feature selection}
+\title{Feature selection vis stepwise forward}
 \usage{
 featsel_stepforward(model, ...)
 }
 \arguments{
 \item{model}{model}
 
-\item{...}{Additional argumentos for stats::step}
+\item{...}{Additional arguments for stats::step}
 }
 \description{
-Feature selection
+Feature selection vis stepwise forward
 }
 \examples{
 

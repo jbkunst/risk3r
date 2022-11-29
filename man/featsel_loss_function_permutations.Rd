@@ -6,12 +6,8 @@
 \usage{
 featsel_loss_function_permutations(
   model,
-  stat = c("median", "mean", "min", "q25", "q75", "max"),
-  B = 10,
-  n_sample = NULL,
-  loss_function = DALEX::loss_one_minus_auc,
-  verbose = TRUE,
-  plot = TRUE,
+  stat = function(x) quantile(x, 0.25),
+  iterations = 100,
   ...
 )
 }
@@ -20,33 +16,19 @@ featsel_loss_function_permutations(
 
 \item{stat}{= c("median", "mean", "min", "q25", "q75", "max"),}
 
-\item{B}{Iterations, defaults to 10 for each variable}
+\item{iterations}{Default 100.}
 
-\item{n_sample}{n_sample}
-
-\item{loss_function}{Default to DALEX::loss_one_minus_auc}
-
-\item{verbose}{verbose}
-
-\item{plot}{Save plots}
-
-\item{...}{Additional argumentos for DALEX::explain or ingredients::feature_importance}
+\item{...}{Additional arguments for celavi::feature_selection}
 }
 \description{
 Shortcut featsel_loss_function_permutations
 }
 \examples{
 
-if(FALSE){
-
 data("credit_woe")
 
 m <- glm(bad ~ ., family = binomial, data = credit_woe)
 
 m_featsel <- featsel_loss_function_permutations(m, stat = "min")
-
-attr(m_featsel, "plots")
-
-}
 
 }

@@ -46,7 +46,6 @@ ecdf_data <- function(actual, predicted){
 #' @param upper upper
 #' @param show_intercept show_intercept
 #' @param colors colors
-#' @param B B
 #' @param verbose verbose
 #' @param ... ...
 #'
@@ -364,8 +363,10 @@ gg_model_vif <- function(model, colors = c("#3aaf85", "#1b6ca8", "#cd201f"), ...
 }
 
 #' @rdname gg_model_roc
+#' @param ... Additional arguments for celavi::variable_importance.
+#' @importFrom celavi variable_importance
 #' @export
-gg_model_importance <- function(model, verbose = TRUE, B = 10, ...) {
+gg_model_importance <- function(model, ...) {
 
   term_lvls <- broom::tidy(model) %>%
     dplyr::filter(.data$term != "(Intercept)")  %>%
@@ -376,96 +377,16 @@ gg_model_importance <- function(model, verbose = TRUE, B = 10, ...) {
   yvar <- r_n_p[["response"]]
   xvars <- r_n_p[["predictors"]]
 
-  explainer <- DALEX::explain(
+  vi <- celavi::variable_importance(
     model,
-    data = model$data[, xvars],
-    y = as.numeric(model$data[[yvar]]),
-    verbose = verbose
+    data = model$data,
+    response = yvar,
+    predict_function = stats::predict.glm,
   )
 
-  feat_imp <- ingredients::feature_importance(
-    explainer,
-    loss_function = DALEX::loss_one_minus_auc,
-    B = B,
-    variables = xvars
-  )
 
-  res <- tibble::as_tibble(as.data.frame(feat_imp))
+  plot(vi) + ggplot2::theme_get()
 
-  # check if B == 1
-  if (!nrow(dplyr::filter(res, .data$permutation != 0)) == 0) {
-    res <- dplyr::filter(res, .data$permutation != 0)
-  }
-
-  res_full_base <- dplyr::filter(res, .data$variable %in% c("_full_model_", "_baseline_"))
-
-  res <- dplyr::filter(res, !.data$variable %in% c("_full_model_", "_baseline_"))
-
-  res <- res %>%
-    dplyr::mutate(variable = factor(.data$variable, levels = term_lvls))
-
-  res_summ <- summary_feature_importance_ingredients(feat_imp) %>%
-    dplyr::mutate(variable = factor(.data$variable, levels = term_lvls))
-
-  plot <- plot(feat_imp)
-
-  pb <- ggplot2::ggplot_build(plot)
-
-  pb$plot
-
-  full_model <- res_full_base %>%
-    dplyr::filter(.data$variable == "_full_model_") %>%
-    dplyr::pull(.data$dropout_loss) %>%
-    dplyr::first()
-
-  random_model <- base_line <- res_full_base %>%
-    dplyr::filter(.data$variable == "_baseline_") %>%
-    dplyr::pull(.data$dropout_loss) %>%
-    dplyr::first()
-
-  res_summ <- dplyr::mutate(res_summ, full_model = full_model)
-
-  ggplot2::ggplot() +
-
-    # ggplot2::geom_col(
-    ggplot2::geom_linerange(
-      data = res_summ,
-      ggplot2::aes(x = .data$variable, ymin = full_model, ymax = .data$dl_mean),
-      size = 5,
-      alpha = 0.5,
-      # width = 0.25,
-      color = "gray70",
-      # fill =  "gray80",
-    ) +
-
-    ggplot2::geom_hline(
-      data = tibble(
-        y = c(
-          # random_model,
-          full_model
-          )
-        ),
-      ggplot2::aes(yintercept = .data$y),
-      color = "gray60"
-    ) +
-
-    ggplot2::geom_boxplot(
-      data = res,
-      ggplot2::aes(x = .data$variable, y = .data$dropout_loss),
-      width = 0.25/2,
-      # width.errorbar = 0.15,
-      outlier.alpha = 0.1,
-      color = "gray65",
-      fill =  "gray90"
-      )  +
-
-    ggplot2::scale_y_continuous(
-      sec.axis = ggplot2::sec_axis(trans = ~ 1 - .x, name = "AUC (reversed)")
-      ) +
-
-    ggplot2::labs(
-      y = pb$plot$labels$y
-    )
 
 }
 

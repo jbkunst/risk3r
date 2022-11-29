@@ -30,12 +30,13 @@ Imports:
     glmnet,
     corrr,
     tidyselect,
-    DALEX,
-    ingredients,
     ROCR,
     magrittr,
     patchwork,
-    cli
+    cli,
+    celavi
+Remotes:
+  github::jbkunst/celavi    
 Suggests:
     rmarkdown,
     knitr,

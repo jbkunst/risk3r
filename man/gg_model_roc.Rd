@@ -25,7 +25,7 @@ gg_model_corr(model, upper = FALSE, ...)
 
 gg_model_vif(model, colors = c("#3aaf85", "#1b6ca8", "#cd201f"), ...)
 
-gg_model_importance(model, verbose = TRUE, B = 10, ...)
+gg_model_importance(model, ...)
 
 gg_model_importance2(model, bins, ...)
 
@@ -48,7 +48,7 @@ gg_model_calibration(
 
 \item{newdata}{newdata}
 
-\item{...}{...}
+\item{...}{Additional arguments for celavi::variable_importance.}
 
 \item{alpha}{alpha}
 
@@ -60,11 +60,9 @@ gg_model_calibration(
 
 \item{colors}{colors}
 
-\item{verbose}{verbose}
-
-\item{B}{B}
-
 \item{bins}{bins}
+
+\item{verbose}{verbose}
 
 \item{color}{color}
 

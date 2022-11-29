@@ -1,6 +1,8 @@
 ---
 title: "Feature Selection"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+      df_print: kable
 editor_options: 
   chunk_output_type: console
 ---
@@ -53,30 +55,31 @@ test_data  <- tail(credit_woe, 20000)
 
 model_raw <- glm(bad ~ ., family = binomial, data = train_data)
 
-broom::tidy(model_raw)
-
-# some parameter are negative, multicollinearity
-broom::tidy(model_raw) %>% filter(estimate <= 0 | p.value > 0.05)
-
 gg_model_coef(model_raw) +
-  labs(title = "Yikes!")
+  labs(
+    title = "Yikes!",
+    subtitle = "Some parameter are negative, multicollinearity"
+    )
 ```
 
 ## Satellite Model
 
-```{r, eval=TRUE}
-# rf simple
-model_rf <- randomForest::randomForest(bad ~ ., data = train_data, do.trace = FALSE, ntree = 100)
+We'll use a simple random forest to have a benchmark.
 
-metrics(
-  train_data$bad, 
-  predict(model_rf)
-  )
+```{r, eval=TRUE}
+model_rf <- randomForest::randomForest(bad ~ .,
+                                       data = train_data,
+                                       do.trace = FALSE,
+                                       ntree = 100)
+
+metrics(train_data$bad, predict(model_rf))
 ```
 
-## glmnet
+## Lasso or Elasticnet Regularization
 
-From https://glmnet.stanford.edu/articles/glmnet.html
+This is a wrapper of ``glmnet::cv.glmnet`.
+
+From https://glmnet.stanford.edu/articles/glmnet.html:
 
 There 2 option for `S`: `lambda.min` and `lambda.1se` , this last option
 you have a more regularized model.
@@ -90,25 +93,16 @@ in the same order the coefficient in the glmnet model turn to non zero
 ```{r}
 model_fsglmnet <- featsel_glmnet(model_raw, S = "lambda.1se", trace.it = FALSE)
 
-broom::tidy(model_fsglmnet)
-
-broom::tidy(model_fsglmnet) %>% filter(estimate <= 0 | p.value > 0.05)
-
 gg_model_coef(model_fsglmnet)
 ```
 
-## Setpwise forward
+## Setpwise Forward
 
-This is a wrapper for `stats::step` but the start point model is the null one
+This is a wrapper for `stats::step` but the start point model is the null one:
 `response ~ 1`.
 
 ```{r}
 model_fsstep <- featsel_stepforward(model_raw, trace = 0)
-
-broom::tidy(model_fsstep)
-
-broom::tidy(model_fsstep) %>%
-  filter(estimate <= 0 | p.value > 0.05)
 
 gg_model_coef(model_fsstep)
 ```
@@ -117,31 +111,39 @@ gg_model_coef(model_fsstep)
 
 From https://ema.drwhy.ai/featureImportance.html
 
-The `stat = "min"` option give the most simpler model because It'more strict:
-If any iteration the loss increase then the variable is removed. You can choose
-between `c("q25", "mean", "median")`
+This is a wrapper of `celavi::feature_selection`.
 
-```{r, eval=FALSE}
-model_lss_prmt <- featsel_loss_function_permutations(
-  model_fsglmnet, 
-  stat ="min",
-  B = 50
-  )
-
-library(patchwork)
-
-attr(model_lss_prmt, "plots") %>% 
-  purrr::reduce(`+`) &
-  patchwork::plot_layout(ncol = 1) &
-  theme
-
-broom::tidy(model_lss_prmt)
-
-broom::tidy(model_lss_prmt) %>% 
-  filter(estimate <= 0 | p.value > 0.05)
+```{r}
+model_lss_prmt <- featsel_loss_function_permutations(model_raw)
 
 gg_model_coef(model_lss_prmt)
 ```
+
+## Comparison
+
+```{r}
+models <- list(
+  `raw`      = model_raw,
+  `glmnet`   = model_fsglmnet,
+  `stepwise` = model_fsstep,
+  `loss`     = model_lss_prmt
+)
+
+models |> 
+  purrr::map_df(broom::tidy, .id = "model") |> 
+  select(model, term) |> 
+  mutate(value = 1) |> 
+  tidyr::spread(model, value) |> 
+  mutate(across(where(is.numeric), tidyr::replace_na, 0)) |> 
+  select(term, raw, stepwise, glmnet, loss) |> 
+  arrange(desc(raw), desc(stepwise), desc(glmnet), desc(loss))
+
+
+models |> 
+  purrr::map_df(model_metrics, newdata = test_data, .id = "model")
+```
+
+
 
 ## Manual
 
