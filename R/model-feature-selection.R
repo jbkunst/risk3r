@@ -183,7 +183,7 @@ featsel_loss_function_permutations <- function(
     iterations = 100,
     sample_frac = 1,
     predict_function = predict.glm,
-    # function accepts specific argument for the fit function
+    # function accepts specific argument for the fit function!
     family  = binomial,
     ...
   )
