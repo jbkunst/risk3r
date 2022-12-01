@@ -179,9 +179,8 @@ featsel_loss_function_permutations <- function(
     glm,
     model$data,
     response = risk3r::reponse_and_predictors_names(model)[["response"]],
-    stat = function(x) quantile(x, 0.25),
-    iterations = 100,
-    sample_frac = 1,
+    stat = stat,
+    iterations = iterations,
     predict_function = predict.glm,
     # function accepts specific argument for the fit function!
     family  = binomial,
