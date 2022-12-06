@@ -247,28 +247,9 @@ gg_model_dist <- function(model, newdata = NULL, alpha = 0.5, ...) {
 #' @export
 gg_model_coef <- function(model, level = 0.95, show_intercept = FALSE, ...) {
 
-  dmod <- broom::tidy(model)
+  dconf <- model_terms_and_ci(model, level = level, show_intercept = show_intercept)
 
-  term_lvls <- broom::tidy(model) %>%
-    dplyr::filter(.data$term != "(Intercept)")  %>%
-    dplyr::pull(.data$term)
-
-  # stats::confint(model, level = level)
-  # https://stackoverflow.com/questions/35629374/confint-with-glm-stats-very-very-slow
-
-  dconf <- stats::confint.default(model, level = level) %>%
-    as.data.frame() %>%
-    tibble::rownames_to_column("term") %>%
-    tibble::as_tibble() %>%
-    purrr::set_names(c("term", "lower", "upper"))
-
-  dconf <- dplyr::left_join(dmod, dconf, by = "term")
-
-  if(!show_intercept) {
-    dconf <-  dplyr::filter(dconf, .data$term != "(Intercept)")
-  }
-
-  dconf <- dplyr::mutate(dconf, term = factor(.data$term, levels = term_lvls))
+  dconf <- dplyr::mutate(dconf, term = factor(.data$term, levels = .data$term))
 
   ggplot2::ggplot(dconf, ggplot2::aes(y = forcats::fct_rev(.data$term))) +
 

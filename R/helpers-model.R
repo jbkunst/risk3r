@@ -13,7 +13,6 @@ reponse_and_predictors_names <- function(model) {
   )
 }
 
-
 #' Get formula from reponse and predictors names
 #' @param response response
 #' @param predictors predictors
@@ -29,4 +28,32 @@ formula_from_reponse_and_predictors_names <- function(response, predictors) {
   f <- paste0(response, " ~ ", f)
 
   as.formula(f)
+}
+
+#' A broom::tidy for glm modelos with terms and confidence intervals
+#' @param model model.
+#' @param level the confidence level required.
+#' @param show_intercept A logical value to indicate to show or hide the `(Intercept)`.
+#' @export
+model_terms_and_ci <- function(model, level = 0.95, show_intercept = FALSE){
+
+  dmod <- broom::tidy(model)
+
+  dconf <- stats::confint.default(model, level = level) %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column("term") %>%
+    tibble::as_tibble() %>%
+    purrr::set_names(c("term", "lower", "upper"))
+
+  dconf <- dplyr::left_join(dmod, dconf, by = "term")
+
+  dconf
+
+  if(!show_intercept){
+    dconf <- dconf %>%
+      dplyr::filter(.data$term != "(Intercept)")
+  }
+
+  dconf
+
 }
