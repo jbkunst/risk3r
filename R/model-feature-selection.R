@@ -99,7 +99,7 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
 
   dcoefs <- as.data.frame(dcoefs)
   dcoefs <- tibble::rownames_to_column(dcoefs, var = "variable")
-  dcoefs <- tibble::as.tibble(dcoefs)
+  dcoefs <- tibble::as_tibble(dcoefs)
   dcoefs <- dplyr::left_join(dcoefs, dm, by = "variable")
   dcoefs <- dplyr::mutate(dcoefs, position = ifelse(is.na(.data$position), Inf, .data$position))
   dcoefs <- dplyr::filter(dcoefs, .data$coefficient != 0, .data$variable != "(Intercept)")
