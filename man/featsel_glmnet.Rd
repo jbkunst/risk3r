@@ -17,7 +17,10 @@ featsel_glmnet(
 \arguments{
 \item{model}{model}
 
-\item{S}{S}
+\item{S}{From https://glmnet.stanford.edu/articles/glmnet.html#quick-start: `lambda.min` is
+the value of λ that gives minimum mean cross-validated error, while `lambda.1se` is the
+value of λ that gives the most regularized model such that the cross-validated error
+is within one standard error of the minimum.}
 
 \item{plot}{plot}
 
@@ -29,8 +32,12 @@ featsel_glmnet(
 
 \item{...}{Additional argumentos for glmnet::cv.glmnet}
 }
+\value{
+A `glm` object using the selected variables from `glmnet::cv.glmnet`.#'
+}
 \description{
-Feature selection via glmnet
+This is a wrapper for `glmnet::cv.glmnet` and return A `glm` object using
+the selected variables from `glmnet::cv.glmnet`.
 }
 \examples{
 

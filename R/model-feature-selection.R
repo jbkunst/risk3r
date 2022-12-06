@@ -1,7 +1,15 @@
 #' Feature selection via glmnet
 #'
+#' This is a wrapper for `glmnet::cv.glmnet` and return A `glm` object using
+#' the selected variables from `glmnet::cv.glmnet`.
+#'
+#' @return A `glm` object using the selected variables from `glmnet::cv.glmnet`.#'
+#'
 #' @param model model
-#' @param S S
+#' @param S From https://glmnet.stanford.edu/articles/glmnet.html#quick-start: `lambda.min` is
+#'   the value of λ that gives minimum mean cross-validated error, while `lambda.1se` is the
+#'   value of λ that gives the most regularized model such that the cross-validated error
+#'   is within one standard error of the minimum.
 #' @param plot plot
 #' @param seed seed
 #' @param trace.it trace.it p
@@ -53,7 +61,7 @@ featsel_glmnet <- function(model, S = "lambda.1se", plot = TRUE, seed = 123,
   dm <- dplyr::filter(dm, dplyr::row_number() == 1)
   dm <- dplyr::ungroup(dm)
   dm <- dplyr::mutate(dm, position = dplyr::row_number())
-  dm <- dplyr::select(dm, .data$variable, .data$position)
+  dm <- dplyr::select(dm, "variable", "position")
 
   # cv fit
   set.seed(seed)
@@ -165,7 +173,7 @@ featsel_stepforward <- function(model, ...) {
 #'
 #' m <- glm(bad ~ ., family = binomial, data = credit_woe)
 #'
-#' m_featsel <- featsel_loss_function_permutations(m, stat = "min")
+#' m_featsel <- featsel_loss_function_permutations(m, stat = min, iterations = 10)
 #'
 #' @export
 #' @importFrom celavi feature_selection
@@ -192,5 +200,70 @@ featsel_loss_function_permutations <- function(
   model_lss_prmt <- attr(fs, "final_fit")
 
   model_lss_prmt
+
+}
+
+
+#' An iterative process to eliminate variables by confidence interval or sign term
+#'
+#' @param model model
+#' @param level the confidence level used to calculate the confidence interval
+#' @param verbose Default set to TRUE.
+#'
+#' @examples
+#'
+#' data("credit_woe")
+#'
+#' m <- glm(bad ~ ., family = binomial, data = credit_woe)
+#'
+#' m_featsel <- featsel_brute_force(m)
+#'
+#' @export
+#' @importFrom celavi feature_selection
+featsel_brute_force <- function(model, level = 0.95, verbose = TRUE) {
+
+  while (TRUE) {
+
+    # print(gg_model_coef(model))
+
+    dconf <- model_terms_and_ci(model, level = level)
+    dconf <- dplyr::arrange(dconf, .data$estimate)
+
+    vars_sign_problems <- dplyr::filter(dconf, .data$estimate < 0)
+    vars_sign_problems <- dplyr::pull(vars_sign_problems, .data$term)
+
+    vars_conf_problems <- dplyr::filter(dconf, .data$lower < 0 & .data$upper > 0)
+    vars_conf_problems <- dplyr::pull(vars_conf_problems, .data$term)
+
+    vars_with_problems <- unique(c(vars_sign_problems, vars_conf_problems))
+
+    if(length(vars_with_problems) == 0){
+
+      break
+
+    }
+
+    var_to_rm <- vars_with_problems[1]
+
+    cli::cli_alert_info("removing `{var_to_rm}`.")
+
+    r_n_p <- reponse_and_predictors_names(model)
+
+    r_n_p$predictors <- setdiff(r_n_p$predictors, var_to_rm)
+
+    f <- formula_from_reponse_and_predictors_names(
+      r_n_p$response,
+      r_n_p$predictors
+    )
+
+    model <- glm(
+      f,
+      family = binomial,
+      data = dplyr::select(model$data, as.character(unlist(r_n_p)))
+      )
+
+  }
+
+  model
 
 }
