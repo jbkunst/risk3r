@@ -178,7 +178,6 @@ model_summary_variables <- function(model,
       dummy_correlation  = .data$correlation_max < limit_corr,
       dummy_vif          = .data$vif < limit_vif,
       dummy_sign = ifelse(.data$term == "(Intercept)", NA, .data$dummy_sign)
-
     )
 
   dmodtot
