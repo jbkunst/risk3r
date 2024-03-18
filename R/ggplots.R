@@ -80,9 +80,10 @@ ecdf_data <- function(actual, predicted){
 #'
 #' gg_model_partials(m)
 #'
-#' gg_model_coef(m) + ggplot2::coord_flip() + ggplot2::scale_y_discrete(limits = rev)
 #' gg_model_vif(m)  + ggplot2::coord_flip() + ggplot2::scale_x_discrete(limits = rev)
+#'
 #' gg_model_corr(m, upper = TRUE)
+#'
 #' gg_model_corr(m, upper = TRUE) +
 #'  ggplot2::coord_flip() +
 #'  ggplot2::scale_y_discrete(limits = rev) +
@@ -550,6 +551,8 @@ gg_model_calibration <- function(model, newdata = NULL,
 #'
 #' data("woes")
 #'
+#' woes <- head(woes)
+#'
 #' pps <- gg_woes(woes)
 #'
 #' if(require(patchwork)){
@@ -563,8 +566,8 @@ gg_model_calibration <- function(model, newdata = NULL,
 #' }
 #'
 #' gg_woes(woes, variable = "woe")
-#' gg_woes(woes, variable = "bin_iv")
 #'
+#' gg_woes(woes, variable = "bin_iv")
 #'
 #' @export
 #' @importFrom patchwork get_dim
@@ -631,6 +634,21 @@ gg_woes <- function(woes,
   pvars
 
 }
+
+
+
+#' data("woes")
+#'
+# s <- scorecard::scorecard2(
+#   bins = woes,
+#   dt = credit,
+#   "bad",
+#   points0 = 500,
+#   odds0 = 1/20,
+#   pdo = 20
+#   )
+#
+# s
 
 
 # p1 <- gg_model_ks(m) +

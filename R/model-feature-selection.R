@@ -235,7 +235,7 @@ featsel_brute_force <- function(model, level = 0.95, verbose = TRUE) {
     vars_conf_problems <- dplyr::filter(dconf, .data$lower < 0 & .data$upper > 0)
     vars_conf_problems <- dplyr::pull(vars_conf_problems, .data$term)
 
-    vars_with_problems <- unique(c(vars_sign_problems, vars_conf_problems))
+    vars_with_problems <- unique(c(vars_conf_problems, vars_sign_problems))
 
     if(length(vars_with_problems) == 0){
 
