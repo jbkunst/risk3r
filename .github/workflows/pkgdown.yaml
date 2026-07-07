@@ -8,12 +8,15 @@ on:
 
 name: pkgdown
 
+permissions:
+  contents: write
+
 jobs:
   pkgdown:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       RSPM: https://packagemanager.posit.co/cran/__linux__/jammy/latest
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_PAT: ${{ github.token }}
 
     steps:
       - uses: actions/checkout@v4
@@ -35,8 +38,8 @@ jobs:
           path: |
             ${{ env.R_LIBS_USER }}/*
             !${{ env.R_LIBS_USER }}/pak
-          key: ubuntu-latest-${{ steps.install-r.outputs.installed-r-version }}-1-${{ hashFiles('.github/r-depends.rds') }}
-          restore-keys: ubuntu-latest-${{ steps.install-r.outputs.installed-r-version }}-1-
+          key: ubuntu-22.04-${{ steps.install-r.outputs.installed-r-version }}-1-${{ hashFiles('.github/r-depends.rds') }}
+          restore-keys: ubuntu-22.04-${{ steps.install-r.outputs.installed-r-version }}-1-
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
