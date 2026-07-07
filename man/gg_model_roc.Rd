@@ -87,10 +87,10 @@ m <- featsel_stepforward(m, scale = 5, trace = 0)
 dnew <- tail(credit_woe, 10000)
 
 gg_model_roc(m)
-gg_model_roc(m, newdata = dnew, size = 2)
+gg_model_roc(m, newdata = dnew, linewidth = 2)
 
 gg_model_ecdf(m)
-gg_model_ecdf(m, newdata = dnew, size = 2)
+gg_model_ecdf(m, newdata = dnew, linewidth = 2)
 
 gg_model_dist(m)
 gg_model_dist(m, newdata = dnew, alpha = 0.4, color = "transparent")
