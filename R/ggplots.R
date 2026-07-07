@@ -59,12 +59,11 @@ ecdf_data <- function(actual, predicted){
 #' dnew <- tail(credit_woe, 10000)
 #'
 #' gg_model_roc(m)
-#' gg_model_roc(m, newdata = dnew, size = 2)
+#' gg_model_roc(m, newdata = dnew, linewidth = 2)
 #'
 #' gg_model_ecdf(m)
-#' gg_model_ecdf(m, newdata = dnew, size = 2)
+#' gg_model_ecdf(m, newdata = dnew, linewidth = 2)
 #'
-#' gg_model_dist(m)
 #' gg_model_dist(m, newdata = dnew, alpha = 0.4, color = "transparent")
 #'
 #' gg_model_calibration(m)
@@ -521,7 +520,7 @@ gg_model_calibration <- function(model, newdata = NULL,
     ggplot2::geom_smooth(
       alpha = alpha_smooth,
       color = color_smooth,
-      size  = size_smooth,
+      linewidth = size_smooth,
       ...)  +
 
     ggplot2::scale_x_continuous(limits = c(0, 1)) +
@@ -606,7 +605,7 @@ gg_woes <- function(woes,
 
         ggplot2::geom_line(
           ggplot2::aes(y = .data$var),
-          size = 1.2,
+          linewidth = 1.2,
           group = 1,
           color = color_line
         ) +
@@ -667,6 +666,3 @@ gg_woes <- function(woes,
 # library(patchwork)
 #
 # p1 + p2
-
-
-
