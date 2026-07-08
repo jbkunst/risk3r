@@ -91,7 +91,7 @@ woebin_summary(bins_regular) %>%
 ```
 
 Now we run the simple retry wrapper. It accepts either increasing or decreasing
-monotonicity for each numeric variable. This is intentional: expected risk
+monotonicity for each numeric variable. This is intentional: the expected risk
 direction is variable-specific and should be reviewed after binning.
 
 ```{r monotonic-bins}
@@ -146,10 +146,9 @@ ggplot(plot_data, aes(bin_id, posprob, group = 1)) +
 A monotonic binning result is not automatically a good risk variable.
 
 The analyst still has to validate the direction of risk. For example, a longer
-loan duration may be expected to increase risk in many credit products, but that
-assumption should be checked against the product, portfolio, policy, and sample
-used in the model. Other variables can be monotonic in the data but still have a
-risk direction that is hard to justify or unstable out of sample.
+loan duration may be expected to increase risk in many credit products, while
+other variables, such as age or income, may reasonably move in another direction.
+A single global trend argument would hide that variable-specific judgment.
 
 In practice, use the monotonic helper as a first pass. Then review:
 
