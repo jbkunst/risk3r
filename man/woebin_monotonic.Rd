@@ -2,7 +2,7 @@
 % Please edit documentation in R/woebin-monotonic.R
 \name{woebin_monotonic}
 \alias{woebin_monotonic}
-\title{Monotonic WOE binning with scorecard retries}
+\title{Simple monotonic retry wrapper around scorecard::woebin()}
 \usage{
 woebin_monotonic(
   dt,
@@ -29,6 +29,7 @@ woebin_monotonic(
   count_distr_limit_max = 0.2,
   bin_num_limit_min = 2L,
   monotonic_metric = "posprob",
+  direction = c("auto", "increasing", "decreasing"),
   strict = FALSE,
   verbose = TRUE
 )
@@ -42,7 +43,7 @@ woebin_monotonic(
 
 \item{var_skip}{Optional character vector with variables to skip.}
 
-\item{breaks_list}{Optional list of break points passed to \code{scorecard::woebin()}.}
+\item{breaks_list}{Optional list of break points passed to \code{scorecard::woebin()}. When manual breaks are supplied for a numeric variable, the function does not try to force monotonicity for that variable.}
 
 \item{special_values}{Optional list of special values passed to \code{scorecard::woebin()}.}
 
@@ -62,18 +63,21 @@ woebin_monotonic(
 
 \item{monotonic_metric}{Column used to check monotonicity. Defaults to \code{"posprob"}.}
 
+\item{direction}{Expected direction of the metric across bins. Use \code{"auto"} to accept either increasing or decreasing monotonicity. Use \code{"increasing"} or \code{"decreasing"} when the expected risk direction is known.}
+
 \item{strict}{Logical. If \code{TRUE}, adjacent bins must be strictly increasing or strictly decreasing. If \code{FALSE}, flat adjacent bins are allowed.}
 
 \item{verbose}{Logical. If \code{TRUE}, prints progress messages.}
 }
 \value{
-A list compatible with the output of \code{scorecard::woebin()}.
+A list compatible with the output of \code{scorecard::woebin()}. The list includes a \code{monotonic_summary} attribute with the retry diagnostics.
 }
 \description{
-\code{woebin_monotonic()} is a pragmatic wrapper around \code{scorecard::woebin()}.
-Categorical variables are sent to \code{scorecard::woebin()} unchanged. Numeric variables are processed one by one and retried with stricter binning settings until the selected metric is monotonic or the retry limits are reached.
+\code{woebin_monotonic()} is a simple retry wrapper around \code{scorecard::woebin()}. It is intentionally basic: it does not solve an optimal binning problem, it does not maximize IV under monotonic constraints, and it does not validate whether the direction of risk makes business sense.
 }
 \details{
+For numeric variables, the function repeatedly calls \code{scorecard::woebin()} with coarser binning settings until the selected metric is monotonic or the retry limits are reached. For categorical variables, regular \code{scorecard::woebin()} is used without forcing monotonicity.
+
 Missing values are kept as a separate bin and are excluded from the monotonicity check.
 }
 \examples{
@@ -84,10 +88,12 @@ bins <- woebin_monotonic(
   germancredit,
   y = "creditability",
   x = c("duration.in.month", "credit.amount", "age.in.years"),
+  direction = "auto",
   no_cores = 1,
   verbose = FALSE
 )
 
 woebin_summary(bins)
+attr(bins, "monotonic_summary")
 }
 }
