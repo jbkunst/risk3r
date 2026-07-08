@@ -1,0 +1,136 @@
+---
+title: "Monotonic WOE binning"
+output: rmarkdown::html_vignette
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 8,
+  fig.height = 5
+)
+```
+
+```{r setup}
+library(risk3r)
+library(scorecard)
+library(dplyr)
+library(ggplot2)
+
+data("germancredit", package = "scorecard")
+```
+
+## Motivation
+
+Scorecard development usually needs bins that are easy to explain and stable
+across samples. For numeric variables, a monotonic relationship between the bins
+and the observed bad rate is often preferred.
+
+`woebin_monotonic()` is a small wrapper around `scorecard::woebin()`. It keeps
+categorical variables unchanged and retries numeric variables with stricter
+binning settings until the selected metric is monotonic or the retry limits are
+reached.
+
+The default monotonicity check uses `posprob`. Missing values are kept as a
+separate bin and are not included in the monotonicity check.
+
+## German Credit example
+
+We use a small subset of the German Credit data.
+
+```{r data}
+vars <- c(
+  "duration.in.month",
+  "credit.amount",
+  "age.in.years",
+  "status.of.existing.checking.account",
+  "purpose"
+)
+
+dat <- germancredit[, c("creditability", vars)]
+```
+
+First, we can run the usual `scorecard::woebin()` process.
+
+```{r regular-bins}
+bins_regular <- scorecard::woebin(
+  dat,
+  y = "creditability",
+  x = vars,
+  no_cores = 1,
+  print_step = 0
+)
+
+woebin_summary(bins_regular) %>%
+  select(variable, n_categories, iv, monotone, factor)
+```
+
+Now we run the monotonic wrapper. Numeric variables are retried one at a time.
+Categorical variables are passed to `scorecard::woebin()` without forcing a
+monotonic shape.
+
+```{r monotonic-bins}
+bins_monotonic <- woebin_monotonic(
+  dat,
+  y = "creditability",
+  x = vars,
+  no_cores = 1,
+  print_step = 0,
+  bin_num_limit = 6,
+  verbose = FALSE
+)
+
+woebin_summary(bins_monotonic) %>%
+  select(variable, n_categories, iv, monotone, factor)
+```
+
+## Inspect the numeric bins
+
+The helper is meant to make a first monotonic binning attempt. The result still
+needs analyst review.
+
+```{r numeric-bin-path}
+numeric_vars <- c("duration.in.month", "credit.amount", "age.in.years")
+
+plot_data <- dplyr::bind_rows(bins_monotonic[numeric_vars]) %>%
+  filter(breaks != "missing") %>%
+  group_by(variable) %>%
+  mutate(bin_id = row_number()) %>%
+  ungroup()
+
+ggplot(plot_data, aes(bin_id, posprob, group = 1)) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(vars(variable), scales = "free_x") +
+  labs(
+    x = "Bin order",
+    y = "Observed bad rate / posprob",
+    title = "Monotonicity check for numeric variables"
+  ) +
+  theme_minimal()
+```
+
+## Important caveat
+
+A monotonic binning result is not automatically a good risk variable.
+
+The analyst still has to validate the direction of risk. For example, a longer
+loan duration may be expected to increase risk in many credit products, but that
+assumption should be checked against the product, portfolio, policy, and sample
+used in the model. Other variables can be monotonic in the data but still have a
+risk direction that is hard to justify or unstable out of sample.
+
+In practice, use the monotonic helper as a first pass. Then review:
+
+- whether the direction of `posprob` makes business sense;
+- whether the number of bins is reasonable;
+- whether missing and special-value bins should be kept separate;
+- whether the pattern is stable in validation samples or later vintages.
+
+The goal is not to automate judgment away. The goal is to make the first binning
+iteration faster and easier to inspect.
