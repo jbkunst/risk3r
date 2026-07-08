@@ -6,7 +6,7 @@
 
 bins <- woebin(germancredit, y = "creditability")
 #> ℹ Creating woe binning ...
-#> ✔ Binning on 1000 rows and 21 columns in 00:00:02
+#> ✔ Binning on 1000 rows and 21 columns in 00:00:04
 
 binssummary <- woebin_summary(bins)
 
