@@ -1,15 +1,16 @@
 #' Simple monotonic retry wrapper around scorecard::woebin()
 #'
-#' `woebin_monotonic_retry()` is a simple retry wrapper around
-#' [scorecard::woebin()]. It is intentionally basic: it does not solve an
-#' optimal binning problem, it does not maximize IV under monotonic constraints,
-#' and it does not validate whether the observed trend makes business sense.
+#' `woebin_monotonic_retry()` is a small wrapper around
+#' [scorecard::woebin()]. It does not solve an optimal binning problem and it
+#' does not try to choose the best monotonic cuts. It simply retries numeric
+#' variables with coarser settings until `posprob` is monotonic or the retry
+#' path is exhausted.
 #'
-#' For numeric variables, the function repeatedly calls `scorecard::woebin()`
-#' with coarser binning settings until the selected metric is monotonic or the
-#' retry limits are reached. For categorical variables, regular
-#' `scorecard::woebin()` is used without forcing monotonicity.
+#' The retry path is intentionally basic: increase `count_distr_limit` up to
+#' `0.2`; if that does not work, reduce `bin_num_limit`; if that still does not
+#' work, keep the last valid binning for analyst review.
 #'
+#' Categorical variables are processed with regular [scorecard::woebin()].
 #' Missing values are kept as a separate bin and are excluded from the
 #' monotonicity check.
 #'
@@ -19,29 +20,19 @@
 #'   variables except `y` and `var_skip` are used.
 #' @param var_skip Optional character vector with variables to skip.
 #' @param breaks_list Optional list of break points passed to
-#'   [scorecard::woebin()]. When manual breaks are supplied for a numeric
-#'   variable, the function does not try to force monotonicity for that variable.
+#'   [scorecard::woebin()].
 #' @param special_values Optional list of special values passed to
 #'   [scorecard::woebin()].
-#' @param missing_join Optional argument passed to [scorecard::woebin()] when not
-#'   `NULL`.
+#' @param missing_join Optional argument passed to [scorecard::woebin()].
 #' @param stop_limit,count_distr_limit,bin_num_limit,positive,no_cores,print_step,method,ignore_const_cols,ignore_datetime_cols,check_cate_num,replace_blank_inf
 #'   Arguments passed to [scorecard::woebin()].
 #' @param save_as Optional path to save the output as an RDS file.
 #' @param ... Additional arguments passed to [scorecard::woebin()].
 #' @param count_distr_step Numeric step used to increase `count_distr_limit`
 #'   when a numeric variable is not monotonic.
-#' @param count_distr_limit_max Maximum `count_distr_limit` to try.
-#' @param bin_num_limit_min Minimum `bin_num_limit` to try when reducing the
-#'   number of bins.
-#' @param monotonic_metric Column used to check monotonicity. Defaults to
-#'   `"posprob"`.
-#' @param strict Logical. If `TRUE`, adjacent bins must be strictly increasing or
-#'   strictly decreasing. If `FALSE`, flat adjacent bins are allowed.
 #' @param verbose Logical. If `TRUE`, prints progress messages.
 #'
-#' @return A list compatible with the output of [scorecard::woebin()]. The list
-#'   includes a `monotonic_summary` attribute with the retry diagnostics.
+#' @return A list compatible with the output of [scorecard::woebin()].
 #' @export
 #'
 #' @examples
@@ -57,7 +48,6 @@
 #' )
 #'
 #' woebin_summary(bins)
-#' attr(bins, "monotonic_summary")
 #' }
 woebin_monotonic_retry <- function(
   dt,
@@ -81,17 +71,11 @@ woebin_monotonic_retry <- function(
   save_as = NULL,
   ...,
   count_distr_step = 0.025,
-  count_distr_limit_max = 0.2,
-  bin_num_limit_min = 2L,
-  monotonic_metric = "posprob",
-  strict = FALSE,
   verbose = TRUE
 ) {
   stopifnot(is.data.frame(dt))
   stopifnot(is.character(y), length(y) == 1L, y %in% names(dt))
   stopifnot(is.numeric(count_distr_step), count_distr_step > 0)
-  stopifnot(is.numeric(count_distr_limit_max), count_distr_limit_max <= 0.2)
-  stopifnot(is.numeric(bin_num_limit_min), bin_num_limit_min >= 2)
 
   vars <- if (is.null(x)) setdiff(names(dt), y) else x
   vars <- vars[vars %in% names(dt)]
@@ -102,24 +86,21 @@ woebin_monotonic_retry <- function(
 
   bins_categorical <- list()
   bins_numeric <- list()
-  monotonic_summary <- list()
 
   if (length(vars_categorical) > 0L) {
     if (isTRUE(verbose)) {
       cli::cli_inform("Binning categorical variables with scorecard::woebin().")
     }
 
-    bins_categorical <- risk3r_woebin_monotonic_call(
+    args_categorical <- list(
       dt = dt,
       y = y,
       x = vars_categorical,
       var_skip = NULL,
       breaks_list = risk3r_filter_named_list(breaks_list, vars_categorical),
       special_values = risk3r_filter_named_list(special_values, vars_categorical),
-      missing_join = missing_join,
       stop_limit = stop_limit,
       count_distr_limit = count_distr_limit,
-      bin_num_limit = bin_num_limit,
       positive = positive,
       no_cores = no_cores,
       print_step = print_step,
@@ -128,23 +109,14 @@ woebin_monotonic_retry <- function(
       ignore_datetime_cols = ignore_datetime_cols,
       check_cate_num = check_cate_num,
       replace_blank_inf = replace_blank_inf,
-      quiet = TRUE,
+      save_as = NULL,
       ...
     )
 
-    for (variable in names(bins_categorical)) {
-      monotonic_summary[[variable]] <- risk3r_monotonic_summary_row(
-        variable = variable,
-        type = "categorical",
-        monotone = NA,
-        observed_trend = NA_character_,
-        n_attempts = 1L,
-        final_count_distr_limit = count_distr_limit,
-        final_bin_num_limit = bin_num_limit,
-        manual_breaks = !is.null(risk3r_filter_named_list(breaks_list, variable)),
-        message = "categorical_not_forced"
-      )
-    }
+    if (!is.null(missing_join)) args_categorical$missing_join <- missing_join
+    if (!is.null(bin_num_limit)) args_categorical$bin_num_limit <- bin_num_limit
+
+    bins_categorical <- risk3r_quiet_do_call(scorecard::woebin, args_categorical)
   }
 
   for (variable in vars_numeric) {
@@ -153,28 +125,20 @@ woebin_monotonic_retry <- function(
     count_distr_var <- count_distr_limit
     bin_num_var <- bin_num_limit
     last_bin <- NULL
-    last_status <- risk3r_monotonic_status(numeric(), strict = strict)
-    has_manual_breaks <- FALSE
-    n_attempts <- 0L
 
     repeat {
-      n_attempts <- n_attempts + 1L
-
       breaks_variable <- risk3r_filter_named_list(breaks_list, variable)
       special_values_variable <- risk3r_filter_named_list(special_values, variable)
-      has_manual_breaks <- !is.null(breaks_variable)
 
-      bin_variable <- risk3r_woebin_monotonic_call(
+      args_variable <- list(
         dt = dt,
         y = y,
         x = variable,
         var_skip = NULL,
         breaks_list = breaks_variable,
         special_values = special_values_variable,
-        missing_join = missing_join,
         stop_limit = stop_limit,
         count_distr_limit = count_distr_var,
-        bin_num_limit = bin_num_var,
         positive = positive,
         no_cores = no_cores,
         print_step = print_step,
@@ -183,72 +147,41 @@ woebin_monotonic_retry <- function(
         ignore_datetime_cols = ignore_datetime_cols,
         check_cate_num = check_cate_num,
         replace_blank_inf = replace_blank_inf,
-        quiet = TRUE,
+        save_as = NULL,
         ...
       )
 
+      if (!is.null(missing_join)) args_variable$missing_join <- missing_join
+      if (!is.null(bin_num_var)) args_variable$bin_num_limit <- bin_num_var
+
+      bin_variable <- risk3r_quiet_do_call(scorecard::woebin, args_variable)
+      bin_summary <- NULL
+
       if (!is.null(bin_variable) && !is.null(bin_variable[[variable]])) {
         last_bin <- bin_variable[[variable]]
-
-        last_status <- risk3r_woebin_monotonic_status(
-          last_bin,
-          metric = monotonic_metric,
-          strict = strict
-        )
+        bin_summary <- risk3r::woebin_summary(bin_variable, sort = FALSE)
+        bin_summary$monotone <- woebin_monotonic_bin_is_monotone(last_bin)
 
         if (is.null(bin_num_var)) {
-          n_non_missing_bins <- sum(as.character(last_bin$breaks) != "missing")
-          bin_num_var <- max(as.integer(bin_num_limit_min), n_non_missing_bins)
+          bin_num_var <- max(2L, bin_summary$n_categories[1])
         }
       }
 
-      if (isTRUE(last_status$monotone)) {
+      if (!is.null(bin_summary) && isTRUE(bin_summary$monotone[1])) {
         bins_numeric[[variable]] <- last_bin
-        monotonic_summary[[variable]] <- risk3r_monotonic_summary_row(
-          variable = variable,
-          type = "numeric",
-          monotone = last_status$monotone,
-          observed_trend = last_status$observed_trend,
-          n_attempts = n_attempts,
-          final_count_distr_limit = count_distr_var,
-          final_bin_num_limit = bin_num_var,
-          manual_breaks = has_manual_breaks,
-          message = "accepted"
-        )
-        if (isTRUE(verbose)) {
-          cli::cli_alert_success("{variable}: accepted, observed_trend={last_status$observed_trend}.")
-        }
+        if (isTRUE(verbose)) cli::cli_alert_success("{variable}: monotone=TRUE.")
         break
       }
 
-      if (isTRUE(has_manual_breaks)) {
-        bins_numeric[[variable]] <- last_bin
-        monotonic_summary[[variable]] <- risk3r_monotonic_summary_row(
-          variable = variable,
-          type = "numeric",
-          monotone = last_status$monotone,
-          observed_trend = last_status$observed_trend,
-          n_attempts = n_attempts,
-          final_count_distr_limit = count_distr_var,
-          final_bin_num_limit = bin_num_var,
-          manual_breaks = TRUE,
-          message = "manual_breaks_not_forced"
-        )
-        if (isTRUE(verbose)) {
-          cli::cli_alert_warning("{variable}: manual breaks supplied; monotonicity was not forced.")
-        }
-        break
-      }
-
-      if (count_distr_var < count_distr_limit_max) {
-        count_distr_var <- min(count_distr_var + count_distr_step, count_distr_limit_max)
+      if (count_distr_var < 0.2) {
+        count_distr_var <- min(count_distr_var + count_distr_step, 0.2)
         if (isTRUE(verbose)) {
           cli::cli_inform("{variable}: not monotonic, count_distr_limit = {count_distr_var}")
         }
         next
       }
 
-      if (!is.null(bin_num_var) && bin_num_var > bin_num_limit_min) {
+      if (!is.null(bin_num_var) && bin_num_var > 2L) {
         bin_num_var <- bin_num_var - 1L
         count_distr_var <- count_distr_limit
         if (isTRUE(verbose)) {
@@ -259,22 +192,9 @@ woebin_monotonic_retry <- function(
 
       if (!is.null(last_bin)) {
         bins_numeric[[variable]] <- last_bin
-      }
-
-      monotonic_summary[[variable]] <- risk3r_monotonic_summary_row(
-        variable = variable,
-        type = "numeric",
-        monotone = last_status$monotone,
-        observed_trend = last_status$observed_trend,
-        n_attempts = n_attempts,
-        final_count_distr_limit = count_distr_var,
-        final_bin_num_limit = bin_num_var,
-        manual_breaks = has_manual_breaks,
-        message = "not_monotonic_after_retries"
-      )
-
-      if (isTRUE(verbose)) {
-        cli::cli_alert_warning("{variable}: left for review; no monotonic binning was found.")
+        if (isTRUE(verbose)) {
+          cli::cli_alert_warning("{variable}: left for review; no monotonic binning was found.")
+        }
       }
 
       break
@@ -282,7 +202,6 @@ woebin_monotonic_retry <- function(
   }
 
   bins <- c(bins_numeric, bins_categorical)
-  attr(bins, "monotonic_summary") <- dplyr::bind_rows(monotonic_summary)
 
   if (!is.null(save_as)) saveRDS(bins, file = save_as)
 
@@ -291,13 +210,10 @@ woebin_monotonic_retry <- function(
 
 #' Check whether one WOE bin table is monotonic
 #'
-#' Checks whether a column from one `scorecard::woebin()` bin table is monotonic.
-#' The `missing` bin is excluded from the check.
+#' Checks whether `posprob` from one `scorecard::woebin()` bin table is
+#' monotonic. The `missing` bin is excluded from the check.
 #'
 #' @param bin A single data frame from a `scorecard::woebin()` output list.
-#' @param metric Column used to check monotonicity. Defaults to `"posprob"`.
-#' @param strict Logical. If `TRUE`, adjacent bins must be strictly increasing or
-#'   strictly decreasing. If `FALSE`, flat adjacent bins are allowed.
 #'
 #' @return A logical value.
 #' @export
@@ -308,91 +224,27 @@ woebin_monotonic_retry <- function(
 #' bins <- scorecard::woebin(germancredit, y = "creditability", x = "credit.amount")
 #' woebin_monotonic_bin_is_monotone(bins$credit.amount)
 #' }
-woebin_monotonic_bin_is_monotone <- function(bin, metric = "posprob", strict = FALSE) {
+woebin_monotonic_bin_is_monotone <- function(bin) {
   stopifnot(is.data.frame(bin))
-  stopifnot(is.character(metric), length(metric) == 1L, metric %in% names(bin))
 
-  risk3r_woebin_monotonic_status(
-    bin = bin,
-    metric = metric,
-    strict = strict
-  )$monotone
+  posprob <- bin |>
+    dplyr::filter(.data$breaks != "missing") |>
+    dplyr::pull(.data$posprob)
+
+  risk3r_is_monotone(posprob)
 }
 
-risk3r_woebin_monotonic_status <- function(bin, metric, strict) {
-  keep <- as.character(bin$breaks) != "missing"
-  value <- bin[[metric]][keep]
-
-  risk3r_monotonic_status(value, strict = strict)
-}
-
-risk3r_monotonic_status <- function(x, strict = FALSE) {
+risk3r_is_monotone <- function(x) {
   if (any(is.na(x))) {
-    return(list(
-      monotone = NA,
-      observed_trend = NA_character_
-    ))
+    message("Some values are NA, returning NA.")
+    return(NA)
   }
 
-  if (length(x) <= 1L) {
-    return(list(
-      monotone = TRUE,
-      observed_trend = "flat"
-    ))
-  }
+  if (length(x) <= 1L) return(TRUE)
 
   dx <- diff(x)
 
-  if (isTRUE(strict)) {
-    increasing <- all(dx > 0)
-    decreasing <- all(dx < 0)
-  } else {
-    increasing <- all(dx >= 0)
-    decreasing <- all(dx <= 0)
-  }
-
-  monotone <- increasing || decreasing
-
-  observed_trend <- dplyr::case_when(
-    increasing && decreasing ~ "flat",
-    increasing ~ "increasing",
-    decreasing ~ "decreasing",
-    TRUE ~ "not_monotonic"
-  )
-
-  list(
-    monotone = monotone,
-    observed_trend = observed_trend
-  )
-}
-
-risk3r_monotonic_summary_row <- function(
-  variable,
-  type,
-  monotone,
-  observed_trend,
-  n_attempts,
-  final_count_distr_limit,
-  final_bin_num_limit,
-  manual_breaks,
-  message
-) {
-  tibble::tibble(
-    variable = variable,
-    type = type,
-    monotone = monotone,
-    observed_trend = observed_trend,
-    n_attempts = as.integer(n_attempts),
-    final_count_distr_limit = final_count_distr_limit,
-    final_bin_num_limit = risk3r_integer_or_na(final_bin_num_limit),
-    manual_breaks = manual_breaks,
-    message = message
-  )
-}
-
-risk3r_integer_or_na <- function(x) {
-  if (is.null(x)) return(NA_integer_)
-  as.integer(x)
+  all(dx >= 0) || all(dx <= 0)
 }
 
 risk3r_filter_named_list <- function(x, vars) {
@@ -404,59 +256,10 @@ risk3r_filter_named_list <- function(x, vars) {
   x[vars]
 }
 
-risk3r_woebin_monotonic_call <- function(
-  dt,
-  y,
-  x,
-  var_skip,
-  breaks_list,
-  special_values,
-  missing_join,
-  stop_limit,
-  count_distr_limit,
-  bin_num_limit,
-  positive,
-  no_cores,
-  print_step,
-  method,
-  ignore_const_cols,
-  ignore_datetime_cols,
-  check_cate_num,
-  replace_blank_inf,
-  quiet,
-  ...
-) {
-  args <- list(
-    dt = dt,
-    y = y,
-    x = x,
-    var_skip = var_skip,
-    breaks_list = breaks_list,
-    special_values = special_values,
-    stop_limit = stop_limit,
-    count_distr_limit = count_distr_limit,
-    positive = positive,
-    no_cores = no_cores,
-    print_step = print_step,
-    method = method,
-    ignore_const_cols = ignore_const_cols,
-    ignore_datetime_cols = ignore_datetime_cols,
-    check_cate_num = check_cate_num,
-    replace_blank_inf = replace_blank_inf
-  )
-
-  if (!is.null(missing_join)) args$missing_join <- missing_join
-  if (!is.null(bin_num_limit)) args$bin_num_limit <- bin_num_limit
-
-  args <- c(args, list(...))
-
-  if (isTRUE(quiet)) {
-    out <- NULL
-    invisible(utils::capture.output(
-      out <- suppressWarnings(suppressMessages(do.call(scorecard::woebin, args)))
-    ))
-    return(out)
-  }
-
-  do.call(scorecard::woebin, args)
+risk3r_quiet_do_call <- function(what, args) {
+  out <- NULL
+  invisible(utils::capture.output(
+    out <- suppressWarnings(suppressMessages(do.call(what, args)))
+  ))
+  out
 }
