@@ -26,10 +26,6 @@ woebin_monotonic_retry(
   save_as = NULL,
   ...,
   count_distr_step = 0.025,
-  count_distr_limit_max = 0.2,
-  bin_num_limit_min = 2L,
-  monotonic_metric = "posprob",
-  strict = FALSE,
   verbose = TRUE
 )
 }
@@ -42,11 +38,11 @@ woebin_monotonic_retry(
 
 \item{var_skip}{Optional character vector with variables to skip.}
 
-\item{breaks_list}{Optional list of break points passed to \code{scorecard::woebin()}. When manual breaks are supplied for a numeric variable, the function does not try to force monotonicity for that variable.}
+\item{breaks_list}{Optional list of break points passed to \code{scorecard::woebin()}.}
 
 \item{special_values}{Optional list of special values passed to \code{scorecard::woebin()}.}
 
-\item{missing_join}{Optional argument passed to \code{scorecard::woebin()} when not \code{NULL}.}
+\item{missing_join}{Optional argument passed to \code{scorecard::woebin()}.}
 
 \item{stop_limit, count_distr_limit, bin_num_limit, positive, no_cores, print_step, method, ignore_const_cols, ignore_datetime_cols, check_cate_num, replace_blank_inf}{Arguments passed to \code{scorecard::woebin()}.}
 
@@ -56,26 +52,18 @@ woebin_monotonic_retry(
 
 \item{count_distr_step}{Numeric step used to increase \code{count_distr_limit} when a numeric variable is not monotonic.}
 
-\item{count_distr_limit_max}{Maximum \code{count_distr_limit} to try.}
-
-\item{bin_num_limit_min}{Minimum \code{bin_num_limit} to try when reducing the number of bins.}
-
-\item{monotonic_metric}{Column used to check monotonicity. Defaults to \code{"posprob"}.}
-
-\item{strict}{Logical. If \code{TRUE}, adjacent bins must be strictly increasing or strictly decreasing. If \code{FALSE}, flat adjacent bins are allowed.}
-
 \item{verbose}{Logical. If \code{TRUE}, prints progress messages.}
 }
 \value{
-A list compatible with the output of \code{scorecard::woebin()}. The list includes a \code{monotonic_summary} attribute with the retry diagnostics.
+A list compatible with the output of \code{scorecard::woebin()}.
 }
 \description{
-\code{woebin_monotonic_retry()} is a simple retry wrapper around \code{scorecard::woebin()}. It is intentionally basic: it does not solve an optimal binning problem, it does not maximize IV under monotonic constraints, and it does not validate whether the observed trend makes business sense.
+\code{woebin_monotonic_retry()} is a small wrapper around \code{scorecard::woebin()}. It does not solve an optimal binning problem and it does not try to choose the best monotonic cuts. It simply retries numeric variables with coarser settings until \code{posprob} is monotonic or the retry path is exhausted.
 }
 \details{
-For numeric variables, the function repeatedly calls \code{scorecard::woebin()} with coarser binning settings until the selected metric is monotonic or the retry limits are reached. For categorical variables, regular \code{scorecard::woebin()} is used without forcing monotonicity.
+The retry path is intentionally basic: increase \code{count_distr_limit} up to \code{0.2}; if that does not work, reduce \code{bin_num_limit}; if that still does not work, keep the last valid binning for analyst review.
 
-Missing values are kept as a separate bin and are excluded from the monotonicity check.
+Categorical variables are processed with regular \code{scorecard::woebin()}. Missing values are kept as a separate bin and are excluded from the monotonicity check.
 }
 \examples{
 if (FALSE) {
@@ -90,6 +78,5 @@ bins <- woebin_monotonic_retry(
 )
 
 woebin_summary(bins)
-attr(bins, "monotonic_summary")
 }
 }
