@@ -27,8 +27,8 @@ data("germancredit", package = "scorecard")
 
 ## Motivation
 
-`woebin_monotonic_retry()` is intentionally simple. It is a retry wrapper around
-`scorecard::woebin()`, not an optimal binning algorithm.
+`woebin_monotonic_scd_retry()` is intentionally simple. It is a retry wrapper
+around `scorecard::woebin()`, not an optimal binning algorithm.
 
 It does not optimize IV under a monotonicity constraint. It does not search all
 possible cuts. It only retries numeric variables with coarser binning settings
@@ -44,7 +44,7 @@ For each numeric variable, the helper follows a basic coarsening strategy:
 
 1. Run `scorecard::woebin()`.
 2. Remove the `missing` bin from the monotonicity check.
-3. Check whether `posprob` is monotonic across bins.
+3. Check whether `posprob` is monotonic across numeric bins.
 4. If it is not monotonic, increase `count_distr_limit` by `count_distr_step`.
 5. If `count_distr_limit` reaches `0.2`, reduce `bin_num_limit`.
 6. Keep the first monotonic binning.
@@ -87,7 +87,7 @@ woebin_summary(bins_regular) %>%
 Now we run the simple retry wrapper.
 
 ```{r monotonic-bins}
-bins_monotonic <- woebin_monotonic_retry(
+bins_monotonic <- woebin_monotonic_scd_retry(
   dat,
   y = "creditability",
   x = vars,
