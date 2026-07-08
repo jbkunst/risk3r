@@ -31,7 +31,7 @@ Scorecard development usually needs bins that are easy to explain and stable
 across samples. For numeric variables, a monotonic relationship between the bins
 and the observed bad rate is often preferred.
 
-`woebin_monotonic()` is intentionally simple. It is a retry wrapper around
+`woebin_monotonic_retry()` is intentionally simple. It is a retry wrapper around
 `scorecard::woebin()`, not an optimal binning algorithm.
 
 It does not optimize IV under a monotonicity constraint. It does not search all
@@ -49,13 +49,15 @@ For each numeric variable, the helper follows a basic coarsening strategy:
 1. Run `scorecard::woebin()`.
 2. Remove the `missing` bin from the monotonicity check.
 3. Check whether `posprob` is monotonic across bins.
-4. If it is not accepted, increase `count_distr_limit`.
+4. If it is not monotonic, increase `count_distr_limit`.
 5. If `count_distr_limit` reaches the maximum value, reduce `bin_num_limit`.
-6. Keep the first accepted binning.
-7. If no accepted binning is found, keep the last valid binning and mark it for
+6. Keep the first monotonic binning.
+7. If no monotonic binning is found, keep the last valid binning and mark it for
    review in the diagnostic summary.
 
 The result includes a diagnostic table in `attr(bins, "monotonic_summary")`.
+The diagnostic table reports the observed trend for each numeric variable, but
+it does not decide whether that trend makes business sense.
 
 ## German Credit example
 
@@ -88,16 +90,15 @@ woebin_summary(bins_regular) %>%
   select(variable, n_categories, iv, monotone, factor)
 ```
 
-Now we run the simple retry wrapper. By default, `direction = "auto"` accepts
-both increasing and decreasing monotonicity. If the expected risk direction is
-known, use `direction = "increasing"` or `direction = "decreasing"`.
+Now we run the simple retry wrapper. It accepts either increasing or decreasing
+monotonicity for each numeric variable. This is intentional: expected risk
+direction is variable-specific and should be reviewed after binning.
 
 ```{r monotonic-bins}
-bins_monotonic <- woebin_monotonic(
+bins_monotonic <- woebin_monotonic_retry(
   dat,
   y = "creditability",
   x = vars,
-  direction = "auto",
   no_cores = 1,
   print_step = 0,
   bin_num_limit = 6,
@@ -152,8 +153,7 @@ risk direction that is hard to justify or unstable out of sample.
 
 In practice, use the monotonic helper as a first pass. Then review:
 
-- whether the direction of `posprob` makes business sense;
-- whether the accepted direction matches the expected risk direction;
+- whether the observed trend of `posprob` makes business sense for each variable;
 - whether the number of bins is reasonable;
 - whether missing and special-value bins should be kept separate;
 - whether the pattern is stable in validation samples or later vintages.
