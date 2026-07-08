@@ -27,20 +27,16 @@ data("germancredit", package = "scorecard")
 
 ## Motivation
 
-Scorecard development usually needs bins that are easy to explain and stable
-across samples. For numeric variables, a monotonic relationship between the bins
-and the observed bad rate is often preferred.
-
 `woebin_monotonic_retry()` is intentionally simple. It is a retry wrapper around
 `scorecard::woebin()`, not an optimal binning algorithm.
 
 It does not optimize IV under a monotonicity constraint. It does not search all
 possible cuts. It only retries numeric variables with coarser binning settings
-until the selected metric is monotonic or the retry limits are reached.
+until `posprob` is monotonic or the retry path is exhausted.
 
-The default monotonicity check uses `posprob`. Missing values are kept as a
-separate bin and are not included in the monotonicity check. Categorical
-variables are passed to `scorecard::woebin()` without forcing monotonicity.
+Categorical variables are passed to `scorecard::woebin()` without forcing
+monotonicity. Missing values are kept as a separate bin and are not included in
+the monotonicity check.
 
 ## Methodology
 
@@ -49,15 +45,13 @@ For each numeric variable, the helper follows a basic coarsening strategy:
 1. Run `scorecard::woebin()`.
 2. Remove the `missing` bin from the monotonicity check.
 3. Check whether `posprob` is monotonic across bins.
-4. If it is not monotonic, increase `count_distr_limit`.
-5. If `count_distr_limit` reaches the maximum value, reduce `bin_num_limit`.
+4. If it is not monotonic, increase `count_distr_limit` by `count_distr_step`.
+5. If `count_distr_limit` reaches `0.2`, reduce `bin_num_limit`.
 6. Keep the first monotonic binning.
-7. If no monotonic binning is found, keep the last valid binning and mark it for
-   review in the diagnostic summary.
+7. If no monotonic binning is found, keep the last valid binning for review.
 
-The result includes a diagnostic table in `attr(bins, "monotonic_summary")`.
-The diagnostic table reports the observed trend for each numeric variable, but
-it does not decide whether that trend makes business sense.
+This is useful as a first pass, but the analyst still has to review whether the
+observed direction of risk makes sense for each variable.
 
 ## German Credit example
 
@@ -90,9 +84,7 @@ woebin_summary(bins_regular) %>%
   select(variable, n_categories, iv, monotone, factor)
 ```
 
-Now we run the simple retry wrapper. It accepts either increasing or decreasing
-monotonicity for each numeric variable. This is intentional: the expected risk
-direction is variable-specific and should be reviewed after binning.
+Now we run the simple retry wrapper.
 
 ```{r monotonic-bins}
 bins_monotonic <- woebin_monotonic_retry(
@@ -102,17 +94,12 @@ bins_monotonic <- woebin_monotonic_retry(
   no_cores = 1,
   print_step = 0,
   bin_num_limit = 6,
+  count_distr_step = 0.025,
   verbose = FALSE
 )
 
 woebin_summary(bins_monotonic) %>%
   select(variable, n_categories, iv, monotone, factor)
-```
-
-The diagnostic summary shows what the helper did for each variable.
-
-```{r monotonic-summary}
-attr(bins_monotonic, "monotonic_summary")
 ```
 
 ## Inspect the numeric bins
