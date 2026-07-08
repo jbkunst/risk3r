@@ -1,9 +1,9 @@
 #' Simple monotonic retry wrapper around scorecard::woebin()
 #'
-#' `woebin_monotonic()` is a simple retry wrapper around
+#' `woebin_monotonic_retry()` is a simple retry wrapper around
 #' [scorecard::woebin()]. It is intentionally basic: it does not solve an
 #' optimal binning problem, it does not maximize IV under monotonic constraints,
-#' and it does not validate whether the direction of risk makes business sense.
+#' and it does not validate whether the observed trend makes business sense.
 #'
 #' For numeric variables, the function repeatedly calls `scorecard::woebin()`
 #' with coarser binning settings until the selected metric is monotonic or the
@@ -36,9 +36,6 @@
 #'   number of bins.
 #' @param monotonic_metric Column used to check monotonicity. Defaults to
 #'   `"posprob"`.
-#' @param direction Expected direction of the metric across bins. Use `"auto"`
-#'   to accept either increasing or decreasing monotonicity. Use `"increasing"`
-#'   or `"decreasing"` when the expected risk direction is known.
 #' @param strict Logical. If `TRUE`, adjacent bins must be strictly increasing or
 #'   strictly decreasing. If `FALSE`, flat adjacent bins are allowed.
 #' @param verbose Logical. If `TRUE`, prints progress messages.
@@ -51,11 +48,10 @@
 #' if (FALSE) {
 #' data(germancredit, package = "scorecard")
 #'
-#' bins <- woebin_monotonic(
+#' bins <- woebin_monotonic_retry(
 #'   germancredit,
 #'   y = "creditability",
 #'   x = c("duration.in.month", "credit.amount", "age.in.years"),
-#'   direction = "auto",
 #'   no_cores = 1,
 #'   verbose = FALSE
 #' )
@@ -63,7 +59,7 @@
 #' woebin_summary(bins)
 #' attr(bins, "monotonic_summary")
 #' }
-woebin_monotonic <- function(
+woebin_monotonic_retry <- function(
   dt,
   y,
   x = NULL,
@@ -88,7 +84,6 @@ woebin_monotonic <- function(
   count_distr_limit_max = 0.2,
   bin_num_limit_min = 2L,
   monotonic_metric = "posprob",
-  direction = c("auto", "increasing", "decreasing"),
   strict = FALSE,
   verbose = TRUE
 ) {
@@ -97,8 +92,6 @@ woebin_monotonic <- function(
   stopifnot(is.numeric(count_distr_step), count_distr_step > 0)
   stopifnot(is.numeric(count_distr_limit_max), count_distr_limit_max <= 0.2)
   stopifnot(is.numeric(bin_num_limit_min), bin_num_limit_min >= 2)
-
-  direction <- match.arg(direction)
 
   vars <- if (is.null(x)) setdiff(names(dt), y) else x
   vars <- vars[vars %in% names(dt)]
@@ -144,9 +137,7 @@ woebin_monotonic <- function(
         variable = variable,
         type = "categorical",
         monotone = NA,
-        direction = NA_character_,
-        expected_direction = NA_character_,
-        direction_ok = NA,
+        observed_trend = NA_character_,
         n_attempts = 1L,
         final_count_distr_limit = count_distr_limit,
         final_bin_num_limit = bin_num_limit,
@@ -162,7 +153,7 @@ woebin_monotonic <- function(
     count_distr_var <- count_distr_limit
     bin_num_var <- bin_num_limit
     last_bin <- NULL
-    last_status <- risk3r_monotonic_status(numeric(), strict = strict, direction = direction)
+    last_status <- risk3r_monotonic_status(numeric(), strict = strict)
     has_manual_breaks <- FALSE
     n_attempts <- 0L
 
@@ -202,8 +193,7 @@ woebin_monotonic <- function(
         last_status <- risk3r_woebin_monotonic_status(
           last_bin,
           metric = monotonic_metric,
-          strict = strict,
-          direction = direction
+          strict = strict
         )
 
         if (is.null(bin_num_var)) {
@@ -212,15 +202,13 @@ woebin_monotonic <- function(
         }
       }
 
-      if (isTRUE(last_status$direction_ok)) {
+      if (isTRUE(last_status$monotone)) {
         bins_numeric[[variable]] <- last_bin
         monotonic_summary[[variable]] <- risk3r_monotonic_summary_row(
           variable = variable,
           type = "numeric",
           monotone = last_status$monotone,
-          direction = last_status$direction,
-          expected_direction = direction,
-          direction_ok = last_status$direction_ok,
+          observed_trend = last_status$observed_trend,
           n_attempts = n_attempts,
           final_count_distr_limit = count_distr_var,
           final_bin_num_limit = bin_num_var,
@@ -228,7 +216,7 @@ woebin_monotonic <- function(
           message = "accepted"
         )
         if (isTRUE(verbose)) {
-          cli::cli_alert_success("{variable}: accepted, direction={last_status$direction}.")
+          cli::cli_alert_success("{variable}: accepted, observed_trend={last_status$observed_trend}.")
         }
         break
       }
@@ -239,9 +227,7 @@ woebin_monotonic <- function(
           variable = variable,
           type = "numeric",
           monotone = last_status$monotone,
-          direction = last_status$direction,
-          expected_direction = direction,
-          direction_ok = last_status$direction_ok,
+          observed_trend = last_status$observed_trend,
           n_attempts = n_attempts,
           final_count_distr_limit = count_distr_var,
           final_bin_num_limit = bin_num_var,
@@ -257,7 +243,7 @@ woebin_monotonic <- function(
       if (count_distr_var < count_distr_limit_max) {
         count_distr_var <- min(count_distr_var + count_distr_step, count_distr_limit_max)
         if (isTRUE(verbose)) {
-          cli::cli_inform("{variable}: not accepted, count_distr_limit = {count_distr_var}")
+          cli::cli_inform("{variable}: not monotonic, count_distr_limit = {count_distr_var}")
         }
         next
       }
@@ -266,7 +252,7 @@ woebin_monotonic <- function(
         bin_num_var <- bin_num_var - 1L
         count_distr_var <- count_distr_limit
         if (isTRUE(verbose)) {
-          cli::cli_inform("{variable}: not accepted, bin_num_limit = {bin_num_var}")
+          cli::cli_inform("{variable}: not monotonic, bin_num_limit = {bin_num_var}")
         }
         next
       }
@@ -279,18 +265,16 @@ woebin_monotonic <- function(
         variable = variable,
         type = "numeric",
         monotone = last_status$monotone,
-        direction = last_status$direction,
-        expected_direction = direction,
-        direction_ok = last_status$direction_ok,
+        observed_trend = last_status$observed_trend,
         n_attempts = n_attempts,
         final_count_distr_limit = count_distr_var,
         final_bin_num_limit = bin_num_var,
         manual_breaks = has_manual_breaks,
-        message = "not_accepted_after_retries"
+        message = "not_monotonic_after_retries"
       )
 
       if (isTRUE(verbose)) {
-        cli::cli_alert_warning("{variable}: left for review; no accepted monotonic binning was found.")
+        cli::cli_alert_warning("{variable}: left for review; no monotonic binning was found.")
       }
 
       break
@@ -312,8 +296,6 @@ woebin_monotonic <- function(
 #'
 #' @param bin A single data frame from a `scorecard::woebin()` output list.
 #' @param metric Column used to check monotonicity. Defaults to `"posprob"`.
-#' @param direction Expected direction of the metric across bins. Use `"auto"`
-#'   to accept either increasing or decreasing monotonicity.
 #' @param strict Logical. If `TRUE`, adjacent bins must be strictly increasing or
 #'   strictly decreasing. If `FALSE`, flat adjacent bins are allowed.
 #'
@@ -326,46 +308,36 @@ woebin_monotonic <- function(
 #' bins <- scorecard::woebin(germancredit, y = "creditability", x = "credit.amount")
 #' woebin_monotonic_bin_is_monotone(bins$credit.amount)
 #' }
-woebin_monotonic_bin_is_monotone <- function(
-  bin,
-  metric = "posprob",
-  direction = c("auto", "increasing", "decreasing"),
-  strict = FALSE
-) {
+woebin_monotonic_bin_is_monotone <- function(bin, metric = "posprob", strict = FALSE) {
   stopifnot(is.data.frame(bin))
   stopifnot(is.character(metric), length(metric) == 1L, metric %in% names(bin))
-
-  direction <- match.arg(direction)
 
   risk3r_woebin_monotonic_status(
     bin = bin,
     metric = metric,
-    strict = strict,
-    direction = direction
-  )$direction_ok
+    strict = strict
+  )$monotone
 }
 
-risk3r_woebin_monotonic_status <- function(bin, metric, strict, direction) {
+risk3r_woebin_monotonic_status <- function(bin, metric, strict) {
   keep <- as.character(bin$breaks) != "missing"
   value <- bin[[metric]][keep]
 
-  risk3r_monotonic_status(value, strict = strict, direction = direction)
+  risk3r_monotonic_status(value, strict = strict)
 }
 
-risk3r_monotonic_status <- function(x, strict = FALSE, direction = "auto") {
+risk3r_monotonic_status <- function(x, strict = FALSE) {
   if (any(is.na(x))) {
     return(list(
       monotone = NA,
-      direction = NA_character_,
-      direction_ok = NA
+      observed_trend = NA_character_
     ))
   }
 
   if (length(x) <= 1L) {
     return(list(
       monotone = TRUE,
-      direction = "flat",
-      direction_ok = TRUE
+      observed_trend = "flat"
     ))
   }
 
@@ -381,24 +353,16 @@ risk3r_monotonic_status <- function(x, strict = FALSE, direction = "auto") {
 
   monotone <- increasing || decreasing
 
-  found_direction <- dplyr::case_when(
+  observed_trend <- dplyr::case_when(
     increasing && decreasing ~ "flat",
     increasing ~ "increasing",
     decreasing ~ "decreasing",
     TRUE ~ "not_monotonic"
   )
 
-  direction_ok <- switch(
-    direction,
-    auto = monotone,
-    increasing = increasing,
-    decreasing = decreasing
-  )
-
   list(
     monotone = monotone,
-    direction = found_direction,
-    direction_ok = direction_ok
+    observed_trend = observed_trend
   )
 }
 
@@ -406,9 +370,7 @@ risk3r_monotonic_summary_row <- function(
   variable,
   type,
   monotone,
-  direction,
-  expected_direction,
-  direction_ok,
+  observed_trend,
   n_attempts,
   final_count_distr_limit,
   final_bin_num_limit,
@@ -419,9 +381,7 @@ risk3r_monotonic_summary_row <- function(
     variable = variable,
     type = type,
     monotone = monotone,
-    direction = direction,
-    expected_direction = expected_direction,
-    direction_ok = direction_ok,
+    observed_trend = observed_trend,
     n_attempts = as.integer(n_attempts),
     final_count_distr_limit = final_count_distr_limit,
     final_bin_num_limit = risk3r_integer_or_na(final_bin_num_limit),
