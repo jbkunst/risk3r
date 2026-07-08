@@ -1,5 +1,5 @@
 ---
-title: "Monotonic WOE binning"
+title: "Simple monotonic WOE retry binning"
 output: rmarkdown::html_vignette
 editor_options:
   chunk_output_type: console
@@ -31,13 +31,31 @@ Scorecard development usually needs bins that are easy to explain and stable
 across samples. For numeric variables, a monotonic relationship between the bins
 and the observed bad rate is often preferred.
 
-`woebin_monotonic()` is a small wrapper around `scorecard::woebin()`. It keeps
-categorical variables unchanged and retries numeric variables with stricter
-binning settings until the selected metric is monotonic or the retry limits are
-reached.
+`woebin_monotonic()` is intentionally simple. It is a retry wrapper around
+`scorecard::woebin()`, not an optimal binning algorithm.
+
+It does not optimize IV under a monotonicity constraint. It does not search all
+possible cuts. It only retries numeric variables with coarser binning settings
+until the selected metric is monotonic or the retry limits are reached.
 
 The default monotonicity check uses `posprob`. Missing values are kept as a
-separate bin and are not included in the monotonicity check.
+separate bin and are not included in the monotonicity check. Categorical
+variables are passed to `scorecard::woebin()` without forcing monotonicity.
+
+## Methodology
+
+For each numeric variable, the helper follows a basic coarsening strategy:
+
+1. Run `scorecard::woebin()`.
+2. Remove the `missing` bin from the monotonicity check.
+3. Check whether `posprob` is monotonic across bins.
+4. If it is not accepted, increase `count_distr_limit`.
+5. If `count_distr_limit` reaches the maximum value, reduce `bin_num_limit`.
+6. Keep the first accepted binning.
+7. If no accepted binning is found, keep the last valid binning and mark it for
+   review in the diagnostic summary.
+
+The result includes a diagnostic table in `attr(bins, "monotonic_summary")`.
 
 ## German Credit example
 
@@ -70,15 +88,16 @@ woebin_summary(bins_regular) %>%
   select(variable, n_categories, iv, monotone, factor)
 ```
 
-Now we run the monotonic wrapper. Numeric variables are retried one at a time.
-Categorical variables are passed to `scorecard::woebin()` without forcing a
-monotonic shape.
+Now we run the simple retry wrapper. By default, `direction = "auto"` accepts
+both increasing and decreasing monotonicity. If the expected risk direction is
+known, use `direction = "increasing"` or `direction = "decreasing"`.
 
 ```{r monotonic-bins}
 bins_monotonic <- woebin_monotonic(
   dat,
   y = "creditability",
   x = vars,
+  direction = "auto",
   no_cores = 1,
   print_step = 0,
   bin_num_limit = 6,
@@ -87,6 +106,12 @@ bins_monotonic <- woebin_monotonic(
 
 woebin_summary(bins_monotonic) %>%
   select(variable, n_categories, iv, monotone, factor)
+```
+
+The diagnostic summary shows what the helper did for each variable.
+
+```{r monotonic-summary}
+attr(bins_monotonic, "monotonic_summary")
 ```
 
 ## Inspect the numeric bins
@@ -128,6 +153,7 @@ risk direction that is hard to justify or unstable out of sample.
 In practice, use the monotonic helper as a first pass. Then review:
 
 - whether the direction of `posprob` makes business sense;
+- whether the accepted direction matches the expected risk direction;
 - whether the number of bins is reasonable;
 - whether missing and special-value bins should be kept separate;
 - whether the pattern is stable in validation samples or later vintages.
