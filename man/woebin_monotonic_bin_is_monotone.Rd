@@ -4,19 +4,12 @@
 \alias{woebin_monotonic_bin_is_monotone}
 \title{Check whether one WOE bin table is monotonic}
 \usage{
-woebin_monotonic_bin_is_monotone(
-  bin,
-  metric = "posprob",
-  direction = c("auto", "increasing", "decreasing"),
-  strict = FALSE
-)
+woebin_monotonic_bin_is_monotone(bin, metric = "posprob", strict = FALSE)
 }
 \arguments{
 \item{bin}{A single data frame from a \code{scorecard::woebin()} output list.}
 
 \item{metric}{Column used to check monotonicity. Defaults to \code{"posprob"}.}
-
-\item{direction}{Expected direction of the metric across bins. Use \code{"auto"} to accept either increasing or decreasing monotonicity.}
 
 \item{strict}{Logical. If \code{TRUE}, adjacent bins must be strictly increasing or strictly decreasing. If \code{FALSE}, flat adjacent bins are allowed.}
 }
