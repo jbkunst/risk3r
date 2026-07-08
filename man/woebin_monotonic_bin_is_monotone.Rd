@@ -4,20 +4,16 @@
 \alias{woebin_monotonic_bin_is_monotone}
 \title{Check whether one WOE bin table is monotonic}
 \usage{
-woebin_monotonic_bin_is_monotone(bin, metric = "posprob", strict = FALSE)
+woebin_monotonic_bin_is_monotone(bin)
 }
 \arguments{
 \item{bin}{A single data frame from a \code{scorecard::woebin()} output list.}
-
-\item{metric}{Column used to check monotonicity. Defaults to \code{"posprob"}.}
-
-\item{strict}{Logical. If \code{TRUE}, adjacent bins must be strictly increasing or strictly decreasing. If \code{FALSE}, flat adjacent bins are allowed.}
 }
 \value{
 A logical value.
 }
 \description{
-Checks whether a column from one \code{scorecard::woebin()} bin table is monotonic. The \code{missing} bin is excluded from the check.
+Checks whether \code{posprob} from one \code{scorecard::woebin()} bin table is monotonic. The \code{missing} bin is excluded from the check.
 }
 \examples{
 if (FALSE) {
