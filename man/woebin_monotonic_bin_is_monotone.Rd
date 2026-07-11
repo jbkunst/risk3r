@@ -13,7 +13,7 @@ woebin_monotonic_bin_is_monotone(bin)
 A logical value.
 }
 \description{
-Checks whether \code{posprob} from one \code{scorecard::woebin()} bin table is monotonic. The \code{missing} bin is excluded from the check.
+Checks whether \code{posprob} from one \code{scorecard::woebin()} bin table is monotonic. Missing and special-value bins are excluded, and flat steps are allowed.
 }
 \examples{
 if (FALSE) {
