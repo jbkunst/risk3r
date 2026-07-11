@@ -27,21 +27,21 @@ data("germancredit", package = "scorecard")
 
 ## Motivation
 
-`woebin_monotonic()` separates the orchestration from the numeric binning
-method:
+`woebin_monotonic()` separates orchestration from the numeric binning method:
 
 - categorical variables always use `scorecard::woebin()`;
 - numeric variables use the engine selected with `type`;
-- every engine returns one table compatible with an element of a
-  `scorecard::woebin()` result.
+- every numeric engine receives one variable and returns one table compatible
+  with an element of a `scorecard::woebin()` result.
 
-This makes the method extensible without changing the outer workflow.
+This makes it possible to add other monotonic methods without changing the
+outer workflow.
 
 Two numeric engines are currently available:
 
-- `type = "scorecard_retry"` uses the original retry/coarsening helper;
-- `type = "isoreg"` uses weighted isotonic regression and direct adjacent-bin
-  merging.
+- `type = "scorecard_retry"` uses the original retry/coarsening strategy;
+- `type = "isoreg"` applies weighted isotonic merging to an initial scorecard
+  binning.
 
 Neither method replaces analyst judgment. Monotonicity removes irregular
 patterns, but the final direction still needs to make sense for the risk
@@ -51,20 +51,26 @@ problem.
 
 For one numeric variable, the isotonic engine:
 
-1. Calculates the observed positive rate for every distinct value of `x`.
-2. Fits weighted increasing and decreasing isotonic regressions.
-3. Applies `count_distr_limit` and `bin_num_limit` to both candidates by merging
-   adjacent blocks with the smallest increase in weighted squared error.
-4. Selects the final direction with the lowest weighted squared error.
-5. Converts the blocks to cut points.
-6. Calls `scorecard::woebin()` with those cut points to obtain the usual WOE and
-   IV output.
+1. Runs `scorecard::woebin()` with the requested `count_distr_limit`,
+   `bin_num_limit`, missing handling, and special values.
+2. Orders the regular numeric bins and uses their observed positive rates and
+   counts.
+3. Fits weighted increasing and decreasing isotonic regressions.
+4. Selects the direction with the lowest weighted squared error.
+5. Merges adjacent initial bins that belong to the same selected isotonic block.
+6. Calls `scorecard::woebin()` again with the resulting cut points to obtain the
+   usual WOE and IV table.
+
+Because the isotonic step only merges bins from the initial scorecard result,
+it does not create bins smaller than the initial minimum or exceed the initial
+maximum number of bins.
 
 The direction is not imposed in advance. The engine follows the direction that
-best fits the observed data after applying the bin constraints.
+best fits the observed initial-bin rates, while the analyst still decides
+whether that direction is economically sensible.
 
-Missing and special-value bins are excluded from the monotonicity check. Manual
-breaks take precedence over either numeric engine.
+Missing and special-value bins are excluded from the monotonicity fit and
+check.
 
 ## German Credit example
 
@@ -119,12 +125,21 @@ woebin_summary(bins_isoreg) %>%
   select(variable, n_categories, iv, monotone, factor)
 ```
 
-The isotonic tables keep a few diagnostic attributes:
+The individual numeric engines can also be used directly when only one
+variable is needed:
 
-```{r diagnostics}
-attr(bins_isoreg$credit.amount, "monotonic_direction")
-attr(bins_isoreg$credit.amount, "isoreg_weighted_sse")
-attr(bins_isoreg$credit.amount, "isoreg_breaks")
+```{r direct-engine}
+credit_amount_bin <- woebin_monotonic_isoreg(
+  dat,
+  y = "creditability",
+  x = "credit.amount",
+  no_cores = 1,
+  bin_num_limit = 6,
+  count_distr_limit = 0.05,
+  verbose = FALSE
+)
+
+credit_amount_bin
 ```
 
 ## Inspect the numeric bins
