@@ -1,5 +1,5 @@
 ---
-title: "Simple monotonic WOE retry binning"
+title: "Monotonic WOE binning"
 output: rmarkdown::html_vignette
 editor_options:
   chunk_output_type: console
@@ -27,35 +27,46 @@ data("germancredit", package = "scorecard")
 
 ## Motivation
 
-`woebin_monotonic_scd_retry()` is intentionally simple. It is a retry wrapper
-around `scorecard::woebin()`, not an optimal binning algorithm.
+`woebin_monotonic()` separates the orchestration from the numeric binning
+method:
 
-It does not optimize IV under a monotonicity constraint. It does not search all
-possible cuts. It only retries numeric variables with coarser binning settings
-until `posprob` is monotonic or the retry path is exhausted.
+- categorical variables always use `scorecard::woebin()`;
+- numeric variables use the engine selected with `type`;
+- every engine returns one table compatible with an element of a
+  `scorecard::woebin()` result.
 
-Categorical variables are passed to `scorecard::woebin()` without forcing
-monotonicity. Missing values are kept as a separate bin and are not included in
-the monotonicity check.
+This makes the method extensible without changing the outer workflow.
 
-## Methodology
+Two numeric engines are currently available:
 
-For each numeric variable, the helper follows a basic coarsening strategy:
+- `type = "scorecard_retry"` uses the original retry/coarsening helper;
+- `type = "isoreg"` uses weighted isotonic regression and direct adjacent-bin
+  merging.
 
-1. Run `scorecard::woebin()`.
-2. Remove the `missing` bin from the monotonicity check.
-3. Check whether `posprob` is monotonic across numeric bins.
-4. If it is not monotonic, increase `count_distr_limit` by `count_distr_step`.
-5. If `count_distr_limit` reaches `0.2`, reduce `bin_num_limit`.
-6. Keep the first monotonic binning.
-7. If no monotonic binning is found, keep the last valid binning for review.
+Neither method replaces analyst judgment. Monotonicity removes irregular
+patterns, but the final direction still needs to make sense for the risk
+problem.
 
-This is useful as a first pass, but the analyst still has to review whether the
-observed direction of risk makes sense for each variable.
+## Isotonic engine
+
+For one numeric variable, the isotonic engine:
+
+1. Calculates the observed positive rate for every distinct value of `x`.
+2. Fits weighted increasing and decreasing isotonic regressions.
+3. Applies `count_distr_limit` and `bin_num_limit` to both candidates by merging
+   adjacent blocks with the smallest increase in weighted squared error.
+4. Selects the final direction with the lowest weighted squared error.
+5. Converts the blocks to cut points.
+6. Calls `scorecard::woebin()` with those cut points to obtain the usual WOE and
+   IV output.
+
+The direction is not imposed in advance. The engine follows the direction that
+best fits the observed data after applying the bin constraints.
+
+Missing and special-value bins are excluded from the monotonicity check. Manual
+breaks take precedence over either numeric engine.
 
 ## German Credit example
-
-We use a small subset of the German Credit data.
 
 ```{r data}
 vars <- c(
@@ -69,49 +80,60 @@ vars <- c(
 dat <- germancredit[, c("creditability", vars)]
 ```
 
-First, we can run the usual `scorecard::woebin()` process.
+### Retry engine
 
-```{r regular-bins}
-bins_regular <- scorecard::woebin(
+```{r retry-bins}
+bins_retry <- woebin_monotonic(
   dat,
   y = "creditability",
   x = vars,
-  no_cores = 1,
-  print_step = 0
-)
-
-woebin_summary(bins_regular) %>%
-  select(variable, n_categories, iv, monotone, factor)
-```
-
-Now we run the simple retry wrapper.
-
-```{r monotonic-bins}
-bins_monotonic <- woebin_monotonic_scd_retry(
-  dat,
-  y = "creditability",
-  x = vars,
+  type = "scorecard_retry",
   no_cores = 1,
   print_step = 0,
   bin_num_limit = 6,
+  count_distr_limit = 0.05,
   count_distr_step = 0.025,
   verbose = FALSE
 )
 
-woebin_summary(bins_monotonic) %>%
+woebin_summary(bins_retry) %>%
   select(variable, n_categories, iv, monotone, factor)
+```
+
+### Isotonic engine
+
+```{r isoreg-bins}
+bins_isoreg <- woebin_monotonic(
+  dat,
+  y = "creditability",
+  x = vars,
+  type = "isoreg",
+  no_cores = 1,
+  print_step = 0,
+  bin_num_limit = 6,
+  count_distr_limit = 0.05,
+  verbose = FALSE
+)
+
+woebin_summary(bins_isoreg) %>%
+  select(variable, n_categories, iv, monotone, factor)
+```
+
+The isotonic tables keep a few diagnostic attributes:
+
+```{r diagnostics}
+attr(bins_isoreg$credit.amount, "monotonic_direction")
+attr(bins_isoreg$credit.amount, "isoreg_weighted_sse")
+attr(bins_isoreg$credit.amount, "isoreg_breaks")
 ```
 
 ## Inspect the numeric bins
 
-The helper is meant to make a first monotonic binning attempt. The result still
-needs analyst review.
-
 ```{r numeric-bin-path}
 numeric_vars <- c("duration.in.month", "credit.amount", "age.in.years")
 
-plot_data <- dplyr::bind_rows(bins_monotonic[numeric_vars]) %>%
-  filter(breaks != "missing") %>%
+plot_data <- bind_rows(bins_isoreg[numeric_vars]) %>%
+  filter(breaks != "missing", !is_special_values) %>%
   group_by(variable) %>%
   mutate(bin_id = row_number()) %>%
   ungroup()
@@ -123,26 +145,20 @@ ggplot(plot_data, aes(bin_id, posprob, group = 1)) +
   labs(
     x = "Bin order",
     y = "Observed bad rate / posprob",
-    title = "Monotonicity check for numeric variables"
+    title = "Monotonic bad rates for numeric variables"
   ) +
   theme_minimal()
 ```
 
-## Important caveat
+## Practical review
 
-A monotonic binning result is not automatically a good risk variable.
+After the automatic pass, review:
 
-The analyst still has to validate the direction of risk. For example, a longer
-loan duration may be expected to increase risk in many credit products, while
-other variables, such as age or income, may reasonably move in another direction.
-A single global trend argument would hide that variable-specific judgment.
+- whether the selected direction makes business sense;
+- whether the number and size of bins are useful operationally;
+- whether missing and special values should remain separate;
+- whether the pattern is stable in validation samples and later vintages;
+- whether a manual break is preferable for interpretation or policy reasons.
 
-In practice, use the monotonic helper as a first pass. Then review:
-
-- whether the observed trend of `posprob` makes business sense for each variable;
-- whether the number of bins is reasonable;
-- whether missing and special-value bins should be kept separate;
-- whether the pattern is stable in validation samples or later vintages.
-
-The goal is not to automate judgment away. The goal is to make the first binning
-iteration faster and easier to inspect.
+The goal is to simplify the first binning iteration, not to automate away the
+risk decision.
