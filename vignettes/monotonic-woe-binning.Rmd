@@ -1,0 +1,179 @@
+---
+title: "Monotonic WOE binning"
+output: rmarkdown::html_vignette
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 8,
+  fig.height = 5
+)
+```
+
+```{r setup}
+library(risk3r)
+library(scorecard)
+library(dplyr)
+library(ggplot2)
+
+data("germancredit", package = "scorecard")
+```
+
+## Motivation
+
+`woebin_monotonic()` separates orchestration from the numeric binning method:
+
+- categorical variables always use `scorecard::woebin()`;
+- numeric variables use the engine selected with `type`;
+- every numeric engine receives one variable and returns one table compatible
+  with an element of a `scorecard::woebin()` result.
+
+This makes it possible to add other monotonic methods without changing the
+outer workflow.
+
+Two numeric engines are currently available:
+
+- `type = "scorecard_retry"` uses the original retry/coarsening strategy;
+- `type = "isoreg"` applies weighted isotonic merging to an initial scorecard
+  binning.
+
+Neither method replaces analyst judgment. Monotonicity removes irregular
+patterns, but the final direction still needs to make sense for the risk
+problem.
+
+## Isotonic engine
+
+For one numeric variable, the isotonic engine:
+
+1. Runs `scorecard::woebin()` with the requested `count_distr_limit`,
+   `bin_num_limit`, missing handling, and special values.
+2. Orders the regular numeric bins and uses their observed positive rates and
+   counts.
+3. Fits weighted increasing and decreasing isotonic regressions.
+4. Selects the direction with the lowest weighted squared error.
+5. Merges adjacent initial bins that belong to the same selected isotonic block.
+6. Calls `scorecard::woebin()` again with the resulting cut points to obtain the
+   usual WOE and IV table.
+
+Because the isotonic step only merges bins from the initial scorecard result,
+it does not create bins smaller than the initial minimum or exceed the initial
+maximum number of bins.
+
+The direction is not imposed in advance. The engine follows the direction that
+best fits the observed initial-bin rates, while the analyst still decides
+whether that direction is economically sensible.
+
+Missing and special-value bins are excluded from the monotonicity fit and
+check.
+
+## German Credit example
+
+```{r data}
+vars <- c(
+  "duration.in.month",
+  "credit.amount",
+  "age.in.years",
+  "status.of.existing.checking.account",
+  "purpose"
+)
+
+dat <- germancredit[, c("creditability", vars)]
+```
+
+### Retry engine
+
+```{r retry-bins}
+bins_retry <- woebin_monotonic(
+  dat,
+  y = "creditability",
+  x = vars,
+  type = "scorecard_retry",
+  no_cores = 1,
+  print_step = 0,
+  bin_num_limit = 6,
+  count_distr_limit = 0.05,
+  count_distr_step = 0.025,
+  verbose = FALSE
+)
+
+woebin_summary(bins_retry) %>%
+  select(variable, n_categories, iv, monotone, factor)
+```
+
+### Isotonic engine
+
+```{r isoreg-bins}
+bins_isoreg <- woebin_monotonic(
+  dat,
+  y = "creditability",
+  x = vars,
+  type = "isoreg",
+  no_cores = 1,
+  print_step = 0,
+  bin_num_limit = 6,
+  count_distr_limit = 0.05,
+  verbose = FALSE
+)
+
+woebin_summary(bins_isoreg) %>%
+  select(variable, n_categories, iv, monotone, factor)
+```
+
+The individual numeric engines can also be used directly when only one
+variable is needed:
+
+```{r direct-engine}
+credit_amount_bin <- woebin_monotonic_isoreg(
+  dat,
+  y = "creditability",
+  x = "credit.amount",
+  no_cores = 1,
+  bin_num_limit = 6,
+  count_distr_limit = 0.05,
+  verbose = FALSE
+)
+
+credit_amount_bin
+```
+
+## Inspect the numeric bins
+
+```{r numeric-bin-path}
+numeric_vars <- c("duration.in.month", "credit.amount", "age.in.years")
+
+plot_data <- bind_rows(bins_isoreg[numeric_vars]) %>%
+  filter(breaks != "missing", !is_special_values) %>%
+  group_by(variable) %>%
+  mutate(bin_id = row_number()) %>%
+  ungroup()
+
+ggplot(plot_data, aes(bin_id, posprob, group = 1)) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(vars(variable), scales = "free_x") +
+  labs(
+    x = "Bin order",
+    y = "Observed bad rate / posprob",
+    title = "Monotonic bad rates for numeric variables"
+  ) +
+  theme_minimal()
+```
+
+## Practical review
+
+After the automatic pass, review:
+
+- whether the selected direction makes business sense;
+- whether the number and size of bins are useful operationally;
+- whether missing and special values should remain separate;
+- whether the pattern is stable in validation samples and later vintages;
+- whether a manual break is preferable for interpretation or policy reasons.
+
+The goal is to simplify the first binning iteration, not to automate away the
+risk decision.
