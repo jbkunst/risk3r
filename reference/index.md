@@ -2,95 +2,97 @@
 
 ## All functions
 
-- [`apply_filters()`](http://jkunst.com/risk3r/reference/apply_filters.md)
+- [`apply_filters()`](https://jkunst.com/risk3r/reference/apply_filters.md)
   : Apply consecutive filter expressions to a data frame and return
   results
-- [`as.list(`*`<skim_df>`*`)`](http://jkunst.com/risk3r/reference/as.list.skim_df.md)
+- [`as.list(`*`<skim_df>`*`)`](https://jkunst.com/risk3r/reference/as.list.skim_df.md)
   : As list method for skim_df object
-- [`count_distr_max()`](http://jkunst.com/risk3r/reference/count_distr_max.md)
+- [`count_distr_max()`](https://jkunst.com/risk3r/reference/count_distr_max.md)
   : Get the max proportion
-- [`credit`](http://jkunst.com/risk3r/reference/credit.md) : Credit data
-- [`credit_woe`](http://jkunst.com/risk3r/reference/credit_woe.md) :
+- [`credit`](https://jkunst.com/risk3r/reference/credit.md) : Credit
+  data
+- [`credit_woe`](https://jkunst.com/risk3r/reference/credit_woe.md) :
   Credit data in woe form
-- [`featsel_brute_force()`](http://jkunst.com/risk3r/reference/featsel_brute_force.md)
+- [`featsel_brute_force()`](https://jkunst.com/risk3r/reference/featsel_brute_force.md)
   : An iterative process to eliminate variables by confidence interval
   or sign term
-- [`featsel_glmnet()`](http://jkunst.com/risk3r/reference/featsel_glmnet.md)
+- [`featsel_glmnet()`](https://jkunst.com/risk3r/reference/featsel_glmnet.md)
   : Feature selection via glmnet
-- [`featsel_loss_function_permutations()`](http://jkunst.com/risk3r/reference/featsel_loss_function_permutations.md)
+- [`featsel_loss_function_permutations()`](https://jkunst.com/risk3r/reference/featsel_loss_function_permutations.md)
   : Shortcut featsel_loss_function_permutations
-- [`featsel_stepforward()`](http://jkunst.com/risk3r/reference/featsel_stepforward.md)
+- [`featsel_stepforward()`](https://jkunst.com/risk3r/reference/featsel_stepforward.md)
   : Feature selection vis stepwise forward
-- [`formula_from_reponse_and_predictors_names()`](http://jkunst.com/risk3r/reference/formula_from_reponse_and_predictors_names.md)
+- [`formula_from_reponse_and_predictors_names()`](https://jkunst.com/risk3r/reference/formula_from_reponse_and_predictors_names.md)
   : Get formula from reponse and predictors names
-- [`gain()`](http://jkunst.com/risk3r/reference/gain.md) : Gains
-- [`gg_model_roc()`](http://jkunst.com/risk3r/reference/gg_model_roc.md)
-  [`gg_model_ecdf()`](http://jkunst.com/risk3r/reference/gg_model_roc.md)
-  [`gg_model_dist()`](http://jkunst.com/risk3r/reference/gg_model_roc.md)
-  [`gg_model_coef()`](http://jkunst.com/risk3r/reference/gg_model_roc.md)
-  [`gg_model_corr()`](http://jkunst.com/risk3r/reference/gg_model_roc.md)
-  [`gg_model_vif()`](http://jkunst.com/risk3r/reference/gg_model_roc.md)
-  [`gg_model_importance()`](http://jkunst.com/risk3r/reference/gg_model_roc.md)
-  [`gg_model_importance2()`](http://jkunst.com/risk3r/reference/gg_model_roc.md)
-  [`gg_model_partials()`](http://jkunst.com/risk3r/reference/gg_model_roc.md)
-  [`gg_model_calibration()`](http://jkunst.com/risk3r/reference/gg_model_roc.md)
+- [`gain()`](https://jkunst.com/risk3r/reference/gain.md) : Gains
+- [`gg_model_roc()`](https://jkunst.com/risk3r/reference/gg_model_roc.md)
+  [`gg_model_ecdf()`](https://jkunst.com/risk3r/reference/gg_model_roc.md)
+  [`gg_model_dist()`](https://jkunst.com/risk3r/reference/gg_model_roc.md)
+  [`gg_model_coef()`](https://jkunst.com/risk3r/reference/gg_model_roc.md)
+  [`gg_model_corr()`](https://jkunst.com/risk3r/reference/gg_model_roc.md)
+  [`gg_model_vif()`](https://jkunst.com/risk3r/reference/gg_model_roc.md)
+  [`gg_model_importance()`](https://jkunst.com/risk3r/reference/gg_model_roc.md)
+  [`gg_model_importance2()`](https://jkunst.com/risk3r/reference/gg_model_roc.md)
+  [`gg_model_partials()`](https://jkunst.com/risk3r/reference/gg_model_roc.md)
+  [`gg_model_calibration()`](https://jkunst.com/risk3r/reference/gg_model_roc.md)
   : Plot models
-- [`gg_woes()`](http://jkunst.com/risk3r/reference/gg_woes.md) : Plot
+- [`gg_woes()`](https://jkunst.com/risk3r/reference/gg_woes.md) : Plot
   woes
-- [`hhi()`](http://jkunst.com/risk3r/reference/hhi.md) :
+- [`hhi()`](https://jkunst.com/risk3r/reference/hhi.md) :
   Herfindahl-Hirschman Index
-- [`hhi_label()`](http://jkunst.com/risk3r/reference/hhi_label.md) : Get
-  labels for HHI. indexes
-- [`hmeq`](http://jkunst.com/risk3r/reference/hmeq.md) : hmeq data
-- [`information_value()`](http://jkunst.com/risk3r/reference/information_value.md)
+- [`hhi_label()`](https://jkunst.com/risk3r/reference/hhi_label.md) :
+  Get labels for HHI. indexes
+- [`hmeq`](https://jkunst.com/risk3r/reference/hmeq.md) : hmeq data
+- [`information_value()`](https://jkunst.com/risk3r/reference/information_value.md)
   : Calculate Information Value
-- [`iv_label()`](http://jkunst.com/risk3r/reference/iv_label.md) : Get
+- [`iv_label()`](https://jkunst.com/risk3r/reference/iv_label.md) : Get
   labels for Information Values
-- [`ks()`](http://jkunst.com/risk3r/reference/ks.md) : Calculate
+- [`ks()`](https://jkunst.com/risk3r/reference/ks.md) : Calculate
   Kolmogorov-Smirnov statistic
-- [`metrics()`](http://jkunst.com/risk3r/reference/metrics.md) : Metrics
-- [`model_metrics()`](http://jkunst.com/risk3r/reference/model_metrics.md)
+- [`metrics()`](https://jkunst.com/risk3r/reference/metrics.md) :
+  Metrics
+- [`model_metrics()`](https://jkunst.com/risk3r/reference/model_metrics.md)
   : Calculate predictive metrics for glm models
-- [`model_partials()`](http://jkunst.com/risk3r/reference/model_partials.md)
+- [`model_partials()`](https://jkunst.com/risk3r/reference/model_partials.md)
   : Get predictive indicator for partial models given a model
-- [`model_summary_variables()`](http://jkunst.com/risk3r/reference/model_summary_variables.md)
-  [`model_corr_variables()`](http://jkunst.com/risk3r/reference/model_summary_variables.md)
-  [`model_vif_variables()`](http://jkunst.com/risk3r/reference/model_summary_variables.md)
-  [`model_iv_variables()`](http://jkunst.com/risk3r/reference/model_summary_variables.md)
+- [`model_summary_variables()`](https://jkunst.com/risk3r/reference/model_summary_variables.md)
+  [`model_corr_variables()`](https://jkunst.com/risk3r/reference/model_summary_variables.md)
+  [`model_vif_variables()`](https://jkunst.com/risk3r/reference/model_summary_variables.md)
+  [`model_iv_variables()`](https://jkunst.com/risk3r/reference/model_summary_variables.md)
   : Get summary of model
-- [`model_terms_and_ci()`](http://jkunst.com/risk3r/reference/model_terms_and_ci.md)
+- [`model_terms_and_ci()`](https://jkunst.com/risk3r/reference/model_terms_and_ci.md)
   : A broom::tidy for glm modelos with terms and confidence intervals
-- [`n_growths()`](http://jkunst.com/risk3r/reference/n_growths.md) :
+- [`n_growths()`](https://jkunst.com/risk3r/reference/n_growths.md) :
   Number of up/growths
-- [`psi_label()`](http://jkunst.com/risk3r/reference/psi_label.md) : Get
-  labels for PSIs
-- [`psi_table()`](http://jkunst.com/risk3r/reference/psi_table.md) :
+- [`psi_label()`](https://jkunst.com/risk3r/reference/psi_label.md) :
+  Get labels for PSIs
+- [`psi_table()`](https://jkunst.com/risk3r/reference/psi_table.md) :
   Function to calculate the vector table given 2 vector of counts
-- [`psi_vector()`](http://jkunst.com/risk3r/reference/psi_vector.md) :
+- [`psi_vector()`](https://jkunst.com/risk3r/reference/psi_vector.md) :
   Function to calculate the vector psi given 2 vector of counts
-- [`reponse_and_predictors_names()`](http://jkunst.com/risk3r/reference/reponse_and_predictors_names.md)
+- [`reponse_and_predictors_names()`](https://jkunst.com/risk3r/reference/reponse_and_predictors_names.md)
   : Get response and predictors names from model
-- [`risk3r-exports`](http://jkunst.com/risk3r/reference/risk3r-exports.md)
-  [`%>%`](http://jkunst.com/risk3r/reference/risk3r-exports.md) : risk3r
-  exported operators and S3 methods
-- [`risk3r`](http://jkunst.com/risk3r/reference/risk3r.md) : Risk3r
-- [`roc_data()`](http://jkunst.com/risk3r/reference/roc_data.md)
-  [`ecdf_data()`](http://jkunst.com/risk3r/reference/roc_data.md) :
+- [`risk3r-exports`](https://jkunst.com/risk3r/reference/risk3r-exports.md)
+  [`%>%`](https://jkunst.com/risk3r/reference/risk3r-exports.md) :
+  risk3r exported operators and S3 methods
+- [`risk3r`](https://jkunst.com/risk3r/reference/risk3r.md) : Risk3r
+- [`roc_data()`](https://jkunst.com/risk3r/reference/roc_data.md)
+  [`ecdf_data()`](https://jkunst.com/risk3r/reference/roc_data.md) :
   Auxiliar functions for data plots
-- [`rsi()`](http://jkunst.com/risk3r/reference/rsi.md)
-  [`cmo()`](http://jkunst.com/risk3r/reference/rsi.md) : Relative
+- [`rsi()`](https://jkunst.com/risk3r/reference/rsi.md)
+  [`cmo()`](https://jkunst.com/risk3r/reference/rsi.md) : Relative
   Strength Index (RSI) and Chande Momentum Oscillator (CMO)
-- [`vif_label()`](http://jkunst.com/risk3r/reference/vif_label.md) : Get
-  labels for VIF values
-- [`woebin2()`](http://jkunst.com/risk3r/reference/woebin2.md) : woebin
+- [`vif_label()`](https://jkunst.com/risk3r/reference/vif_label.md) :
+  Get labels for VIF values
+- [`woebin2()`](https://jkunst.com/risk3r/reference/woebin2.md) : woebin
   fix for windows
-- [`woebin_cor_iv()`](http://jkunst.com/risk3r/reference/woebin_cor_iv.md)
+- [`woebin_cor_iv()`](https://jkunst.com/risk3r/reference/woebin_cor_iv.md)
   : Create a tidy data frame with a correlations and IV
-- [`woebin_ctree()`](http://jkunst.com/risk3r/reference/woebin_ctree.md)
+- [`woebin_ctree()`](https://jkunst.com/risk3r/reference/woebin_ctree.md)
   : Interface scorecard::woebin for partykiy::ctree
-- [`woebin_ply_min()`](http://jkunst.com/risk3r/reference/woebin_ply_min.md)
+- [`woebin_ply_min()`](https://jkunst.com/risk3r/reference/woebin_ply_min.md)
   : Minimalistic version of scorecard::woebin_ply
-- [`woebin_summary()`](http://jkunst.com/risk3r/reference/woebin_summary.md)
+- [`woebin_summary()`](https://jkunst.com/risk3r/reference/woebin_summary.md)
   : Get scorecard's woe_bin summary
-- [`woes`](http://jkunst.com/risk3r/reference/woes.md) : woes from
+- [`woes`](https://jkunst.com/risk3r/reference/woes.md) : woes from
   credit data
