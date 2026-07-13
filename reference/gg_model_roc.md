@@ -192,7 +192,7 @@ bins <- scorecard::woebin(credit, "bad", no_cores = 1)
 #> ℹ Creating woe binning ...
 #> Warning: There were 3 constant columns removed from input dataset,
 #> flag_other_card, flag_mobile_phone, flag_contact_phone
-#> ✔ Binning on 49694 rows and 14 columns in 00:00:04
+#> ✔ Binning on 49694 rows and 14 columns in 00:00:02
 
 gg_model_importance2(m, bins)
 
