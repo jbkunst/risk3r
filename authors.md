@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/jbkunst/risk3r/blob/master/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/jbkunst/risk3r/blob/v0.1.1/DESCRIPTION)
 
 Kunst J (2026). *risk3r: Tools for credit risk modelling*. R package
 version 0.1.0.9000, <https://jkunst.com/risk3r/>.
