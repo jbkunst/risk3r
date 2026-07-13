@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">risk3r</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
       <h1>Feature Selection</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/jbkunst/risk3r/blob/v0.1.2/vignettes/feature-selection.Rmd" class="external-link"><code>vignettes/feature-selection.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jbkunst/risk3r/blob/master/vignettes/feature-selection.Rmd" class="external-link"><code>vignettes/feature-selection.Rmd</code></a></small>
       <div class="d-none name"><code>feature-selection.Rmd</code></div>
     </div>
 
@@ -114,14 +114,14 @@
 <div class="section level2">
 <h2 id="lasso-or-elasticnet-regularization">Lasso or Elasticnet Regularization<a class="anchor" aria-label="anchor" href="#lasso-or-elasticnet-regularization"></a>
 </h2>
-<p>This is a wrapper of `<code><a href="https://rdrr.io/pkg/glmnet/man/cv.glmnet.html" class="external-link">glmnet::cv.glmnet</a></code>.</p>
+<p>This is a wrapper of `<code><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">glmnet::cv.glmnet</a></code>.</p>
 <p>From <a href="https://glmnet.stanford.edu/articles/glmnet.html" class="external-link uri">https://glmnet.stanford.edu/articles/glmnet.html</a>:</p>
 <p>There 2 option for <code>S</code>: <code>lambda.min</code> and
 <code>lambda.1se</code> , this last option you have a more regularized
 model.</p>
 <p>This wrapper around the glmnet package take a model as input, then
 return the model with the variables non zero from the
-<code><a href="https://rdrr.io/pkg/glmnet/man/cv.glmnet.html" class="external-link">glmnet::cv.glmnet()</a></code> function according with the selected
+<code><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">glmnet::cv.glmnet()</a></code> function according with the selected
 <code>S</code> option. This function reorder the variables in the same
 order the coefficient in the glmnet model turn to non zero (check the
 plots when run this funtion).</p>

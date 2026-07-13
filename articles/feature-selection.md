@@ -49,7 +49,7 @@ metrics(train_data$bad, predict(model_rf))
 ## Lasso or Elasticnet Regularization
 
 This is a wrapper of
-\`[`glmnet::cv.glmnet`](https://rdrr.io/pkg/glmnet/man/cv.glmnet.html).
+\`[`glmnet::cv.glmnet`](https://glmnet.stanford.edu/reference/cv.glmnet.html).
 
 From <https://glmnet.stanford.edu/articles/glmnet.html>:
 
@@ -58,7 +58,7 @@ you have a more regularized model.
 
 This wrapper around the glmnet package take a model as input, then
 return the model with the variables non zero from the
-[`glmnet::cv.glmnet()`](https://rdrr.io/pkg/glmnet/man/cv.glmnet.html)
+[`glmnet::cv.glmnet()`](https://glmnet.stanford.edu/reference/cv.glmnet.html)
 function according with the selected `S` option. This function reorder
 the variables in the same order the coefficient in the glmnet model turn
 to non zero (check the plots when run this funtion).
