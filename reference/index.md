@@ -43,6 +43,8 @@
 - [`hhi_label()`](https://jkunst.com/risk3r/reference/hhi_label.md) :
   Get labels for HHI. indexes
 - [`hmeq`](https://jkunst.com/risk3r/reference/hmeq.md) : hmeq data
+- [`home_credit_application`](https://jkunst.com/risk3r/reference/home_credit_application.md)
+  : Home Credit application training data
 - [`information_value()`](https://jkunst.com/risk3r/reference/information_value.md)
   : Calculate Information Value
 - [`iv_label()`](https://jkunst.com/risk3r/reference/iv_label.md) : Get
@@ -75,7 +77,8 @@
 - [`risk3r-exports`](https://jkunst.com/risk3r/reference/risk3r-exports.md)
   [`%>%`](https://jkunst.com/risk3r/reference/risk3r-exports.md) :
   risk3r exported operators and S3 methods
-- [`risk3r`](https://jkunst.com/risk3r/reference/risk3r.md) : Risk3r
+- [`risk3r-package`](https://jkunst.com/risk3r/reference/risk3r.md)
+  [`risk3r`](https://jkunst.com/risk3r/reference/risk3r.md) : Risk3r
 - [`roc_data()`](https://jkunst.com/risk3r/reference/roc_data.md)
   [`ecdf_data()`](https://jkunst.com/risk3r/reference/roc_data.md) :
   Auxiliar functions for data plots

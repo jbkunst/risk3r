@@ -19,6 +19,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/feature-selection.html">Feature Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/home-credit-scorecard.html">Desarrollo de un scorecard con Home Credit</a></li>
     <li><a class="dropdown-item" href="../articles/Plots.html">Plots</a></li>
     <li><a class="dropdown-item" href="../articles/predictive-metrics.html">Predictive Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/scorecard.html">Scorecard helpers and others funcions</a></li>
@@ -84,6 +85,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"woes"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">woes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">woes</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pps</span> <span class="op">&lt;-</span> <span class="fu">gg_woes</span><span class="op">(</span><span class="va">woes</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> id_client (IV = 0.42%)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> sex (IV = 2.60%)</span>
@@ -91,13 +94,6 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> age (IV = 19.40%)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> flag_res_phone (IV = 7.54%)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> area_code_res_phone (IV = 4.17%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> payment_day (IV = 2.18%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> residence_type (IV = 0.72%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> months_in_residence (IV = 1.72%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> months_in_the_job (IV = 8.96%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> profession_code (IV = 6.18%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> personal_net_income (IV = 4.10%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> quant_add_cards (IV = 1.84%)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span></span>
 <span class="r-in"><span></span></span>
@@ -118,13 +114,6 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> age (IV = 19.40%)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> flag_res_phone (IV = 7.54%)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> area_code_res_phone (IV = 4.17%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> payment_day (IV = 2.18%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> residence_type (IV = 0.72%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> months_in_residence (IV = 1.72%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> months_in_the_job (IV = 8.96%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> profession_code (IV = 6.18%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> personal_net_income (IV = 4.10%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> quant_add_cards (IV = 1.84%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $id_client</span>
 <span class="r-plt img"><img src="gg_woes-2.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -143,27 +132,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $area_code_res_phone</span>
 <span class="r-plt img"><img src="gg_woes-7.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $payment_day</span>
-<span class="r-plt img"><img src="gg_woes-8.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $residence_type</span>
-<span class="r-plt img"><img src="gg_woes-9.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $months_in_residence</span>
-<span class="r-plt img"><img src="gg_woes-10.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $months_in_the_job</span>
-<span class="r-plt img"><img src="gg_woes-11.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $profession_code</span>
-<span class="r-plt img"><img src="gg_woes-12.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $personal_net_income</span>
-<span class="r-plt img"><img src="gg_woes-13.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $quant_add_cards</span>
-<span class="r-plt img"><img src="gg_woes-14.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_woes</span><span class="op">(</span><span class="va">woes</span>, variable <span class="op">=</span> <span class="st">"bin_iv"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> id_client (IV = 0.42%)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> sex (IV = 2.60%)</span>
@@ -171,53 +140,24 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> age (IV = 19.40%)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> flag_res_phone (IV = 7.54%)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> area_code_res_phone (IV = 4.17%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> payment_day (IV = 2.18%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> residence_type (IV = 0.72%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> months_in_residence (IV = 1.72%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> months_in_the_job (IV = 8.96%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> profession_code (IV = 6.18%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> personal_net_income (IV = 4.10%)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> quant_add_cards (IV = 1.84%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $id_client</span>
-<span class="r-plt img"><img src="gg_woes-15.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_woes-8.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sex</span>
-<span class="r-plt img"><img src="gg_woes-16.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_woes-9.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $marital_status</span>
-<span class="r-plt img"><img src="gg_woes-17.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_woes-10.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $age</span>
-<span class="r-plt img"><img src="gg_woes-18.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_woes-11.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $flag_res_phone</span>
-<span class="r-plt img"><img src="gg_woes-19.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_woes-12.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $area_code_res_phone</span>
-<span class="r-plt img"><img src="gg_woes-20.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_woes-13.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $payment_day</span>
-<span class="r-plt img"><img src="gg_woes-21.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $residence_type</span>
-<span class="r-plt img"><img src="gg_woes-22.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $months_in_residence</span>
-<span class="r-plt img"><img src="gg_woes-23.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $months_in_the_job</span>
-<span class="r-plt img"><img src="gg_woes-24.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $profession_code</span>
-<span class="r-plt img"><img src="gg_woes-25.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $personal_net_income</span>
-<span class="r-plt img"><img src="gg_woes-26.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $quant_add_cards</span>
-<span class="r-plt img"><img src="gg_woes-27.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

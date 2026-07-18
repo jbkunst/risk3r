@@ -3,10 +3,11 @@ pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   feature-selection: feature-selection.html
+  home-credit-scorecard: home-credit-scorecard.html
   Plots: Plots.html
   predictive-metrics: predictive-metrics.html
   scorecard: scorecard.html
-last_built: 2026-07-13T20:06Z
+last_built: 2026-07-18T04:34Z
 urls:
   reference: https://jkunst.com/risk3r/reference
   article: https://jkunst.com/risk3r/articles

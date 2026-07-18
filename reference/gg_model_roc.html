@@ -19,6 +19,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/feature-selection.html">Feature Selection</a></li>
+    <li><a class="dropdown-item" href="../articles/home-credit-scorecard.html">Desarrollo de un scorecard con Home Credit</a></li>
     <li><a class="dropdown-item" href="../articles/Plots.html">Plots</a></li>
     <li><a class="dropdown-item" href="../articles/predictive-metrics.html">Predictive Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/scorecard.html">Scorecard helpers and others funcions</a></li>
@@ -161,35 +162,33 @@
 <span class="r-in"><span><span class="fu">gg_model_ecdf</span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dnew</span>, linewidth <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gg_model_roc-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">gg_model_dist</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="gg_model_roc-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">gg_model_dist</span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dnew</span>, alpha <span class="op">=</span> <span class="fl">0.4</span>, color <span class="op">=</span> <span class="st">"transparent"</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="gg_model_roc-6.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_model_roc-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_calibration</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'</span>
-<span class="r-plt img"><img src="gg_model_roc-7.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_model_roc-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">gg_model_calibration</span><span class="op">(</span><span class="va">m</span>, newdata <span class="op">=</span> <span class="va">dnew</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'</span>
-<span class="r-plt img"><img src="gg_model_roc-8.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_model_roc-7.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_coef</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="gg_model_roc-9.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_model_roc-8.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_corr</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Correlation computed with</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Method: 'pearson'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Missing treated using: 'pairwise.complete.obs'</span>
-<span class="r-plt img"><img src="gg_model_roc-10.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_model_roc-9.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_vif</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="gg_model_roc-11.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_model_roc-10.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_importance</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using all variables in data.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using 1 - AUCROC as loss function.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using `base::identity` as sampler.</span>
-<span class="r-plt img"><img src="gg_model_roc-12.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_model_roc-11.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_partials</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting and evaluating model with 1 variables: age_woe</span>
@@ -204,17 +203,17 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Creating woe binning ...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting and evaluating model with 6 variables: age_woe, flag_res_phone_woe, m...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Creating woe binning ...</span>
+<span class="r-plt img"><img src="gg_model_roc-12.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">gg_model_vif</span><span class="op">(</span><span class="va">m</span><span class="op">)</span>  <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="va">rev</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gg_model_roc-13.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">gg_model_coef</span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_y_discrete</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="va">rev</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="gg_model_roc-14.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu">gg_model_vif</span><span class="op">(</span><span class="va">m</span><span class="op">)</span>  <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="va">rev</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="gg_model_roc-15.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">gg_model_corr</span><span class="op">(</span><span class="va">m</span>, upper <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Correlation computed with</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Method: 'pearson'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Missing treated using: 'pairwise.complete.obs'</span>
-<span class="r-plt img"><img src="gg_model_roc-16.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_model_roc-14.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_corr</span><span class="op">(</span><span class="va">m</span>, upper <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_y_discrete</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="va">rev</span><span class="op">)</span> <span class="op">+</span></span></span>
@@ -222,7 +221,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Correlation computed with</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Method: 'pearson'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Missing treated using: 'pairwise.complete.obs'</span>
-<span class="r-plt img"><img src="gg_model_roc-17.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_model_roc-15.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"credit_woe"</span><span class="op">)</span></span></span>
@@ -237,9 +236,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #B2B2B2;">Binning on 49694 rows and 14 columns in 00:00:04</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">gg_model_importance2</span><span class="op">(</span><span class="va">m</span>, <span class="va">bins</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="gg_model_roc-18.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_model_roc-16.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">gg_model_importance2</span><span class="op">(</span><span class="va">m</span>, <span class="va">bins</span>, fill <span class="op">=</span> <span class="st">"gray60"</span>, width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="gg_model_roc-19.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gg_model_roc-17.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

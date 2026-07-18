@@ -42,6 +42,8 @@ gg_woes(
 
 data("woes")
 
+woes <- head(woes)
+
 pps <- gg_woes(woes)
 #> id_client (IV = 0.42%)
 #> sex (IV = 2.60%)
@@ -49,13 +51,6 @@ pps <- gg_woes(woes)
 #> age (IV = 19.40%)
 #> flag_res_phone (IV = 7.54%)
 #> area_code_res_phone (IV = 4.17%)
-#> payment_day (IV = 2.18%)
-#> residence_type (IV = 0.72%)
-#> months_in_residence (IV = 1.72%)
-#> months_in_the_job (IV = 8.96%)
-#> profession_code (IV = 6.18%)
-#> personal_net_income (IV = 4.10%)
-#> quant_add_cards (IV = 1.84%)
 
 if(require(patchwork)){
 
@@ -76,13 +71,6 @@ gg_woes(woes, variable = "woe")
 #> age (IV = 19.40%)
 #> flag_res_phone (IV = 7.54%)
 #> area_code_res_phone (IV = 4.17%)
-#> payment_day (IV = 2.18%)
-#> residence_type (IV = 0.72%)
-#> months_in_residence (IV = 1.72%)
-#> months_in_the_job (IV = 8.96%)
-#> profession_code (IV = 6.18%)
-#> personal_net_income (IV = 4.10%)
-#> quant_add_cards (IV = 1.84%)
 #> $id_client
 
 #> 
@@ -101,27 +89,7 @@ gg_woes(woes, variable = "woe")
 #> $area_code_res_phone
 
 #> 
-#> $payment_day
 
-#> 
-#> $residence_type
-
-#> 
-#> $months_in_residence
-
-#> 
-#> $months_in_the_job
-
-#> 
-#> $profession_code
-
-#> 
-#> $personal_net_income
-
-#> 
-#> $quant_add_cards
-
-#> 
 gg_woes(woes, variable = "bin_iv")
 #> id_client (IV = 0.42%)
 #> sex (IV = 2.60%)
@@ -129,13 +97,6 @@ gg_woes(woes, variable = "bin_iv")
 #> age (IV = 19.40%)
 #> flag_res_phone (IV = 7.54%)
 #> area_code_res_phone (IV = 4.17%)
-#> payment_day (IV = 2.18%)
-#> residence_type (IV = 0.72%)
-#> months_in_residence (IV = 1.72%)
-#> months_in_the_job (IV = 8.96%)
-#> profession_code (IV = 6.18%)
-#> personal_net_income (IV = 4.10%)
-#> quant_add_cards (IV = 1.84%)
 #> $id_client
 
 #> 
@@ -154,26 +115,4 @@ gg_woes(woes, variable = "bin_iv")
 #> $area_code_res_phone
 
 #> 
-#> $payment_day
-
-#> 
-#> $residence_type
-
-#> 
-#> $months_in_residence
-
-#> 
-#> $months_in_the_job
-
-#> 
-#> $profession_code
-
-#> 
-#> $personal_net_income
-
-#> 
-#> $quant_add_cards
-
-#> 
-
 ```

@@ -119,8 +119,6 @@ gg_model_ecdf(m)
 gg_model_ecdf(m, newdata = dnew, linewidth = 2)
 
 
-gg_model_dist(m)
-
 gg_model_dist(m, newdata = dnew, alpha = 0.4, color = "transparent")
 
 
@@ -164,14 +162,14 @@ gg_model_partials(m)
 #> ℹ Creating woe binning ...
 
 
-gg_model_coef(m) + ggplot2::coord_flip() + ggplot2::scale_y_discrete(limits = rev)
-
 gg_model_vif(m)  + ggplot2::coord_flip() + ggplot2::scale_x_discrete(limits = rev)
+
 
 gg_model_corr(m, upper = TRUE)
 #> Correlation computed with
 #> • Method: 'pearson'
 #> • Missing treated using: 'pairwise.complete.obs'
+
 
 gg_model_corr(m, upper = TRUE) +
  ggplot2::coord_flip() +
