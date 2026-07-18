@@ -30,6 +30,8 @@ Plot woes
 
 data("woes")
 
+woes <- head(woes)
+
 pps <- gg_woes(woes)
 
 if(require(patchwork)){
@@ -43,7 +45,7 @@ if(require(patchwork)){
 }
 
 gg_woes(woes, variable = "woe")
-gg_woes(woes, variable = "bin_iv")
 
+gg_woes(woes, variable = "bin_iv")
 
 }

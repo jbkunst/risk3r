@@ -2,10 +2,20 @@
 % Please edit documentation in R/risk3-package.R
 \docType{package}
 \name{risk3r}
+\alias{risk3r-package}
 \alias{risk3r}
 \title{Risk3r}
 \description{
 Set of fuctions to work with risk modelling
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://jkunst.com/risk3r/}
+  \item \url{https://github.com/jbkunst/risk3r}
+  \item Report bugs at \url{https://github.com/jbkunst/risk3r/issues}
+}
+
 }
 \author{
 Joshua Kunst (@jbkunst)
