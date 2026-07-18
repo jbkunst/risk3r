@@ -31,3 +31,147 @@
 #' @usage hmeq
 #' @format A \code{data frame} with 5,960 observations and 13 variables.
 "hmeq"
+
+#' Home Credit application training data
+#'
+#' Training application data from the Home Credit Default Risk competition.
+#' The data are credited to Home Credit and the competition's official data
+#' page on Kaggle. The copy used to build this package is a third-party mirror
+#' published by the Hugging Face user `cantalapiedra`; it is provided as a
+#' convenient download location and is not the official source.
+#'
+#' @docType data
+#' @name home_credit_application
+#' @usage home_credit_application
+#' @format A \code{data frame} with 307,511 observations and 122 variables:
+#' \describe{
+#'   \item{sk_id_curr}{ID of loan in our sample}
+#'   \item{target}{Target variable (1 - client with payment difficulties: he/she had late payment more than X days on at least one of the first Y installments of the loan in our sample, 0 - all other cases)}
+#'   \item{name_contract_type}{Identification if loan is cash or revolving}
+#'   \item{code_gender}{Gender of the client}
+#'   \item{flag_own_car}{Flag if the client owns a car}
+#'   \item{flag_own_realty}{Flag if client owns a house or flat}
+#'   \item{cnt_children}{Number of children the client has}
+#'   \item{amt_income_total}{Income of the client}
+#'   \item{amt_credit}{Credit amount of the loan}
+#'   \item{amt_annuity}{Loan annuity}
+#'   \item{amt_goods_price}{For consumer loans it is the price of the goods for which the loan is given}
+#'   \item{name_type_suite}{Who was accompanying client when he was applying for the loan}
+#'   \item{name_income_type}{Client income type (for example, business, employment, or maternity leave).}
+#'   \item{name_education_type}{Level of highest education the client achieved}
+#'   \item{name_family_status}{Family status of the client}
+#'   \item{name_housing_type}{What is the housing situation of the client (renting, living with parents, ...)}
+#'   \item{region_population_relative}{Normalized population of region where client lives (higher number means the client lives in more populated region)}
+#'   \item{days_birth}{Client's age in days at the time of application}
+#'   \item{days_employed}{How many days before the application the person started current employment}
+#'   \item{days_registration}{How many days before the application did client change his registration}
+#'   \item{days_id_publish}{How many days before the application did client change the identity document with which he applied for the loan}
+#'   \item{own_car_age}{Age of client's car}
+#'   \item{flag_mobil}{Did client provide mobile phone (1=YES, 0=NO)}
+#'   \item{flag_emp_phone}{Did client provide work phone (1=YES, 0=NO)}
+#'   \item{flag_work_phone}{Did client provide home phone (1=YES, 0=NO)}
+#'   \item{flag_cont_mobile}{Was mobile phone reachable (1=YES, 0=NO)}
+#'   \item{flag_phone}{Did client provide home phone (1=YES, 0=NO)}
+#'   \item{flag_email}{Did client provide email (1=YES, 0=NO)}
+#'   \item{occupation_type}{What kind of occupation does the client have}
+#'   \item{cnt_fam_members}{How many family members does client have}
+#'   \item{region_rating_client}{Our rating of the region where client lives (1,2,3)}
+#'   \item{region_rating_client_w_city}{Our rating of the region where client lives with taking city into account (1,2,3)}
+#'   \item{weekday_appr_process_start}{On which day of the week did the client apply for the loan}
+#'   \item{hour_appr_process_start}{Approximately at what hour did the client apply for the loan}
+#'   \item{reg_region_not_live_region}{Flag if client's permanent address does not match contact address (1=different, 0=same, at region level)}
+#'   \item{reg_region_not_work_region}{Flag if client's permanent address does not match work address (1=different, 0=same, at region level)}
+#'   \item{live_region_not_work_region}{Flag if client's contact address does not match work address (1=different, 0=same, at region level)}
+#'   \item{reg_city_not_live_city}{Flag if client's permanent address does not match contact address (1=different, 0=same, at city level)}
+#'   \item{reg_city_not_work_city}{Flag if client's permanent address does not match work address (1=different, 0=same, at city level)}
+#'   \item{live_city_not_work_city}{Flag if client's contact address does not match work address (1=different, 0=same, at city level)}
+#'   \item{organization_type}{Type of organization where client works}
+#'   \item{ext_source_1}{Normalized score from external data source}
+#'   \item{ext_source_2}{Normalized score from external data source}
+#'   \item{ext_source_3}{Normalized score from external data source}
+#'   \item{apartments_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{basementarea_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{years_beginexpluatation_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{years_build_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{commonarea_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{elevators_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{entrances_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{floorsmax_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{floorsmin_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{landarea_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{livingapartments_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{livingarea_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{nonlivingapartments_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{nonlivingarea_avg}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{apartments_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{basementarea_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{years_beginexpluatation_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{years_build_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{commonarea_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{elevators_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{entrances_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{floorsmax_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{floorsmin_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{landarea_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{livingapartments_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{livingarea_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{nonlivingapartments_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{nonlivingarea_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{apartments_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{basementarea_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{years_beginexpluatation_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{years_build_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{commonarea_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{elevators_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{entrances_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{floorsmax_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{floorsmin_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{landarea_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{livingapartments_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{livingarea_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{nonlivingapartments_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{nonlivingarea_medi}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{fondkapremont_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{housetype_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{totalarea_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{wallsmaterial_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{emergencystate_mode}{Normalized information about building where the client lives, What is average (_AVG suffix), modus (_MODE suffix), median (_MEDI suffix) apartment size, common area, living area, age of building, number of elevators, number of entrances, state of the building, number of floor}
+#'   \item{obs_30_cnt_social_circle}{How many observation of client's social surroundings with observable 30 DPD (days past due) default}
+#'   \item{def_30_cnt_social_circle}{How many observation of client's social surroundings defaulted on 30 DPD (days past due)}
+#'   \item{obs_60_cnt_social_circle}{How many observation of client's social surroundings with observable 60 DPD (days past due) default}
+#'   \item{def_60_cnt_social_circle}{How many observation of client's social surroundings defaulted on 60 (days past due) DPD}
+#'   \item{days_last_phone_change}{How many days before application did client change phone}
+#'   \item{flag_document_2}{Did client provide document 2}
+#'   \item{flag_document_3}{Did client provide document 3}
+#'   \item{flag_document_4}{Did client provide document 4}
+#'   \item{flag_document_5}{Did client provide document 5}
+#'   \item{flag_document_6}{Did client provide document 6}
+#'   \item{flag_document_7}{Did client provide document 7}
+#'   \item{flag_document_8}{Did client provide document 8}
+#'   \item{flag_document_9}{Did client provide document 9}
+#'   \item{flag_document_10}{Did client provide document 10}
+#'   \item{flag_document_11}{Did client provide document 11}
+#'   \item{flag_document_12}{Did client provide document 12}
+#'   \item{flag_document_13}{Did client provide document 13}
+#'   \item{flag_document_14}{Did client provide document 14}
+#'   \item{flag_document_15}{Did client provide document 15}
+#'   \item{flag_document_16}{Did client provide document 16}
+#'   \item{flag_document_17}{Did client provide document 17}
+#'   \item{flag_document_18}{Did client provide document 18}
+#'   \item{flag_document_19}{Did client provide document 19}
+#'   \item{flag_document_20}{Did client provide document 20}
+#'   \item{flag_document_21}{Did client provide document 21}
+#'   \item{amt_req_credit_bureau_hour}{Number of enquiries to Credit Bureau about the client one hour before application}
+#'   \item{amt_req_credit_bureau_day}{Number of enquiries to Credit Bureau about the client one day before application (excluding one hour before application)}
+#'   \item{amt_req_credit_bureau_week}{Number of enquiries to Credit Bureau about the client one week before application (excluding one day before application)}
+#'   \item{amt_req_credit_bureau_mon}{Number of enquiries to Credit Bureau about the client one month before application (excluding one week before application)}
+#'   \item{amt_req_credit_bureau_qrt}{Number of enquiries to Credit Bureau about the client 3 month before application (excluding one month before application)}
+#'   \item{amt_req_credit_bureau_year}{Number of enquiries to Credit Bureau about the client one day year (excluding last 3 months before application)}
+#' }
+#' @source Official source: Home Credit Default Risk competition on Kaggle,
+#'   \url{https://www.kaggle.com/competitions/home-credit-default-risk/data}.
+#'   Third-party copy used to build the package:
+#'   \url{https://huggingface.co/cantalapiedra/poc_scoring_fair/resolve/main/application_train.csv?download=true}.
+#' @references Home Credit Default Risk competition,
+#'   \url{https://www.kaggle.com/competitions/home-credit-default-risk}.
+"home_credit_application"

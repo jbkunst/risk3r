@@ -32,3 +32,19 @@ hmeq <- rename_with(hmeq, str_to_lower)
 glimpse(hmeq)
 
 usethis::use_data(hmeq, overwrite = TRUE)
+
+
+# home_credit_application -------------------------------------------------
+# Official source: Home Credit Default Risk competition on Kaggle.
+# This third-party Hugging Face mirror is used only for convenient download.
+home_credit_application <- readr::read_csv(
+  "https://huggingface.co/cantalapiedra/poc_scoring_fair/resolve/main/application_train.csv?download=true",
+  show_col_types = FALSE
+) |>
+  dplyr::rename_with(stringr::str_to_lower)
+
+stopifnot(identical(dim(home_credit_application), c(307511L, 122L)))
+
+glimpse(home_credit_application)
+
+usethis::use_data(home_credit_application, overwrite = TRUE)

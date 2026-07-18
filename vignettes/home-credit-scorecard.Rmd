@@ -1,0 +1,1009 @@
+---
+title: "Desarrollo de un scorecard con Home Credit"
+subtitle: "De la muestra de desarrollo al backtesting de PD"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Desarrollo de un scorecard con Home Credit}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = TRUE,
+  fig.width = 8,
+  fig.height = 5
+)
+
+course_table <- function(data, caption = NULL, digits = 3,
+                         max_height = NULL) {
+  table_html <- knitr::kable(
+    data,
+    format = "html",
+    caption = caption,
+    digits = digits,
+    row.names = FALSE
+  )
+
+  if (is.null(max_height)) {
+    return(table_html)
+  }
+
+  knitr::asis_output(paste0(
+    '<div style="max-height:', max_height, '; ',
+    'overflow-y:auto; overflow-x:auto; ',
+    'border:1px solid #ddd; padding:0.25rem;">',
+    as.character(table_html),
+    '</div>'
+  ))
+}
+```
+
+# Propósito y alcance
+
+Esta viñeta presenta, de principio a fin, el desarrollo pedagógico de un
+scorecard de originación. El modelo estima la probabilidad de dificultades de
+pago (`target = 1`) de una solicitud de crédito. El resultado se transforma en
+una PD, un puntaje y una regla de decisión ilustrativa.
+
+El ejemplo sirve para aprender metodología. No constituye una política de
+crédito ni un modelo apto para producción. Antes de usar un scorecard en un
+banco deben revisarse representatividad, sesgo de aprobación, estabilidad,
+regulación, gobierno y validación independiente.
+
+## Mapa del proceso
+
+1. Comprender la población y el target.
+2. Auditar y filtrar observaciones.
+3. Separar desarrollo y validación.
+4. Construir bins y transformar a WOE.
+5. filtrar variables por IV, concentración y monotonicidad.
+6. Resolver redundancia y correlación.
+7. Estimar y seleccionar el modelo logístico.
+8. Evaluar discriminación y calibración.
+9. Convertir la PD a score, bandas y una decisión ilustrativa.
+10. Preparar un backtesting de PD observada versus esperada.
+
+# Preparación
+
+Los objetos se asignan explícitamente para que cada etapa pueda inspeccionarse,
+modificarse y enseñarse por separado.
+
+```{r libraries}
+library(risk3r)
+library(scorecard)
+library(dplyr)
+library(ggplot2)
+library(purrr)
+library(rsample)
+library(tidyr)
+
+theme_set(theme_minimal())
+
+set.seed(2026)
+
+# Use Inf para trabajar con las 307.511 observaciones.
+course_sample_n <- 100000
+correlation_limit <- 0.70
+iv_min <- 0.02
+max_variables <- 14L
+max_relative_performance_variation <- 0.10
+max_income <- 1000000
+
+data("home_credit_application", package = "risk3r")
+
+applications <- home_credit_application
+
+if (is.finite(course_sample_n) && nrow(applications) > course_sample_n) {
+  applications <- applications |>
+    group_by(target) |>
+    slice_sample(prop = course_sample_n / nrow(applications)) |>
+    ungroup()
+}
+```
+
+# 1. Población, unidad de análisis y target
+
+Cada fila representa una solicitud. `sk_id_curr` identifica la solicitud y no
+debe utilizarse como predictor. El evento `target = 1` representa dificultades
+de pago según la definición de Home Credit.
+
+En un desarrollo real también se documentan la ventana de observación, la
+ventana de desempeño, la maduración y las exclusiones. Esta tabla no contiene
+fechas completas para reconstruir esas ventanas.
+
+```{r target-audit}
+target_summary <- applications |>
+  summarise(
+    applications = n(),
+    unique_applications = n_distinct(sk_id_curr),
+    bads = sum(target == 1, na.rm = TRUE),
+    bad_rate = mean(target == 1, na.rm = TRUE)
+  )
+
+target_summary
+```
+
+# 2. Calidad de datos y filtros de población
+
+`apply_filters()` aplica exclusiones consecutivas y conserva una tabla de
+trazabilidad. Para que el ejemplo modele una población relativamente homogénea,
+se define el scorecard para préstamos de efectivo solicitados por personas con
+una fuente de ingreso laboral activa. Después se aplican controles de
+completitud y alcance operacional.
+
+Estas reglas son ilustrativas. En un desarrollo bancario deben acordarse antes
+de mirar su efecto sobre el target y quedar respaldadas por una política. En la
+base completa, las dos primeras reglas reducen la población de 307.511 a cerca
+de 226 mil solicitudes y elevan la tasa de malos de aproximadamente 8,1% a
+9,0%; por lo tanto, la población resultante es materialmente distinta.
+
+```{r population-filters}
+# Umbral pedagógico de alcance operacional. En un desarrollo real debe
+# provenir de una política previamente acordada.
+population_filters <- list(
+  `producto prestamos de efectivo` = rlang::quo(name_contract_type == "Cash loans"),
+  `fuente de ingreso laboral activa` = rlang::quo(name_income_type %in% c("Working", "Commercial associate", "State servant")),
+  `terminos contractuales completos` = rlang::quo(!is.na(amt_annuity) & !is.na(amt_goods_price)),
+  `genero informado` = rlang::quo(code_gender != "XNA"),
+  `ingreso dentro del alcance` = rlang::quo(amt_income_total <= !!max_income)
+)
+
+population_summary <- function(data) {
+  data |>
+    summarise(
+      bads = sum(target == 1),
+      bad_rate = mean(target == 1)
+    )
+}
+
+filtered <- apply_filters(
+  data = applications,
+  filters = population_filters,
+  summary_fun = population_summary
+)
+
+filter_log <- filtered$summary
+model_population <- filtered$data
+
+course_table(
+  filter_log,
+  caption = "Trazabilidad de los filtros de población"
+)
+```
+
+En la muestra pedagógica de aproximadamente 50 mil filas se espera que las
+reglas de producto e ingreso activo retiren alrededor de 4.700 y 8.300 casos,
+respectivamente. Los controles restantes afectan pocos registros, pero son
+útiles para demostrar que el log conserva también controles sin pérdidas
+materiales.
+
+## Valores especiales no son necesariamente exclusiones
+
+`days_employed = 365243` aparece en más de 55 mil solicitudes. Aunque parece
+una antigüedad laboral imposible, en estos datos funciona como un valor
+especial asociado principalmente a personas pensionadas o sin empleo activo.
+No debe eliminarse silenciosamente como si fuera un error. Al delimitar antes
+la población por fuente de ingreso, se evita mezclar ese segmento con el
+scorecard laboral; si permaneciera, debería tratarse explícitamente como
+categoría especial durante el binning.
+
+Del mismo modo, los missing de variables predictoras no se eliminan de manera
+general. `woebin()` puede construir un bin de missing, permitiendo evaluar su
+riesgo y conservar solicitudes que sí pertenecen a la población objetivo.
+
+# 3. Muestras de desarrollo y validación
+
+La separación se hace antes de estimar bins o seleccionar variables. De este
+modo, las decisiones del modelador se aprenden solamente con desarrollo. Se
+usa `rsample`, componente de tidymodels, con estratificación por target.
+
+```{r train-test}
+data_split <- initial_split(
+  model_population,
+  prop = 0.80,
+  strata = target
+)
+
+development <- training(data_split)
+validation <- testing(data_split)
+
+sample_summary <- bind_rows(
+  development = development,
+  validation = validation,
+  .id = "sample"
+) |>
+  group_by(sample) |>
+  summarise(
+    n = n(),
+    bads = sum(target),
+    bad_rate = mean(target),
+    .groups = "drop"
+  )
+
+course_table(
+  sample_summary,
+  caption = "Composición de las muestras de desarrollo y validación"
+)
+```
+
+# 4. Variables candidatas
+
+Se excluyen el identificador y el target. También deben excluirse variables
+que no estarán disponibles al momento de decidir, variables posteriores al
+evento y atributos cuyo uso esté restringido.
+
+Antes del binning también se revisa la cardinalidad de las variables
+categóricas. `organization_type` contiene 57 categorías en la población del
+ejemplo. Además de producir muchos bins potencialmente inestables,
+`scorecard::woebin()` solicita una confirmación interactiva para este tipo de
+columnas, lo que interrumpe el render de una viñeta. En este primer desarrollo
+se excluyen automáticamente las variables con más de 20 categorías. Otra
+alternativa válida sería agrupar sus niveles con criterio de negocio.
+
+```{r candidate-variables}
+max_categorical_levels <- 20L
+
+categorical_cardinality <- development |>
+  select(where(~ is.character(.x) || is.factor(.x))) |>
+  summarise(across(everything(), n_distinct)) |>
+  pivot_longer(
+    cols = everything(),
+    names_to = "variable",
+    values_to = "n_levels"
+  ) |>
+  arrange(desc(n_levels))
+
+high_cardinality_variables <- categorical_cardinality |>
+  filter(n_levels > max_categorical_levels) |>
+  pull(variable)
+
+excluded_variables <- c(
+  "sk_id_curr",
+  "target",
+  high_cardinality_variables
+)
+
+candidate_variables <- setdiff(
+  names(development),
+  excluded_variables
+)
+
+development_model <- development |>
+  select(target, all_of(candidate_variables))
+
+validation_model <- validation |>
+  select(target, all_of(candidate_variables))
+
+removal_log <- tibble(variable = high_cardinality_variables) |>
+  mutate(
+    stage = "categorical cardinality",
+    reason = paste0(
+      "more than ",
+      max_categorical_levels,
+      " categorical levels"
+    ),
+    .before = 1
+  )
+
+course_table(
+  categorical_cardinality,
+  caption = "Cardinalidad de las variables categóricas"
+)
+```
+
+# 5. Binning, WOE e Information Value
+
+Los bins se estiman exclusivamente en desarrollo. `woebin()` agrupa valores y
+calcula WOE e IV. El WOE permite modelar relaciones no lineales manteniendo una
+regresión logística interpretable.
+
+```{r woebin}
+bins_all <- scorecard::woebin(
+  dt = development_model,
+  y = "target",
+  x = candidate_variables,
+  method = "tree",
+  no_cores = 1,
+  print_step = 0
+)
+
+bin_summary_all <- risk3r::woebin_summary(bins_all)
+
+bin_summary_table <- bin_summary_all |>
+  select(
+    variable, iv, iv_lbl, ks, monotone,
+    count_distr_min, count_distr_max, has_missing
+  )
+
+course_table(
+  bin_summary_table,
+  caption = "Resumen univariado y bivariado de las variables candidatas",
+  max_height = "500px"
+)
+```
+
+## Comparación visual de una variable fuerte y una débil
+
+Para que la comparación sea informativa, se consideran solamente variables
+con al menos cuatro bins. Dentro de ese conjunto se seleccionan la de mayor y
+la de menor IV. La primera permite observar una separación más marcada de la
+tasa de malos entre tramos; la segunda muestra que tener varios bins no
+garantiza poder predictivo.
+
+Las barras representan la distribución de observaciones y la línea muestra la
+tasa de malos (`posprob`) de cada bin. Esta comparación ayuda a interpretar el
+IV, pero no reemplaza la revisión de tamaño, estabilidad, monotonicidad y
+sentido de negocio.
+
+```{r iv-extremes-comparison}
+minimum_bins_for_comparison <- 4L
+
+iv_comparison_candidates <- bin_summary_all |>
+  filter(
+    n_categories >= minimum_bins_for_comparison,
+    is.finite(iv)
+  )
+
+iv_extremes <- bind_rows(
+  `Strong variable` = iv_comparison_candidates |>
+    slice_max(iv, n = 1, with_ties = FALSE),
+  `Weak variable` = iv_comparison_candidates |>
+    slice_min(iv, n = 1, with_ties = FALSE),
+  .id = "example"
+)
+
+course_table(
+  iv_extremes |>
+    select(example, variable, n_categories, iv, ks, monotone),
+  caption = paste0(
+    "Variables con mayor y menor IV entre aquellas con al menos ",
+    minimum_bins_for_comparison,
+    " bins"
+  )
+)
+
+iv_extreme_variables <- iv_extremes |>
+  pull(variable)
+
+iv_extreme_plots <- risk3r::gg_woes(
+  bins_all[iv_extreme_variables],
+  variable = "posprob"
+)
+
+iv_comparison_plot <- patchwork::wrap_plots(
+  iv_extreme_plots,
+  ncol = 2
+) +
+  patchwork::plot_annotation(
+    title = "Contraste entre una variable fuerte y una variable débil",
+    subtitle = "Barras: distribución; línea: tasa de malos por bin"
+  )
+
+iv_comparison_plot <- iv_comparison_plot &
+  theme(axis.text.x = element_text(angle = 35, hjust = 1))
+
+iv_comparison_plot
+```
+
+## Filtros de variables
+
+El IV no debe ser el único criterio. También se revisan concentración, bins
+pequeños, missing, disponibilidad futura, estabilidad y sentido de negocio.
+
+```{r variable-filters}
+variable_decisions <- bin_summary_all |>
+  mutate(
+    remove_low_iv = iv < iv_min,
+    remove_concentration = count_distr_max > 0.95,
+    review_small_bin = count_distr_min < 0.02,
+    review_monotonicity = !monotone,
+    keep_automatic = !remove_low_iv & !remove_concentration
+  )
+
+variables_after_iv <- variable_decisions |>
+  filter(keep_automatic) |>
+  pull(variable)
+
+removal_log <- bind_rows(
+  removal_log,
+  variable_decisions |>
+    filter(!keep_automatic) |>
+    transmute(
+      stage = "univariate and bivariate filters",
+      variable,
+      reason = case_when(
+        remove_low_iv ~ "IV below threshold",
+        remove_concentration ~ "excessive concentration",
+        TRUE ~ "manual review"
+      )
+    )
+)
+
+bins_iv <- bins_all[variables_after_iv]
+```
+
+## Revisión de monotonicidad
+
+La monotonicidad ayuda a obtener relaciones ordenadas y defendibles, pero no
+debe imponerse automáticamente a todas las variables. Primero se identifican
+los casos que requieren revisión; después se pueden proporcionar cortes
+manuales mediante `breaks_list` y volver a ejecutar `woebin()`.
+
+```{r monotonicity}
+variables_to_review <- variable_decisions |>
+  filter(keep_automatic, review_monotonicity) |>
+  select(variable, iv, ks, monotone, breaks)
+
+course_table(
+  variables_to_review |>
+    select(-breaks),
+  caption = "Variables que requieren revisión de monotonicidad"
+)
+
+# Ejemplo de intervención experta:
+# manual_breaks <- list(amt_credit = c(250000, 500000, 750000))
+# bins_iv <- scorecard::woebin(
+#   development_model,
+#   y = "target",
+#   x = variables_after_iv,
+#   breaks_list = manual_breaks
+# )
+```
+
+# 6. Redundancia y correlación
+
+La correlación se calcula sobre las variables transformadas a WOE. Cuando dos
+variables exceden el umbral, `woebin_cor_iv()` ordena las variables usando su
+IV; en este ejemplo se conserva la de mayor prioridad y se elimina la segunda.
+
+```{r correlation}
+correlation_table <- risk3r::woebin_cor_iv(
+  dt = development_model |>
+    select(target, all_of(variables_after_iv)),
+  bins = bins_iv,
+  plot = FALSE
+) |>
+  filter(var1 != var2, var1_rank < var2_rank) |>
+  mutate(correlation_conflict = abs(r) >= correlation_limit)
+
+variables_removed_correlation <- correlation_table |>
+  filter(correlation_conflict) |>
+  pull(var2) |>
+  unique()
+
+variables_model <- setdiff(
+  variables_after_iv,
+  variables_removed_correlation
+)
+
+bins_model <- bins_iv[variables_model]
+
+removal_log <- bind_rows(
+  removal_log,
+  tibble(
+    stage = "correlation",
+    variable = variables_removed_correlation,
+    reason = paste0("absolute WOE correlation >= ", correlation_limit)
+  )
+)
+```
+
+# 7. Transformación WOE
+
+Los mismos bins aprendidos en desarrollo se aplican a validación. No se deben
+reestimar cortes ni WOE usando la muestra de validación.
+
+```{r woe-transformation}
+development_woe <- scorecard::woebin_ply(
+  development_model |>
+    select(target, all_of(variables_model)),
+  bins = bins_model,
+  no_cores = 1,
+  print_step = 0
+) |>
+  tibble::as_tibble()
+
+validation_woe <- scorecard::woebin_ply(
+  validation_model |>
+    select(target, all_of(variables_model)),
+  bins = bins_model,
+  no_cores = 1,
+  print_step = 0
+) |>
+  tibble::as_tibble()
+```
+
+# 8. Regresión logística y selección de variables
+
+Se estima un modelo completo y luego se usa elastic net como apoyo a la
+selección. La selección automática no reemplaza la revisión de signos,
+significancia, estabilidad e interpretación.
+
+```{r logistic-model}
+model_full <- glm(
+  target ~ .,
+  data = development_woe,
+  family = binomial(link = "logit")
+)
+
+model_selected <- risk3r::featsel_glmnet(
+  model_full,
+  S = "lambda.1se",
+  plot = FALSE,
+  trace.it = 0
+)
+
+if (length(coef(model_selected)) - 1L > max_variables) {
+  model_selected <- risk3r::featsel_stepforward(
+    model_selected,
+    trace = 0,
+    steps = max_variables
+  )
+}
+
+coefficient_table <- broom::tidy(
+  model_selected,
+  conf.int = TRUE
+)
+
+course_table(
+  coefficient_table,
+  caption = "Coeficientes e intervalos de confianza del modelo seleccionado"
+)
+```
+
+## Signos, significancia y multicolinealidad
+
+Con la convención WOE utilizada debe verificarse el signo esperado. Un signo
+inesperado puede revelar colinealidad, bins inestables, fuga de información o
+una relación distinta de la esperada; no se elimina sin investigar.
+
+```{r model-review}
+variables_selected_woe <- coefficient_table |>
+  filter(term != "(Intercept)") |>
+  pull(term)
+
+significance_review <- coefficient_table |>
+  filter(term != "(Intercept)") |>
+  mutate(
+    significant_5pct = p.value < 0.05,
+    expected_positive_sign = estimate > 0
+  )
+
+vif_review <- risk3r::model_vif_variables(model_selected)
+
+coefficient_plot <- risk3r::gg_model_coef(
+  model_selected,
+  level = 0.95,
+  color = "#2C3E50"
+) +
+  labs(
+    x = "Coeficiente estimado",
+    y = NULL,
+    title = "Coeficientes del modelo",
+    subtitle = "Estimación e intervalo de confianza al 95%"
+  )
+
+coefficient_plot
+
+vif_plot <- risk3r::gg_model_vif(model_selected) +
+  coord_flip() +
+  labs(
+    x = NULL,
+    y = "Variance Inflation Factor",
+    title = "Multicolinealidad del modelo final"
+  )
+
+correlation_plot <- risk3r::gg_model_corr(
+  model_selected,
+  upper = TRUE
+) +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = "Correlaciones entre predictores WOE del modelo final"
+  )
+
+vif_plot
+correlation_plot
+
+course_table(
+  significance_review,
+  caption = "Revisión tabular de signos y significancia"
+)
+
+course_table(
+  vif_review,
+  caption = "Diagnóstico de multicolinealidad"
+)
+```
+
+## Aporte incremental de las variables
+
+`gg_model_partials()` vuelve a estimar modelos incorporando las variables en
+el orden del modelo y muestra cómo evolucionan KS, AUC, IV y Gini en desarrollo
+y validación. Es útil para detectar variables que agregan poco poder
+discriminante o cuyo aporte no se sostiene fuera de muestra. No debe usarse
+como una regla automática de eliminación, porque el resultado depende del
+orden de entrada y de la correlación entre predictores.
+
+```{r model-partials}
+partial_performance_plot <- risk3r::gg_model_partials(
+  model_selected,
+  newdata = validation_woe,
+  verbose = FALSE
+) +
+  labs(
+    x = "Última variable incorporada",
+    y = "Indicador acumulado",
+    title = "Aporte incremental de las variables"
+  )
+
+partial_performance_plot
+```
+
+# 9. Discriminación en desarrollo y validación
+
+KS, AUC y Gini miden separación, no calibración. Deben reportarse fuera de la
+muestra usada para estimar el modelo.
+
+```{r discrimination}
+development_pd <- predict(
+  model_selected,
+  newdata = development_woe,
+  type = "response"
+)
+
+validation_pd <- predict(
+  model_selected,
+  newdata = validation_woe,
+  type = "response"
+)
+
+performance <- bind_rows(
+  development = risk3r::model_metrics(model_selected),
+  validation = risk3r::model_metrics(model_selected, validation_woe),
+  .id = "sample"
+)
+
+performance_comparison <- performance |>
+  select(sample, ks, auc, gini) |>
+  pivot_longer(
+    cols = -sample,
+    names_to = "metric",
+    values_to = "value"
+  ) |>
+  pivot_wider(
+    names_from = sample,
+    values_from = value
+  ) |>
+  mutate(
+    relative_variation = validation / development - 1,
+    absolute_relative_variation = abs(relative_variation),
+    status = if_else(
+      absolute_relative_variation <= max_relative_performance_variation,
+      "Within illustrative tolerance",
+      "Methodological review required"
+    )
+  )
+
+validation_gains <- risk3r::gain(
+  actual = validation_woe$target,
+  predicted = validation_pd
+)
+
+course_table(
+  performance,
+  caption = "Indicadores de discriminación por muestra"
+)
+
+course_table(
+  performance_comparison |>
+    mutate(
+      relative_variation = scales::percent(relative_variation),
+      absolute_relative_variation = scales::percent(
+        absolute_relative_variation
+      )
+    ),
+  caption = paste0(
+    "Variación relativa entre desarrollo y validación; tolerancia ilustrativa: ",
+    scales::percent(max_relative_performance_variation)
+  )
+)
+
+gain_table <- tibble(
+  population_fraction = c(0.10, 0.20, 0.30, 0.40, 0.50),
+  gain = as.numeric(validation_gains)
+)
+
+course_table(
+  gain_table,
+  caption = "Gains acumulados en validación"
+)
+
+roc_plot <- risk3r::gg_model_roc(
+  model_selected,
+  newdata = validation_woe
+) +
+  labs(
+    color = "Sample",
+    title = "ROC en desarrollo y validación"
+  )
+
+ks_plot <- risk3r::gg_model_ecdf(
+  model_selected,
+  newdata = validation_woe
+) +
+  labs(
+    color = "Observed target",
+    title = "Separación acumulada para la lectura del KS"
+  )
+
+roc_plot
+ks_plot
+```
+
+## Gobierno y tolerancias metodológicas
+
+La tolerancia de 10% utilizada arriba es solamente ilustrativa. En una
+institución financiera, el área de riesgo de modelos suele mantener políticas,
+manuales metodológicos y estándares de validación que establecen qué debe
+cumplir un modelo: diferencias máximas entre desarrollo y validación, KS o AUC
+mínimos, estabilidad temporal, VIF aceptable, calibración, documentación,
+validación independiente y reglas para excepciones. Una diferencia elevada no
+implica por sí sola rechazar el modelo, pero sí exige investigar overfitting,
+fuga de información, cambios de población o falta de representatividad.
+
+# 10. Calibración de la PD
+
+Una PD está calibrada cuando las tasas observadas se parecen a las
+probabilidades pronosticadas. Se compara la tasa de malos con la PD promedio,
+primero globalmente y luego por bandas de riesgo.
+
+```{r calibration}
+validation_scored <- validation |>
+  transmute(
+    sk_id_curr,
+    target,
+    pd = validation_pd
+  ) |>
+  mutate(
+    risk_band = ntile(pd, 10L),
+    risk_band = factor(risk_band, levels = 1:10)
+  )
+
+calibration_overall <- validation_scored |>
+  summarise(
+    n = n(),
+    observed_bad_rate = mean(target),
+    expected_pd = mean(pd),
+    observed_expected_ratio = observed_bad_rate / expected_pd
+  )
+
+calibration_bands <- validation_scored |>
+  group_by(risk_band) |>
+  summarise(
+    n = n(),
+    observed_bad_rate = mean(target),
+    expected_pd = mean(pd),
+    .groups = "drop"
+  )
+
+course_table(
+  calibration_overall,
+  caption = "Calibración global en validación"
+)
+
+course_table(
+  calibration_bands,
+  caption = "PD esperada y tasa observada por banda de riesgo"
+)
+
+ggplot(
+  calibration_bands,
+  aes(x = risk_band, group = 1)
+) +
+  geom_line(aes(y = observed_bad_rate, color = "Observed")) +
+  geom_point(aes(y = observed_bad_rate, color = "Observed")) +
+  geom_line(aes(y = expected_pd, color = "Expected")) +
+  geom_point(aes(y = expected_pd, color = "Expected")) +
+  labs(x = "Risk band", y = "Rate / PD", color = NULL)
+```
+
+## Recalibración de intercepto y pendiente
+
+El `glm()` estima el intercepto para la muestra de desarrollo. Si la tasa base
+de una cartera futura cambia, transformar el modelo a puntos no corrige esa
+diferencia. El siguiente diagnóstico estima un intercepto de calibración y una
+pendiente. Idealmente son 0 y 1, respectivamente.
+
+```{r calibration-intercept-slope}
+calibration_model <- glm(
+  target ~ qlogis(pmin(pmax(pd, 1e-6), 1 - 1e-6)),
+  data = validation_scored,
+  family = binomial()
+)
+
+broom::tidy(calibration_model)
+
+# Recalibración solo del nivel general, manteniendo fija la pendiente:
+intercept_recalibration <- glm(
+  target ~ 1,
+  offset = qlogis(pmin(pmax(pd, 1e-6), 1 - 1e-6)),
+  data = validation_scored,
+  family = binomial()
+)
+
+broom::tidy(intercept_recalibration)
+```
+
+# 11. Conversión a score
+
+`scorecard()` convierte la regresión WOE a puntos. Esta conversión cambia la
+escala, no recalibra por sí sola la PD.
+
+```{r scorecard}
+selected_original_variables <- variables_selected_woe |>
+  stringr::str_remove("_woe$")
+
+bins_final <- bins_model[selected_original_variables]
+
+card <- scorecard::scorecard(
+  bins = bins_final,
+  model = model_selected,
+  points0 = 600,
+  odds0 = 50,
+  pdo = 20
+)
+
+validation_points <- scorecard::scorecard_ply(
+  validation |>
+    select(all_of(selected_original_variables)),
+  card,
+  only_total_score = TRUE,
+  print_step = 0
+)
+
+validation_scored <- validation_scored |>
+  mutate(score = validation_points$score)
+```
+
+# 12. Bandas y regla de decisión ilustrativa
+
+Los cortes siguientes no representan apetito de riesgo ni rentabilidad real.
+Una política productiva debe incorporar costos, margen, pérdida esperada,
+capacidad de pago, restricciones regulatorias y revisión de equidad.
+
+```{r decision-rule}
+validation_scored <- validation_scored |>
+  mutate(
+    decision = case_when(
+      pd < 0.05 ~ "Approve",
+      pd < 0.12 ~ "Manual review",
+      TRUE ~ "Decline"
+    )
+  )
+
+decision_summary <- validation_scored |>
+  group_by(decision) |>
+  summarise(
+    applications = n(),
+    share = n() / nrow(validation_scored),
+    observed_bad_rate = mean(target),
+    expected_pd = mean(pd),
+    mean_score = mean(score),
+    .groups = "drop"
+  )
+
+course_table(
+  decision_summary,
+  caption = "Resultado de la regla de decisión ilustrativa"
+)
+```
+
+# 13. Backtesting mensual observado versus esperado
+
+El backtesting mensual compara, para cada período, la tasa de default observada
+con la PD promedio que el modelo asignó antes de conocer el resultado. También
+se controla volumen, mezcla de riesgo, cobertura y maduración.
+
+Home Credit no entrega una fecha de originación adecuada para construir un
+out-of-time real. El período creado abajo es **simulado y exclusivamente
+didáctico**. No mide estabilidad temporal del modelo. En un proyecto real se
+reemplaza por el mes verdadero de originación o de observación y se reserva el
+período más reciente como muestra out-of-time.
+
+```{r monthly-backtesting}
+set.seed(2026)
+
+monitoring_months <- seq.Date(
+  from = as.Date("2025-01-01"),
+  by = "month",
+  length.out = 12L
+)
+
+validation_scored <- validation_scored |>
+  mutate(
+    monitoring_month = sample(
+      monitoring_months,
+      size = n(),
+      replace = TRUE
+    )
+  )
+
+monthly_backtest <- validation_scored |>
+  group_by(monitoring_month) |>
+  summarise(
+    applications = n(),
+    observed_defaults = sum(target),
+    observed_bad_rate = mean(target),
+    expected_pd = mean(pd),
+    observed_expected_ratio = observed_bad_rate / expected_pd,
+    .groups = "drop"
+  )
+
+course_table(
+  monthly_backtest,
+  caption = "Backtesting mensual de PD observada versus esperada"
+)
+
+ggplot(monthly_backtest, aes(x = monitoring_month)) +
+  geom_line(aes(y = observed_bad_rate, color = "Observed")) +
+  geom_point(aes(y = observed_bad_rate, color = "Observed")) +
+  geom_line(aes(y = expected_pd, color = "Expected")) +
+  geom_point(aes(y = expected_pd, color = "Expected")) +
+  scale_y_continuous(
+    limits = c(0, NA),
+    labels = scales::label_percent(),
+    expand = expansion(mult = c(0, 0.05))
+  ) +
+  labs(
+    x = "Monitoring month",
+    y = "Default rate / average PD",
+    color = NULL,
+    title = "Monthly PD backtesting"
+  )
+```
+
+# 14. Qué falta para producción
+
+Antes de implementar el scorecard deben agregarse, como mínimo:
+
+- una muestra out-of-time construida con fechas reales;
+- definición formal de ventanas, maduración y buenos/malos;
+- análisis de sesgo de aprobación y población rechazada;
+- validación de estabilidad de bins, WOE, signos y coeficientes;
+- PSI de variables, score y población;
+- intervalos de confianza y límites de alerta del backtesting;
+- análisis económico de cut-offs y estrategia de aprobación;
+- fairness, explicabilidad, documentación y validación independiente;
+- proceso reproducible de implementación y monitoreo.
+
+# 15. Objetos que documentan el desarrollo
+
+Un desarrollo trazable debería conservar al menos los siguientes artefactos:
+
+```{r artifacts}
+scorecard_artifacts <- list(
+  split = data_split,
+  population_filter_log = filter_log,
+  variable_removal_log = removal_log,
+  bins = bins_final,
+  model = model_selected,
+  scorecard = card,
+  performance = performance,
+  calibration_bands = calibration_bands,
+  monthly_backtest = monthly_backtest
+)
+
+names(scorecard_artifacts)
+```
