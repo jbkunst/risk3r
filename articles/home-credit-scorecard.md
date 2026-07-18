@@ -351,7 +351,7 @@ bins_all <- scorecard::woebin(
 #> name_contract_type, flag_document_7, flag_document_10, flag_document_12
 #> Warning in x_variable(dt, y, x, var_skip, method): Incorrect inputs; there are 4 variables that do not exist in the input data frame, which are removed from x. 
 #> name_contract_type, flag_document_7, flag_document_10, flag_document_12
-#> ✔ Binning on 58872 rows and 116 columns in 00:00:31
+#> ✔ Binning on 58872 rows and 116 columns in 00:00:23
 
 bin_summary_all <- risk3r::woebin_summary(bins_all)
 
