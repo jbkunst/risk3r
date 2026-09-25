@@ -351,7 +351,7 @@ bins_all <- scorecard::woebin(
 #> name_contract_type, flag_document_7, flag_document_10, flag_document_12
 #> Warning in x_variable(dt, y, x, var_skip, method): Incorrect inputs; there are 4 variables that do not exist in the input data frame, which are removed from x. 
 #> name_contract_type, flag_document_7, flag_document_10, flag_document_12
-#> ✔ Binning on 58872 rows and 116 columns in 00:00:29
+#> ✔ Binning on 58872 rows and 116 columns in 00:00:30
 
 bin_summary_all <- risk3r::woebin_summary(bins_all)
 
@@ -687,7 +687,7 @@ correlation_table <- risk3r::woebin_cor_iv(
   filter(var1 != var2, var1_rank < var2_rank) |>
   mutate(correlation_conflict = abs(r) >= correlation_limit)
 #> ℹ Converting into woe values ...
-#> ✔ Woe transformating on 58872 rows and 59 columns in 00:00:02
+#> ✔ Woe transformating on 58872 rows and 59 columns in 00:00:03
 #> Correlation computed with
 #> • Method: 'pearson'
 #> • Missing treated using: 'pairwise.complete.obs'
