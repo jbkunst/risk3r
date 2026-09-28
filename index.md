@@ -6,11 +6,10 @@ conjunction with the scorecard package.
 
 ## Motivation
 
-`risk3r` is an opinionated collection of helpers shaped by credit-risk
-modelling workflows I repeatedly used in banking. It was built mainly
-around the `scorecard` package, adding utilities for recurring parts of
-model development, evaluation and feature selection that I otherwise
-found myself rebuilding across projects.
+`risk3r` is an opinionated set of helpers for credit-risk modeling,
+shaped by workflows I repeatedly used in banking projects. It was built
+to complement the `scorecard` package with utilities and conventions I
+found myself reusing across model development and evaluation.
 
 ## Installation
 
